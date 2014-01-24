@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04b8174b-4f83-418b-81f7-af875f750081" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Development__ilmoprojekti.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Production__ilmoprojekti.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/application/home.erb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/spec__ilmoprojekti.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/test__ilmoprojekti.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ilmoprojekti.iml" afterPath="$PROJECT_DIR$/.idea/ilmoprojekti.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="04b8174b-4f83-418b-81f7-af875f750081" name="Default" comment="" />
     <ignored path="ilmoprojekti.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
