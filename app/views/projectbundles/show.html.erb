@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @projectbundle.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @projectbundle.description %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @projectbundle.active %>
+</p>
+
+<%= link_to 'Edit', edit_projectbundle_path(@projectbundle) %> |
+<%= link_to 'Back', projectbundles_path %>

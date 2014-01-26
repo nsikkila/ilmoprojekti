@@ -1,0 +1,31 @@
+<h1>Listing projectbundles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Active</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projectbundles.each do |projectbundle| %>
+      <tr>
+        <td><%= projectbundle.name %></td>
+        <td><%= projectbundle.description %></td>
+        <td><%= projectbundle.active %></td>
+        <td><%= link_to 'Show', projectbundle %></td>
+        <td><%= link_to 'Edit', edit_projectbundle_path(projectbundle) %></td>
+        <td><%= link_to 'Destroy', projectbundle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Projectbundle', new_projectbundle_path %>

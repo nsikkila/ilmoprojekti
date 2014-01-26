@@ -1,4 +1,14 @@
 Ilmoprojekti::Application.routes.draw do
+  resources :students
+
+  resources :projectbundles
+
+  resources :signups
+
+  resources :projects
+
+  resources :users
+
   resources :home
 
   root 'home#index'
