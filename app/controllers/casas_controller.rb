@@ -1,6 +1,5 @@
-class CasasController < ActionController::Base
+class CasasController < ApplicationController
 
   def index
-
   end
 end
