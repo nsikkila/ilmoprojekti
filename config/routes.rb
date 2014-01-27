@@ -9,7 +9,7 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :users
 
-  resources :HomesController
+  resources :casas
 
   resources :sessions, only: [:new, :create, :destroy]
 
