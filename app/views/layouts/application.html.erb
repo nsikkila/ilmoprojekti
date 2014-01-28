@@ -8,12 +8,19 @@
 </head>
 <body>
 
-<% if not current_user.nil?%>
-    <p><%= link_to 'Sign out', signout_path, method: :delete %></p>
-    <p><%= current_user.username %> signed in</p>
-<% else %>
-	<p><%=link_to 'Sign in', signin_path %></p>
-<% end %>
+<div id="navi">
+
+	<%= link_to 'Käyttäjät', users_path %>
+	<%= link_to 'Projektit', projects_path %>
+	<% if not session[:user_id].nil? %>
+    	<%= User.find(session[:user_id]).username %> kirjautuneena sisään. |
+    	<%= link_to 'Kirjaudu ulos', signout_path, method: :delete %>
+	<% else %>
+		<%=link_to 'Kirjaudu sisään', signin_path %>
+	<% end %>
+
+</div>
+
 
 <%= yield %>
 
