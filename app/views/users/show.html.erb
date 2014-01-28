@@ -1,19 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Firstname:</strong>
-  <%= @user.firstname %>
+	<strong>Username:</strong>
+	<%= @user.username %>
 </p>
-
 <p>
-  <strong>Lastname:</strong>
+  <strong>Name:</strong>
+  <%= @user.firstname %>
   <%= @user.lastname %>
 </p>
 
-<p>
-  <strong>Accesslevel:</strong>
-  <%= @user.accesslevel %>
-</p>
+
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

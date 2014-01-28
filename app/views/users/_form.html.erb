@@ -11,6 +11,7 @@
     </div>
   <% end %>
 
+
   <div class="field">
     <%= f.label :firstname %><br>
     <%= f.text_field :firstname %>
@@ -20,8 +21,16 @@
     <%= f.text_field :lastname %>
   </div>
   <div class="field">
-    <%= f.label :accesslevel %><br>
-    <%= f.number_field :accesslevel %>
+    <%= f.label :username %><br>
+    <%= f.text_field :username %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password_confirmation %>
   </div>
   <div class="actions">
     <%= f.submit %>
