@@ -10,10 +10,10 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id]) 
   end
 
-  def is_at_least(params)
+  def is_at_least(level)
   	if not current_user.nil?
   		list = {:admin => 1, :teacher => 0 }
-  		list[params] <= current_user.accesslevel 
+  		list[level] <= current_user.accesslevel 
 	end
 
   end

@@ -15,6 +15,8 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if not current_user.id == params
+        redirect_to root
   end
 
   # GET /users/new
