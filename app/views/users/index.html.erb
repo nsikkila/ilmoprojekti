@@ -1,10 +1,10 @@
-<h1>Listing users</h1>
+<h1>Käyttäjät</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Username</th>
-      <th>Name</th>
+      <th>Käyttäjänimi</th>
+      <th>Nimi</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,10 +14,8 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.username%></td>
+        <td><%= link_to "#{user.username}", user %></td>
         <td><%= user.firstname %> <%= user.lastname %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
