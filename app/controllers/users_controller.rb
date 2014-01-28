@@ -4,7 +4,12 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    if is_at_least(:admin)
+      @users = User.all
+    else
+      redirect_to :root
+    end
+    
   end
 
   # GET /users/1
@@ -19,6 +24,11 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    if is_at_least("admin")
+      @users = User.all
+    elsif not current_user nil?
+      @users = current_user
+    end
   end
 
   # POST /users
