@@ -21,8 +21,8 @@ class UsersControllerTest < ActionController::TestCase
   #    post :create, user: { accesslevel: @user.accesslevel, firstname: @user.firstname, lastname: @user.lastname }
   #  end
 
-    assert_redirected_to user_path(assigns(:user))
-  end
+  #  assert_redirected_to user_path(assigns(:user))
+  #end
 
   test "should show user" do
     get :show, id: @user
