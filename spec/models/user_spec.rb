@@ -21,7 +21,8 @@ describe User do
 	describe "correctly set user" do
 
 		it "is saved with proper fields" do
-			user = FactoryGirl.create(:user)
+			#user = FactoryGirl.create(:user)
+			user.save
 
 			#User is valid
 			expect(user.valid?).to be (true)
@@ -30,7 +31,7 @@ describe User do
 	end
 end
 
-	describe "incorrectly set user"
+	describe "incorrectly set user" do
 
 		it "is not saved with too short username" do
 			#Username is too short
