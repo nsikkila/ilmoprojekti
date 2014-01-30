@@ -9,6 +9,7 @@
 <body>
 
 <div id="navi">
+	<%= link_to 'Etusivu', root_path %>
 	<% if not current_user.nil? and is_at_least(:admin) %>
 	<%= link_to 'Käyttäjät', users_path %>
 	<% end %>
