@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140127131024) do
+ActiveRecord::Schema.define(version: 20140130103731) do
 
   create_table "projectbundles", force: true do |t|
     t.string   "name"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 20140127131024) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "priority"
+    t.boolean  "status"
   end
 
   create_table "students", force: true do |t|
