@@ -5,10 +5,15 @@ require 'spec_helper'
 #end
 
 describe User do
+	let(:user){ FactoryGirl.build(:user) }
+	
 	it "has the username set correctly" do
-		user = User.new username:"Maija"
-
 		user.username.should == "Maija"
+	end
+
+	it "has the passwors set correctly" do
+		user.password.should == "Test123"
+		user.password.should == "Test123"
 	end
 
 	it "is saved with proper fields" do
@@ -21,9 +26,10 @@ describe User do
 	end
 
 	describe "without a proper username" do
+
 		it "is not saved" do
 			#Username is too short
-			user = User.create username:"ab", password:"Testi123", password_confirmation:"Testi123"
+			user = FactoryGirl.build(:user_with_too_short_username)
 
 			#User must not be valid
 			expect(user.valid?).to be(false)
