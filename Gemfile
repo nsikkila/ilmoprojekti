@@ -47,6 +47,12 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.0'
 end
 
+group :test do
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'launchy'
+end
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

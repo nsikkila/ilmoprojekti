@@ -12,7 +12,7 @@ describe User do
 	end
 
 	it "is saved with proper fields" do
-		user = User.create username:"Maija", password:"Testi123", password_confirmation:"Testi123"
+		user = FactoryGirl.create(:user)
 
 		#User is valid
 		expect(user.valid?).to be (true)
