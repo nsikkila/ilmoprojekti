@@ -16,6 +16,7 @@ class SignupsController < ApplicationController
   def show
     if not is_logged_in_and_authored
       redirect_to :root
+    end
   end
 
   # GET /signups/new
