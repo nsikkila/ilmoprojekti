@@ -14,18 +14,24 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
-    @project = Project.new
+    if not current_user.nil? and (is_at_least(:admin) or is_at_least(:teacher))
+      @project = Project.new
+    else
+      redirect_to :root
+    end
   end
 
   # GET /projects/1/edit
   def edit
+    if current_user.nil? or not (is_at_least(:admin) or not is_at_least(:teacher))
+      redirect_to :root
+    end
   end
 
   # POST /projects
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-
     respond_to do |format|
       if @project.save
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
