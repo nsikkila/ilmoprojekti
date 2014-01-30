@@ -15,22 +15,30 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if not current_user.id == params
-        redirect_to root
+    if not current_user.id == params[:id].to_i
+      redirect_to :root
+    end
   end
 
   # GET /users/new
   def new
-    @user = User.new
+    if is_at_least(:admin)
+      @user = User.new
+    else
+      redirect_to :root
+    end
   end
 
   # GET /users/1/edit
   def edit
     if is_at_least("admin")
       @users = User.all
-    elsif not current_user nil?
+    elsif not current_user.nil?
       @users = current_user
+    else
+      redirect_to :root
     end
+
   end
 
   # POST /users
@@ -67,11 +75,15 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    if is_at_least(:admin)
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
     end
+  else
+    redirect_to :root
+  end
   end
 
   private
