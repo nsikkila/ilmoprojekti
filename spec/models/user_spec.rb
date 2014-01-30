@@ -11,30 +11,39 @@ describe User do
 		user.username.should == "Maija"
 	end
 
-	it "has the passwors set correctly" do
+	it "has the password set correctly" do
 		user.password.should == "Test123"
 		user.password.should == "Test123"
 	end
 
-	it "is saved with proper fields" do
-		user = FactoryGirl.create(:user)
 
-		#User is valid
-		expect(user.valid?).to be (true)
-		#User is added to db
-		expect(User.count).to eq (1)
+
+	describe "correctly set user" do
+
+		it "is saved with proper fields" do
+			user = FactoryGirl.create(:user)
+
+			#User is valid
+			expect(user.valid?).to be (true)
+			#User is added to db
+			expect(User.count).to eq (1)
 	end
+end
 
-	describe "without a proper username" do
+	describe "incorrectly set user"
 
-		it "is not saved" do
+		it "is not saved with too short username" do
 			#Username is too short
 			user = FactoryGirl.build(:user_with_too_short_username)
-
 			#User must not be valid
 			expect(user.valid?).to be(false)
 			#User must not be added to db
 			expect(User.count).to eq(0)
 		end
+			
+		#it "is not saved with too long username" do
+		#	user = FactoryGirl.build(:user_with_too_long_username)
+		#end
+
 	end
 end
