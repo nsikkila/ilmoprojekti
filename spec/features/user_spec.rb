@@ -24,5 +24,15 @@ describe "User" do
 
 			expect(page).to have_content 'Username and password do not match'
 		end
+
+		it "can not sign in with incorrect username" do
+			visit signin_path
+			fill_in('username', with:"Matti")
+			fill_in('password', with:"Test123")
+			click_button('Log in')
+
+			expect(page).to have_content 'Username and password do not match'
+		end
+
 	end
 end
