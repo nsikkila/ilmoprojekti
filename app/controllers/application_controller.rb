@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :is_at_least
+  helper_method :is_logged_in_and_authored
 
   def current_user
     return nil if session[:user_id].nil? 
@@ -18,6 +19,9 @@ class ApplicationController < ActionController::Base
     else
       redirect_to :root
 	  end
+  end
 
+  def is_logged_in_and_authored
+    not current_user.nil? and (is_at_least(:admin) or is_at_least(:teacher))
   end
 end
