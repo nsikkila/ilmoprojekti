@@ -4,12 +4,18 @@ class SignupsController < ApplicationController
   # GET /signups
   # GET /signups.json
   def index
-    @signups = Signup.all
+    if is_logged_in_and_authored
+      @signups = Signup.all
+    else
+      redirect :root
+    end
   end
 
   # GET /signups/1
   # GET /signups/1.json
   def show
+    if not is_logged_in_and_authored
+      redirect_to :root
   end
 
   # GET /signups/new
@@ -19,13 +25,15 @@ class SignupsController < ApplicationController
 
   # GET /signups/1/edit
   def edit
+    if not is_logged_in_and_authored
+        redirect :root
+    end
   end
 
   # POST /signups
   # POST /signups.json
   def create
     @signup = Signup.new(signup_params)
-
     respond_to do |format|
       if @signup.save
         format.html { redirect_to @signup, notice: 'Signup was successfully created.' }
@@ -40,24 +48,31 @@ class SignupsController < ApplicationController
   # PATCH/PUT /signups/1
   # PATCH/PUT /signups/1.json
   def update
-    respond_to do |format|
-      if @signup.update(signup_params)
-        format.html { redirect_to @signup, notice: 'Signup was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @signup.errors, status: :unprocessable_entity }
+    if is_logged_in_and_authored
+      respond_to do |format|
+        if @signup.update(signup_params)
+          format.html { redirect_to @signup, notice: 'Signup was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @signup.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_to :root
     end
   end
-
   # DELETE /signups/1
   # DELETE /signups/1.json
   def destroy
-    @signup.destroy
-    respond_to do |format|
-      format.html { redirect_to signups_url }
-      format.json { head :no_content }
+    if is_logged_in_and_authored
+      @signup.destroy
+      respond_to do |format|
+        format.html { redirect_to signups_url }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to :root
     end
   end
 

@@ -4,21 +4,32 @@ class StudentsController < ApplicationController
   # GET /students
   # GET /students.json
   def index
-    @students = Student.all
+    if is_logged_in_and_authored
+      @students = Student.all
+    else
+      redirect_to :root
+    end
   end
 
   # GET /students/1
   # GET /students/1.json
   def show
+    if current_user.nil? or current_user.id != params[:id].to_i
+      redirect_to :root
+    end
   end
 
   # GET /students/new
   def new
+
     @student = Student.new
   end
 
   # GET /students/1/edit
   def edit
+    if current_user.nil? or current_user.id != params[:id].to_i
+      redirect_to :root
+    end
   end
 
   # POST /students
