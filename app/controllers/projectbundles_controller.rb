@@ -14,7 +14,7 @@ class ProjectbundlesController < ApplicationController
 
   # GET /projectbundles/new
   def new
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @projectbundle = Projectbundle.new
     else
       redirect_to :root
@@ -23,7 +23,7 @@ class ProjectbundlesController < ApplicationController
 
   # GET /projectbundles/1/edit
   def edit
-    if not is_logged_in_and_authored
+    if not is_at_least(:teacher)
       redirect_to :root
     end
   end
@@ -31,7 +31,7 @@ class ProjectbundlesController < ApplicationController
   # POST /projectbundles
   # POST /projectbundles.json
   def create
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @projectbundle = Projectbundle.new(projectbundle_params)
 
       respond_to do |format|
@@ -51,7 +51,7 @@ class ProjectbundlesController < ApplicationController
   # PATCH/PUT /projectbundles/1
   # PATCH/PUT /projectbundles/1.json
   def update
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       respond_to do |format|
         if @projectbundle.update(projectbundle_params)
           format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully updated.' }
@@ -69,7 +69,7 @@ class ProjectbundlesController < ApplicationController
   # DELETE /projectbundles/1
   # DELETE /projectbundles/1.json
   def destroy
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @projectbundle.destroy
       respond_to do |format|
         format.html { redirect_to projectbundles_url }

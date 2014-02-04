@@ -4,7 +4,7 @@ class StudentsController < ApplicationController
   # GET /students
   # GET /students.json
   def index
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @students = Student.all
     else
       redirect_to :root

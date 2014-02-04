@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @project = Project.new
     else
       redirect_to :root
@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    if not is_logged_in_and_authored
+    if not is_at_least(:teacher)
       redirect_to :root
     end
   end
@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @project = Project.new(project_params)
       respond_to do |format|
         if @project.save
@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       respond_to do |format|
         if @project.update(project_params)
           format.html { redirect_to @project, notice: 'Project was successfully updated.' }
@@ -68,7 +68,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-    if is_logged_in_and_authored
+    if is_at_least(:teacher)
       @project.destroy
       respond_to do |format|
         format.html { redirect_to projects_url }
