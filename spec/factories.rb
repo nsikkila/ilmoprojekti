@@ -7,14 +7,6 @@ FactoryGirl.define do
 end
 
 FactoryGirl.define do
-	factory :user_with_too_short_username, :class => User do
-		username "Ab"
-		password "Test123"
-		password_confirmation "Test123"
-	end
-end
-
-FactoryGirl.define do
   factory :signup do
     student_id 1
     project_id 1
