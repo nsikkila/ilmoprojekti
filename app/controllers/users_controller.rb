@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   def edit
     if is_at_least("admin")
       @users = User.all
-    elsif not current_user.nil?
+    elsif current_user.id == params[:id].to_i
       @users = current_user
     else
       redirect_to :root

@@ -13,9 +13,9 @@
 	<% if not current_user.nil? and is_at_least(:admin) %>
 	<%= link_to 'Käyttäjät', users_path %>
 	<% end %>
-	<%= link_to 'Projektit', projects_path %>
+	<%= link_to 'Projektit', projects_path %> |
 	<% if not current_user.nil? %>
-    	<%=link_to current_user.username,  user_path(current_user.id) %> kirjautuneena sisään. |
+    	<%=link_to current_user.username,  user_path(current_user.id) %> kirjautuneena sisään. 
     	<%= link_to 'Kirjaudu ulos', signout_path, method: :delete %>
 	<% else %>
 		<%=link_to 'Kirjaudu sisään', signin_path %>
