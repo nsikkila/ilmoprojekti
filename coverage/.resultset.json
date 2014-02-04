@@ -1,7 +1,109 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/ad/fshome4/u4/n/nsikkila/Linux/ilmoprojekti/spec/models/user_spec.rb": [
+      "/home/wadror/ohtuprojekti/ilmoprojekti/spec/models/project_spec.rb": [
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/app/models/signup.rb": [
+        1,
+        1,
+        1,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/spec/models/projectbundle_spec.rb": [
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/spec/models/signup_spec.rb": [
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        3,
+        null,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/spec/models/student_spec.rb": [
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        3,
+        null,
+        1,
+        null,
+        null,
+        null,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null,
+        1,
+        1,
+        null,
+        1,
+        null,
+        1,
+        null,
+        null,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/app/models/student.rb": [
+        1,
+        1,
+        null
+      ],
+      "/home/wadror/ohtuprojekti/ilmoprojekti/spec/models/user_spec.rb": [
         1,
         null,
         null,
@@ -53,7 +155,7 @@
         null,
         null
       ],
-      "/home/ad/fshome4/u4/n/nsikkila/Linux/ilmoprojekti/app/controllers/sessions_controller.rb": [
+      "/home/wadror/ohtuprojekti/ilmoprojekti/app/controllers/sessions_controller.rb": [
         1,
         null,
         1,
@@ -79,12 +181,13 @@
         null,
         null
       ],
-      "/home/ad/fshome4/u4/n/nsikkila/Linux/ilmoprojekti/app/controllers/application_controller.rb": [
+      "/home/wadror/ohtuprojekti/ilmoprojekti/app/controllers/application_controller.rb": [
         1,
         null,
         null,
         1,
         null,
+        1,
         1,
         1,
         null,
@@ -102,9 +205,12 @@
         null,
         null,
         null,
+        1,
+        0,
+        null,
         null
       ],
-      "/home/ad/fshome4/u4/n/nsikkila/Linux/ilmoprojekti/app/controllers/users_controller.rb": [
+      "/home/wadror/ohtuprojekti/ilmoprojekti/app/controllers/users_controller.rb": [
         1,
         1,
         null,
@@ -211,6 +317,6 @@
         null
       ]
     },
-    "timestamp": 1391090627
+    "timestamp": 1391091722
   }
 }
