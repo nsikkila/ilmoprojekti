@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
+  # GET /users/new  
   def new
     if is_at_least(:admin)
       @user = User.new
