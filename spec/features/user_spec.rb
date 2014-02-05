@@ -53,6 +53,14 @@ describe "User" do
 
 			expect(current_path).to eq('/')
 		end
+
+		it "can sign out" do
+			click_link "Kirjaudu ulos"
+
+			expect(current_path).to eq root_path
+			expect(page).to have_content "Kirjaudu sisään"
+		end
+
 	end
 
 	describe "who has signed in and is an admin" do
