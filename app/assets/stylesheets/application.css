@@ -11,3 +11,29 @@
  *= require_self
  *= require_tree .
  */
+
+ /* Kenties koko ohjelmaan yleistettävää ccs:ää
+ */
+
+.projectDiv {
+    background-color: #FFFFFF;
+    max-width: 100%;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    padding: 3px;
+}
+
+.bundle {
+    font-size: 14px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    padding: 3px;
+}
+
+.content {
+    background-color: rgb(47, 99, 148);
+    padding: 20px;
+}

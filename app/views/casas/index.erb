@@ -1,3 +1,33 @@
-<h1>Welcome to home page!</h1>
+<div class="content">
 
-<p>This site was created by Helsinki University students (not ready yet)</p>
+<div class="bundle"><h1><%= @Projectbundle.name %></h1></div>
+
+<div style="margin: 10px;">
+  <div class="projectDiv">
+    Prioriteetti 1:
+    <%= form_for(@signup) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+    Prioriteetti 2:
+    <%= form_for(@signup2) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+    Prioriteetti 3:
+    <%= form_for(@signup3) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+    Prioriteetti 4:
+    <%= form_for(@signup4) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+    Prioriteetti 5:
+    <%= form_for(@signup5) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+    Prioriteetti 6:
+    <%= form_for(@signup6) do |f| %>
+        <%= f.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+    <% end %>
+  </div>
+</div>
+</div>
