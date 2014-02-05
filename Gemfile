@@ -52,6 +52,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'simplecov', :require => false
+  gem 'coveralls', require: false
 end
 
 # Use unicorn as the app server

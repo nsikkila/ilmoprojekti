@@ -37,6 +37,7 @@ describe "User" do
 	describe "who has signed in and is a teacher" do
 		before :each do
 			FactoryGirl.create :user
+			FactoryGirl.create :projectbundle
 			sign_in
 		end
 

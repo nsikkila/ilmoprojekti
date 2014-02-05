@@ -6,3 +6,10 @@ script:
 - RAILS_ENV=test bundle exec rake db:migrate --trace
 - bundle exec rake db:test:prepare
 - bundle exec rspec spec/
+deploy:
+  provider: heroku
+  api_key:
+    secure: YpPckyBKH8pz979jovrZLioTrBubRhHXYukYiRgAytEAu50OkZrJCViaQ0B9fi90RkB+gt4FuBMv8C3Ff4xztidJ+jdXea9EXMbxY6yWs9VU3ISy6Rp9SnUHrdvCs7BRz5FCT6GtdWCAZLVjyE4WxryDi6eK7/mi+BA/3Chs6Ro=
+  app: ilmoprojekti
+  on:
+    repo: ohtu2014-halme/ilmoprojekti
