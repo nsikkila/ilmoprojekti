@@ -3,6 +3,7 @@ FactoryGirl.define do
 		username "Maija"
 		password "Test123"
 		password_confirmation "Test123"
+    accesslevel 0
 	end
 end
 

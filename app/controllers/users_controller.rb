@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if is_at_least("admin")
+    if is_at_least(:admin)
       @users = User.all
     elsif current_user.id == params[:id].to_i
       @users = current_user
