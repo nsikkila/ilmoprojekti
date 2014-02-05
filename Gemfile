@@ -47,12 +47,13 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
 end
 
+gem 'coveralls', require: false
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'
   gem 'simplecov', :require => false
-  gem 'coveralls', require: false
+
 end
 
 # Use unicorn as the app server
