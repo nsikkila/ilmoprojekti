@@ -1,0 +1,9 @@
+<%= @signups.each do |p| %>
+    <table>
+        <tr>
+        <td><%= p.project.name %></td>
+        <td><%= p.student.firstname %></td>
+        <td><%= p.student.lastname %></td>
+        </tr>
+    </table>
+<% end %>
