@@ -17,4 +17,4 @@
 - https://huboard.com/ohtu2014-halme/ilmoprojekti
 
 ### Working hours tracking:
-- https://docs.google.com/spreadsheet/ccc?key=0AsgqthH8YHFWdG5tc3g0NlZyNm1mUHpDWnVBamlLWVE&usp=sharing
+- https://docs.google.com/spreadsheet/ccc?key=0Ajr6VQ5fknnpdGJoakJGQzVQaGxBVFZvMTZCTWJYSHc&usp=sharing
