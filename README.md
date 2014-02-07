@@ -10,7 +10,7 @@
 - [![Coverage Status](https://coveralls.io/repos/ohtu2014-halme/ilmoprojekti/badge.png?branch=master)](https://coveralls.io/r/ohtu2014-halme/ilmoprojekti?branch=master)
 
 ### Product Backlog:
-- https://docs.google.com/spreadsheet/ccc?key=0AsgqthH8YHFWdG5tc3g0NlZyNm1mUHpDWnVBamlLWVE&usp=drive_web#gid=1
+- https://github.com/ohtu2014-halme/ilmoprojekti/wiki/Product-Backlog
 
 ### Sprint backlog:
 - https://github.com/ohtu2014-halme/ilmoprojekti/issues?state=open
