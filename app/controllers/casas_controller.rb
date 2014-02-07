@@ -23,7 +23,4 @@ class CasasController < ApplicationController
     render action:'show'
   end
 
-  def show
-    @signups = Signup.all
-  end
 end
