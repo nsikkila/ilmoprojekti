@@ -13,6 +13,7 @@ describe CasasController do
     expect(Signup.count).to eq(6)
     #one student
     expect(Student.count).to eq(1)
+    expect(Student.first.signups.first.student_id).to eq(1)
   end
 
 end
