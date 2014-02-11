@@ -1,5 +1,6 @@
 class ProjectbundlesController < ApplicationController
   before_action :set_projectbundle, only: [:show, :edit, :update, :destroy]
+  before_action :is_at_least(:teacher)
 
   # GET /projectbundles
   # GET /projectbundles.json

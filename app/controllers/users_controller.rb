@@ -1,15 +1,11 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :is_at_least(:admin), only [:new, :create, :destroy]
 
   # GET /users
   # GET /users.json
   def index
-    if is_at_least(:admin)
       @users = User.all
-    else
-      redirect_to :root
-    end
-    
   end
 
   # GET /users/1
@@ -22,11 +18,7 @@ class UsersController < ApplicationController
 
   # GET /users/new  
   def new
-    if is_at_least(:admin)
       @user = User.new
-    else
-      redirect_to :root
-    end
   end
 
   # GET /users/1/edit
@@ -80,15 +72,11 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if is_at_least(:admin)
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
     end
-  else
-    redirect_to :root
-  end
   end
 
   private
