@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
-  before_action :is_at_least(:teacher)
 
   # GET /projects
   # GET /projects.json
@@ -15,11 +14,10 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
-    if is_at_least(:teacher)
-      @project = Project.new
-    else
+    if not is_at_least(:teacher)
       redirect_to :root
     end
+      @project = Project.new
   end
 
   # GET /projects/1/edit
@@ -32,7 +30,9 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-    if is_at_least(:teacher)
+    if not is_at_least(:teacher)
+      redirect_to :root
+    end
       @project = Project.new(project_params)
       respond_to do |format|
         if @project.save
@@ -43,15 +43,14 @@ class ProjectsController < ApplicationController
           format.json { render json: @project.errors, status: :unprocessable_entity }
         end
       end
-    else
-      redirect_to :root
-    end
   end
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    if is_at_least(:teacher)
+    if not is_at_least(:teacher)
+      redirect_to :root
+    end
       respond_to do |format|
         if @project.update(project_params)
           format.html { redirect_to @project, notice: 'Project was successfully updated.' }
@@ -61,23 +60,19 @@ class ProjectsController < ApplicationController
           format.json { render json: @project.errors, status: :unprocessable_entity }
         end
       end
-    else
-      redirect_to :root
-    end
   end
 
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-    if is_at_least(:teacher)
+    if not is_at_least(:teacher)
+      redirect_to :root
+    end
       @project.destroy
       respond_to do |format|
         format.html { redirect_to projects_url }
         format.json { head :no_content }
       end
-    else
-      redirect :root
-    end
   end
 
   private

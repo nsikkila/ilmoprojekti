@@ -1,16 +1,21 @@
 class ProjectbundlesController < ApplicationController
   before_action :set_projectbundle, only: [:show, :edit, :update, :destroy]
-  before_action :is_at_least(:teacher)
 
   # GET /projectbundles
   # GET /projectbundles.json
   def index
+    if not is_at_least(:teacher)
+      redirect_to :root
+    end
     @projectbundles = Projectbundle.all
   end
 
   # GET /projectbundles/1
   # GET /projectbundles/1.json
   def show
+    if not is_at_least(:teacher)
+      redirect_to :root
+    end
   end
 
   # GET /projectbundles/new

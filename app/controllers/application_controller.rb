@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :is_at_least
-  helper_method :is_logged_in_and_authored
 
   def current_user
     return nil if session[:user_id].nil? 
@@ -15,7 +14,7 @@ class ApplicationController < ActionController::Base
   def is_at_least(level)
   	if not current_user.nil?
   		list = {:admin => 1, :teacher => 0 }
-  		list[level] <= current_user.accesslevel
+  	  list[level] <= current_user.accesslevel
 	  end
   end
 end
