@@ -15,7 +15,7 @@ describe Student do
 
     student.firstname.should == "Testi"
     student.lastname.should == "Testinen"
-    student.studentnumber.should == "013460745"
+    student.studentnumber.should == "1234567"
   end
 
   it "is saved with proper fields" do
@@ -24,6 +24,14 @@ describe Student do
     expect(student.valid?).to be (true)
     #Student is added to db
     expect(Student.count).to eq (1)
+  end
+
+
+  it "when given invalid fields does not pass validation" do
+    student2 = FactoryGirl.build(:student, firstname:"a", lastname:"b", studentnumber:"1", email:"fakemail")
+    expect(student2.valid?).to be (false)
+
+    expect(Student.count).to eq (0)
   end
 
 end

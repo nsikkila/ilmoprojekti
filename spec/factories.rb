@@ -28,7 +28,8 @@ FactoryGirl.define do
   factory :student do
     firstname "Testi"
     lastname "Testinen"
-    studentnumber "013460745"
+    studentnumber "1234567"
+    email "test@email.com"
   end
 end
 
