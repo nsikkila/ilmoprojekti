@@ -16,8 +16,6 @@ describe "Enrollments page" do
 
       visit root_path
 
-      save_and_open_page
-
       fill_in('sfirstname', with:"Testi")
       fill_in('slastname', with:"Testinen")
       fill_in('studentnumber', with:"1234567")
