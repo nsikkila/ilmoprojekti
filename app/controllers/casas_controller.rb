@@ -20,7 +20,7 @@ class CasasController < ApplicationController
     if @student.nil? or @signups.nil? 
       render action:'index', status: :unprocessable_entity
     end
-    render action:'show', status: :created
+    render action:'show'
   end
 
 private
