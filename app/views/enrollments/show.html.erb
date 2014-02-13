@@ -10,4 +10,4 @@
 <li><%=p.priority %>. valinta: <%= p.project.name %></li>
 <% end %>
 
-<%= link_to 'Muokkaa valintojasi', enrollments/edit/@student.id/@digest %>
+<%= link_to 'Muokkaa valintojasi', "enrollments/edit/"+@student.id.to_s+"/"+@digest %>

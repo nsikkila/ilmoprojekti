@@ -1,2 +1,0 @@
-<%= Ilmottautumisen muokkaus %>
-<%= render 'form' %>
