@@ -21,7 +21,7 @@ class EnrollmentsController < ApplicationController
     Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
     @signups = @student.signups
     @digest=create_hash(@student)
-    EnrollmentMail.confirmation_email(@student, @digest).deliver
+    #EnrollmentMail.confirmation_email(@student, @digest).deliver
     render action:'show'
   end
 
