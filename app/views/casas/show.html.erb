@@ -1,3 +1,4 @@
+<p id="notice"><%= notice %></p>
 <% @signups.each do |p| %>
     <table>
         <tr>
@@ -5,6 +6,8 @@
         <td><%= p.student.firstname %></td>
         <td><%= p.student.lastname %></td>
         <td><%= p.student.email %></td>
+
         </tr>
     </table>
 <% end %>
+Digest: <%= @digest %>
