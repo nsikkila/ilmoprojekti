@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CasasController do
+describe EnrollmentsController do
   before :each do
     @project_bundle = FactoryGirl.create(:projectbundle)
     @projects = generate_six_unique_projects(@project_bundle.id)

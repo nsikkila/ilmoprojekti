@@ -1,4 +1,4 @@
-class CasasController < ApplicationController
+class EnrollmentsController < ApplicationController
 
   def index
     @Projectbundle = Projectbundle.first
