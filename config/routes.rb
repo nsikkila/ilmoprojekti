@@ -17,7 +17,6 @@ Ilmoprojekti::Application.routes.draw do
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
 
- 
 
   root 'enrollments#new'
   # The priority is based upon order of creation: first created -> highest priority.

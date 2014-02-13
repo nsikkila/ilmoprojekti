@@ -1,6 +1,9 @@
 class EnrollmentsController < ApplicationController
-
   require 'digest/sha1'
+  
+  def index
+  end
+
   def new
     @Projectbundle = Projectbundle.first
     #@projects = @Projectbundle.projects
