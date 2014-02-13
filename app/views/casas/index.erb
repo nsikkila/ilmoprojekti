@@ -43,17 +43,23 @@
     <% end %>
   </div>
 
-  <div>
+  <div class="projectInfo">
     <% @projects.each do |p| %>
-    <div id="<%= p.id %>">
-        <%= p.name %>
-        <div style="visibility:none">
+        <h3><%= p.name %></h3>
+        <div id="<%= p.id %>" >
+          <p>
           <%= p.description %>
-          Vastuuhenkilö: <%= p.user.firstname p.user.lastname %>
+          Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+          </p>
         </div>
-    </div>
-
     <% end %>
   </div>
+
 </div>
 </div>
+
+<script>
+    $(function() {
+        $( ".projectInfo" ).accordion();
+    });
+</script>
