@@ -5,8 +5,8 @@ class ProjectbundlesControllerTest < ActionController::TestCase
     @projectbundle = projectbundles(:one)
   end
 
-  test "should get index" do
-    get :index
+  test "should get new" do
+    get :new
     assert_response :success
     assert_not_nil assigns(:projectbundles)
   end

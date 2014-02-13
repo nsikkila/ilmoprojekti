@@ -1,7 +1,7 @@
 class EnrollmentsController < ApplicationController
 
   require 'digest/sha1'
-  def index
+  def new
     @Projectbundle = Projectbundle.first
     #@projects = @Projectbundle.projects
     @projects = Project.all
@@ -22,25 +22,28 @@ class EnrollmentsController < ApplicationController
     render action:'show'
   end
 
-  # GET enrollments/edit/sudent_id/hash
+  # GET enrollments/edit/student_id/hash
   def edit
     @Projectbundle = Projectbundle.first
     @projects = Project.all
     @enrollment = Enrollment.new
 
     student = Student.last
-    #student = Student.find(params[:student_id])
+    student = Student.find(params[:student_id])
 
-    #if hash == create_hash(student)
+    if params[:hash] == create_hash(student)
       signups = Array.new(6)
       student.signups.each do |s|
         signups[s.priority-1] = s.project_id
-   #   end
+      end
+
       @enrollment.signups = signups
       @enrollment.sfirstname = student.firstname
       @enrollment.slastname = student.lastname
       @enrollment.studentnumber = student.studentnumber
       @enrollment.email = student.email
+    else
+      redirect_to :root
     end
 
   end

@@ -5,8 +5,8 @@ class SignupsControllerTest < ActionController::TestCase
     @signup = signups(:one)
   end
 
-  test "should get index" do
-    get :index
+  test "should get new" do
+    get :new
     assert_response :success
     assert_not_nil assigns(:signups)
   end

@@ -6,8 +6,8 @@ describe ProjectbundlesController do
 		@projectbundle2 = FactoryGirl.create :projectbundle, name:"bundle2"
 	end
 
-	it "#index sets all bundles to variable" do
-		get :index
+	it "#new sets all bundles to variable" do
+		get :new
 		assigns(:projectbundles).count.should == 2
 	end
 
