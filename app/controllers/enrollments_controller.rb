@@ -20,6 +20,12 @@ class EnrollmentsController < ApplicationController
     render action:'show'
   end
 
+  # GET edit/hash/edit
+  def edit
+    @enrollment = Enrollment.new
+    @enrollment.msg="heippa"
+  end
+
 private
 
   def create_hash
