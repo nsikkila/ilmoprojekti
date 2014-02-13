@@ -17,26 +17,30 @@ class EnrollmentsController < ApplicationController
     Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
     Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
     @signups = @student.signups
-    @digest=create_hash
+    @digest=create_hash(@student)
     render action:'show'
   end
 
   # GET enrollments/hash/edit
   def edit
     @Projectbundle = Projectbundle.first
-    @projects = Project.all
+    projects = Project.all
     @enrollment = Enrollment.new
-    @student = Student.find(params[:student_id])
+    student = Student.find(params[:student_id])
 
-    if hash == create_hash
-      @student.signups.each
+    if hash == create_hash(student)
+      signups = Array.new(6)
+      student.signups.each do |s|
+        signups[s.priority-1] = s.project_id
+      end
+      @enrollment.signups = signups
     end
   end
 
 private
 
-  def create_hash
-     Digest::SHA1.hexdigest (@student.id.to_s + @student.studentnumber.to_s)
+  def create_hash(student)
+     Digest::SHA1.hexdigest (student.id.to_s + student.studentnumber.to_s)
   end
 
 end
