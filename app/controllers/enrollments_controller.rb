@@ -23,8 +23,10 @@ class EnrollmentsController < ApplicationController
 
   # GET enrollments/hash/edit
   def edit
+    @Projectbundle = Projectbundle.first
+    @projects = Project.all
     @enrollment = Enrollment.new
-    @enrollment.msg="heippa"
+    @enrollment.msg=params[:hash]
   end
 
 private
