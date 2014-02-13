@@ -28,7 +28,7 @@ describe Student do
 
 
   it "when given invalid fields does not pass validation" do
-    student2 = FactoryGirl.build(:student, firstname:"a", lastname:"b", studentnumber:"1", email:"fakemail")
+    student2 = FactoryGirl.build(:student, firstname:"a", lastname:"b", studentnumber:"asd", email:"fakemail")
     expect(student2.valid?).to be (false)
 
     expect(Student.count).to eq (0)

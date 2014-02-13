@@ -18,10 +18,3 @@ describe EnrollmentsController do
 
 end
 
-def generate_six_unique_projects(bundle_id)
-  projects = Array.new(6)
-  (0..5).each do |i|
-    projects[i] = FactoryGirl.create(:project, bundle_id:i+1)
-  end
-  projects
-end
