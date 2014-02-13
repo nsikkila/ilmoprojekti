@@ -9,3 +9,5 @@
 <% @signups.each do |p| %>
 <li><%=p.priority %>. valinta: <%= p.project.name %></li>
 <% end %>
+
+<%= link_to 'Muokkaa valintojasi', enrollments/edit/@student.id/@digest %>

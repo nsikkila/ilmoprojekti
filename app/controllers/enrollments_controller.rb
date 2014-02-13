@@ -17,7 +17,7 @@ class EnrollmentsController < ApplicationController
     Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
     Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
     @signups = @student.signups
-    create_hash
+    @digest=create_hash
     render action:'show'
   end
 
@@ -36,7 +36,7 @@ class EnrollmentsController < ApplicationController
 private
 
   def create_hash
-     @digest=Digest::SHA1.hexdigest (@student.id.to_s + @student.studentnumber.to_s)
+     Digest::SHA1.hexdigest (@student.id.to_s + @student.studentnumber.to_s)
   end
 
 end
