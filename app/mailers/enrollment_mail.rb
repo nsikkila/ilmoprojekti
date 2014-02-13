@@ -5,6 +5,6 @@ class EnrollmentMail < ActionMailer::Base
   	@student=user
   	@digest=hash
   	@url="http://ilmoprojekti.herokuapp.com/enrollments/"+@student.id.to_s+"/"+@digest
-  	mail(to: @user.email, subject:'Vahvistus ilmottautumisesta')
+  	mail(to: @student.email, subject:'Vahvistus ilmottautumisesta')
   end
 end

@@ -36,7 +36,7 @@ describe "Enrollments page" do
         click_button('Ilmoittaudu')
       }.to change{Signup.count}.by(6)
 
-      expect(page).to have_content 'Testi Testinen'
+      expect(page).to have_content 'Etunimi: Testi Sukunimi: Testinen'
     end
 
   end
