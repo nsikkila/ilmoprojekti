@@ -9,7 +9,7 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :users
 
-  resources :enrollments, only: [:new, :create, :destory]
+  resources :enrollments, only: [:new, :create, :destroy]
 
   resources :sessions, only: [:new, :create, :destroy]
 

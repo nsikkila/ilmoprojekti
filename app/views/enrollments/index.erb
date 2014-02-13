@@ -1,22 +1,28 @@
 <div class="content">
 
 <div class="bundle"><h1><%= @Projectbundle.name unless @Projectbundle.nil? %></h1></div>
+  <div style="margin-top: 10px;">
+    <div class="projectDiv" style="padding: 15px;">
 
-    <%= render 'form' %>
+      <div class="projectInfo" style="max-width: 600px;">
+        <% @projects.each do |p| %>
+            <h3><%= p.name %></h3>
+            <div id="<%= p.id %>" >
+              <p>
+                <%= p.description %><br/>
+                Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
+                Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
+                Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+              </p>
+            </div>
+        <% end %>
+      </div>
 
-  <div class="projectInfo">
-    <% @projects.each do |p| %>
-        <h3><%= p.name %></h3>
-        <div id="<%= p.id %>" >
-          <p>
-          <%= p.description %>
-          Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
-          </p>
-        </div>
-    <% end %>
+      <br/>
+  <%= render 'form' %>
+
+    </div>
   </div>
-
-</div>
 </div>
 
 <script>
