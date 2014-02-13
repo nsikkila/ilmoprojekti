@@ -42,5 +42,18 @@
         <%= submit_tag("Ilmoittaudu") %>
     <% end %>
   </div>
+
+  <div>
+    <% @projects.each do |p| %>
+    <div id="<%= p.id %>">
+        <%= p.name %>
+        <div style="visibility:none">
+          <%= p.description %>
+          Vastuuhenkilö: <%= p.user.firstname p.user.lastname %>
+        </div>
+    </div>
+
+    <% end %>
+  </div>
 </div>
 </div>
