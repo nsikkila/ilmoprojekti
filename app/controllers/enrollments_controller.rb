@@ -1,6 +1,6 @@
-class CasasController < ApplicationController
-    require 'digest/sha1'
+class EnrollmentsController < ApplicationController
 
+  require 'digest/sha1'
   def index
     @Projectbundle = Projectbundle.first
     #@projects = @Projectbundle.projects
@@ -8,6 +8,7 @@ class CasasController < ApplicationController
   end
 
   def create
+
     @student = Student.create(firstname: params[:sfirstname], lastname: params[:slastname], studentnumber: params[:studentnumber], email: params[:email])
     Signup.create(student_id: @student.id, priority: 1, status: false, project_id: params[:p1][:project_id])
     Signup.create(student_id: @student.id, priority: 2, status: false, project_id: params[:p2][:project_id])
@@ -16,10 +17,6 @@ class CasasController < ApplicationController
     Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
     Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
     @signups = @student.signups
-    create_hash
-    if @student.nil? or @signups.nil? 
-      render action:'index', status: :unprocessable_entity
-    end
     render action:'show'
   end
 

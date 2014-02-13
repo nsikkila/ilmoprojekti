@@ -9,14 +9,14 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :users
 
-  resources :casas
+  resources :enrollments
 
   resources :sessions, only: [:new, :create, :destroy]
 
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
 
-  root 'casas#index'
+  root 'enrollments#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
