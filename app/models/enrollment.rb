@@ -4,6 +4,14 @@ class Enrollment
     @msg = ""
   end
 
+  def signups
+    @signups
+  end
+
+  def signups=(signups)
+    @signups = signups
+  end
+
   def msg
     @msg
   end

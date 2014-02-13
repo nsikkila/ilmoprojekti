@@ -26,7 +26,11 @@ class EnrollmentsController < ApplicationController
     @Projectbundle = Projectbundle.first
     @projects = Project.all
     @enrollment = Enrollment.new
-    @enrollment.msg=params[:hash]
+    @student = Student.find(params[:student_id])
+
+    if hash == create_hash
+      @student.signups.each
+    end
   end
 
 private
