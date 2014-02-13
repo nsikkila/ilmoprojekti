@@ -24,8 +24,9 @@ class EnrollmentsController < ApplicationController
   # GET enrollments/hash/edit
   def edit
     @Projectbundle = Projectbundle.first
-    projects = Project.all
+    @projects = Project.all
     @enrollment = Enrollment.new
+
     student = Student.find(params[:student_id])
 
     if hash == create_hash(student)
@@ -34,7 +35,12 @@ class EnrollmentsController < ApplicationController
         signups[s.priority-1] = s.project_id
       end
       @enrollment.signups = signups
+      @enrollment.sfirstname = student.firstname
+      @enrollment.slastname = student.lastname
+      @enrollment.studentnumber = student.studentnumber
+      @enrollment.email = student.email
     end
+
   end
 
 private
