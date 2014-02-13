@@ -8,7 +8,6 @@ class EnrollmentsController < ApplicationController
   end
 
   def create
-
     @student = Student.create(firstname: params[:sfirstname], lastname: params[:slastname], studentnumber: params[:studentnumber], email: params[:email])
     Signup.create(student_id: @student.id, priority: 1, status: false, project_id: params[:p1][:project_id])
     Signup.create(student_id: @student.id, priority: 2, status: false, project_id: params[:p2][:project_id])
@@ -21,10 +20,15 @@ class EnrollmentsController < ApplicationController
     render action:'show'
   end
 
-  # GET enrollments/hash/edit
+<<<<<<< HEAD
+  # GET edit/hash/edit
   def edit
     @enrollment = Enrollment.new
     @enrollment.msg="heippa"
+=======
+  def edit
+    
+>>>>>>> 20f3a9446a429f384ff8586d00a8df6a0d96aba5
   end
 
 private

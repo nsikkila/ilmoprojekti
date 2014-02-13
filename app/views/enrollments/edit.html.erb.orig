@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+<h2>Edit enrollment:</h2>
+
+<%= @enrollment.msg %>
+=======
+<%= Ilmottautumisen muokkaus %>
+<%= render 'form' %>
+>>>>>>> 20f3a9446a429f384ff8586d00a8df6a0d96aba5
