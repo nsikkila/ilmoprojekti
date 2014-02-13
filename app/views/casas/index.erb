@@ -42,5 +42,24 @@
         <%= submit_tag("Ilmoittaudu") %>
     <% end %>
   </div>
+
+  <div class="projectInfo">
+    <% @projects.each do |p| %>
+        <h3><%= p.name %></h3>
+        <div id="<%= p.id %>" >
+          <p>
+          <%= p.description %>
+          Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+          </p>
+        </div>
+    <% end %>
+  </div>
+
 </div>
 </div>
+
+<script>
+    $(function() {
+        $( ".projectInfo" ).accordion();
+    });
+</script>

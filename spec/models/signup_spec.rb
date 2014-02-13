@@ -26,7 +26,7 @@ describe Signup do
     #it "is not saved" do
     #  FactoryGirl.build(:signup, project:"asd", priority:"asd", student_id:"asd", status:"asd")
 
-      #Signup must not be valid
+     #Signup must not be valid
     #  expect(signup.valid?).to be(false)
     #  signup.save
       #User must not be added to db
