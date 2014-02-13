@@ -1,66 +1,28 @@
 <div class="content">
 
 <div class="bundle"><h1><%= @Projectbundle.name unless @Projectbundle.nil? %></h1></div>
+  <div style="margin-top: 10px;">
+    <div class="projectDiv" style="padding: 15px;">
 
-<div style="margin-top: 10px;">
-  <div class="projectDiv" style="padding: 15px;">
+      <div class="projectInfo" style="max-width: 600px;">
+        <% @projects.each do |p| %>
+            <h3><%= p.name %></h3>
+            <div id="<%= p.id %>" >
+              <p>
+                <%= p.description %><br/>
+                Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
+                Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
+                Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+              </p>
+            </div>
+        <% end %>
+      </div>
 
-    <div class="projectInfo" style="max-width: 600px;">
-      <% @projects.each do |p| %>
-          <h3><%= p.name %></h3>
-          <div id="<%= p.id %>" >
-            <p>
-              <%= p.description %><br/>
-              Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
-              Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
-              Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
-            </p>
-          </div>
-      <% end %>
+      <br/>
+  <%= render 'form' %>
+
     </div>
-
-    <br/>
-
-    <%= form_tag do %>
-        <table>
-        <tr>
-            <td><%= label_tag(:sfirstname, "Etunimi:") %></td><td><%= text_field_tag(:sfirstname) %></td>
-        </tr>
-        <tr>
-            <td><%= label_tag(:slastname, "Sukunimi:") %></td><td><%= text_field_tag(:slastname) %></td>
-        </tr>
-        <tr>
-            <td><%= label_tag(:studentnumber, "Opiskelijanumero:") %></td><td><%= text_field_tag(:studentnumber) %></td>
-        </tr>
-        <tr>
-          <td><%= label_tag(:email, "Sähköpostiosoite:") %></td><td><%= text_field_tag(:email) %></td>
-        </tr>
-
-        <tr>
-            <td>Prioriteetti 1:</td><td><%= collection_select(:p1, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        <tr>
-            <td>Prioriteetti 2:</td><td><%= collection_select(:p2, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        <tr>
-            <td>Prioriteetti 3:</td><td><%= collection_select(:p3, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        <tr>
-            <td>Prioriteetti 4:</td><td><%= collection_select(:p4, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        <tr>
-            <td>Prioriteetti 5:</td><td><%= collection_select(:p5, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        <tr>
-            <td>Prioriteetti 6:</td><td><%= collection_select(:p6, :project_id, @projects, :id, :name) %></td>
-        </tr>
-        </table>
-
-        <%= submit_tag("Ilmoittaudu") %>
-    <% end %>
   </div>
-
-</div>
 </div>
 
 <script>

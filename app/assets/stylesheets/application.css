@@ -38,3 +38,7 @@
     background-color: rgb(47, 99, 148);
     padding: 20px;
 }
+
+li {
+    list-style: none;
+}

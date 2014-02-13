@@ -1,0 +1,37 @@
+    <%= form_tag do %>
+        <table>
+          <tr>
+            <td><%= label_tag(:sfirstname, "Etunimi:") %></td><td><%= text_field_tag(:sfirstname) %></td>
+          </tr>
+          <tr>
+            <td><%= label_tag(:slastname, "Sukunimi:") %></td><td><%= text_field_tag(:slastname) %></td>
+          </tr>
+          <tr>
+            <td><%= label_tag(:studentnumber, "Opiskelijanumero:") %></td><td><%= text_field_tag(:studentnumber) %></td>
+          </tr>
+          <tr>
+            <td><%= label_tag(:email, "Sähköpostiosoite:") %></td><td><%= text_field_tag(:email) %></td>
+          </tr>
+
+          <tr>
+            <td>Prioriteetti 1:</td><td><%= collection_select(:p1, :project_id, @projects, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td>Prioriteetti 2:</td><td><%= collection_select(:p2, :project_id, @projects, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td>Prioriteetti 3:</td><td><%= collection_select(:p3, :project_id, @projects, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td>Prioriteetti 4:</td><td><%= collection_select(:p4, :project_id, @projects, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td>Prioriteetti 5:</td><td><%= collection_select(:p5, :project_id, @projects, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td>Prioriteetti 6:</td><td><%= collection_select(:p6, :project_id, @projects, :id, :name) %></td>
+          </tr>
+        </table>
+
+        <%= submit_tag("Ilmoittaudu") %>
+    <% end %>
