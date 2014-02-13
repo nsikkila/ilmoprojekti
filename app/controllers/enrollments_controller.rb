@@ -22,20 +22,27 @@ class EnrollmentsController < ApplicationController
     render action:'show'
   end
 
-  # GET enrollments/hash/edit
+  # GET enrollments/edit/sudent_id/hash
   def edit
     @Projectbundle = Projectbundle.first
-    projects = Project.all
+    @projects = Project.all
     @enrollment = Enrollment.new
-    student = Student.find(params[:student_id])
 
-    if hash == create_hash(student)
+    student = Student.last
+    #student = Student.find(params[:student_id])
+
+    #if hash == create_hash(student)
       signups = Array.new(6)
       student.signups.each do |s|
         signups[s.priority-1] = s.project_id
-      end
+   #   end
       @enrollment.signups = signups
+      @enrollment.sfirstname = student.firstname
+      @enrollment.slastname = student.lastname
+      @enrollment.studentnumber = student.studentnumber
+      @enrollment.email = student.email
     end
+
   end
 
 private
