@@ -50,11 +50,10 @@ class EnrollmentsController < ApplicationController
     end
 
   end
-
-private
-
   def create_hash(student)
      Digest::SHA1.hexdigest (student.id.to_s + student.studentnumber.to_s)
   end
+
+  
 
 end

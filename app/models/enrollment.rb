@@ -5,6 +5,8 @@ class Enrollment
   def initialize
     @msg = ""
   end
+
+  
 =begin
   def signups
     @signups

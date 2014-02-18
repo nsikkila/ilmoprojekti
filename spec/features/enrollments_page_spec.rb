@@ -68,6 +68,33 @@ describe "Enrollments page" do
       expect(page).to have_content 'Etunimi: Testi Sukunimi: Testinen'
     end
 
+    it "creates unique hash for users" do
+      FactoryGirl.create :projectbundle
+
+      generate_six_unique_projects_with_user(1)
+      @projects = Project.all
+
+      expect(Project.count).to eq(6)
+
+      visit root_path
+
+      fill_in('sfirstname', with:"Testi")
+      fill_in('slastname', with:"Testinen")
+      fill_in('studentnumber', with:"1234567")
+      fill_in('email', with:"testi@testi.fi")
+
+      select('1', from:'p1[project_id]')
+      select('2', from:'p2[project_id]')
+      select('3', from:'p3[project_id]')
+      select('4', from:'p4[project_id]')
+      select('5', from:'p5[project_id]')
+      select('6', from:'p6[project_id]')
+
+      user= Student.find_by studentnumber:'1234567'
+  #    hash= Enrollment.create_hash(user)
+  #    expect(page).to have_content 'http://ilmoprojekti.herokuapp.com/enrollments/edit/' + user.id + '/' + hash 
+    end
+
   end
 
 end
