@@ -19,6 +19,12 @@
       </div>
 
       <br/>
+
+      <% if not @student.nil? %>
+          <% if @student.errors.any? %>
+              <%= @student.errors.inspect %>
+          <% end %>
+      <% end %>
   <%= render 'form' %>
 
     </div>

@@ -20,7 +20,7 @@ describe "Signup page" do
   it "does not allow editing if user is not logged in" do
     FactoryGirl.create(:signup)
     visit edit_signup_path(1)
-    expect(page).should_not have_content("Editing signup")
+    expect(page).not_to have_content("Editing signup")
   end
 
 end
