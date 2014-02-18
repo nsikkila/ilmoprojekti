@@ -1,37 +1,32 @@
-    <%= form_tag("/enrollments") do %>
-        <table>
-          <tr>
-            <td><%= label_tag(:sfirstname, "Etunimi:") %></td><td><%= text_field_tag(:sfirstname, "#{@enrollment.sfirstname unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td><%= label_tag(:slastname, "Sukunimi:") %></td><td><%= text_field_tag(:slastname, "#{@enrollment.slastname unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td><%= label_tag(:studentnumber, "Opiskelijanumero:") %></td><td><%= text_field_tag(:studentnumber, "#{@enrollment.studentnumber unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td><%= label_tag(:email, "Sähköpostiosoite:") %></td><td><%= text_field_tag(:email, "#{@enrollment.email unless @enrollment.nil?}") %></td>
-          </tr>
+<%= form_for(@enrollment) do |f| %>
+    <% if @enrollment.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@student.errors.count, "error") %> prohibited this enrollment from being saved:</h2>
 
-          <tr>
-            <td>Prioriteetti 1:</td><td><%= collection_select(:p1, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[0] unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td>Prioriteetti 2:</td><td><%= collection_select(:p2, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[1] unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td>Prioriteetti 3:</td><td><%= collection_select(:p3, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[2] unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td>Prioriteetti 4:</td><td><%= collection_select(:p4, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[3] unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td>Prioriteetti 5:</td><td><%= collection_select(:p5, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[4] unless @enrollment.nil?}") %></td>
-          </tr>
-          <tr>
-            <td>Prioriteetti 6:</td><td><%= collection_select(:p6, :project_id, @projects, :id, :name, selected:"#{@enrollment.signups[5] unless @enrollment.nil?}") %></td>
-          </tr>
-        </table>
-
-        <%= submit_tag("Ilmoittaudu") %>
+          <ul>
+            <% @enrollment.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
     <% end %>
+
+    <%= f.label :firstname %><br />
+    <%= f.text_field :firstname %>
+
+    <%= f.label :lastname %><br />
+    <%= f.text_field :lastname %>
+
+    <%= f.label :studentnumber %><br />
+    <%= f.text_field :studentnumber %>
+
+    <%= f.label :email %><br />
+    <%= f.text_field :email %><br />
+
+    <%= fields_for(:)
+
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
