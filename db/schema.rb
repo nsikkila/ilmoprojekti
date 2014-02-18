@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140211160105) do
+ActiveRecord::Schema.define(version: 20140218152314) do
 
   create_table "projectbundles", force: true do |t|
     t.string   "name"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20140211160105) do
     t.datetime "updated_at"
     t.integer  "maxstudents"
     t.integer  "user_id"
-    t.integer  "bundle_id"
+    t.integer  "projectbundle_id"
   end
 
   create_table "signups", force: true do |t|
