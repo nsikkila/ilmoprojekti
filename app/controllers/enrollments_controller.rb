@@ -5,9 +5,9 @@ class EnrollmentsController < ApplicationController
   end
 
   def new
-    @Projectbundle = Projectbundle.first
-    #@projects = @Projectbundle.projects
-    @projects = Project.all
+    @projectbundle = Projectbundle.first
+    @projects = @projectbundle.projects
+    #@projects = Project.all
   end
 
   def create
