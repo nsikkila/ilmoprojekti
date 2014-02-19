@@ -8,13 +8,16 @@ class EnrollmentsController < ApplicationController
     @projectbundle = Projectbundle.first
     @projects = @projectbundle.projects
     @enrollment = Enrollment.new
+
+    6.times do
+      @enrollment.signups << Signup.new
+    end
     #@projects = Project.all
   end
 
   def create
 
     @enrollment = Enrollment.new(enrollment_params)
-
     @enrollment.save
 
 =begin
@@ -60,7 +63,7 @@ class EnrollmentsController < ApplicationController
 private
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email)
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id])
   end
 
   def create_hash(student)

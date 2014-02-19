@@ -24,7 +24,10 @@
     <%= f.label :email %><br />
     <%= f.text_field :email %><br />
 
-
+        <%= f.fields_for :signups do |sf| %>
+            <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+            <br />
+        <% end %>
 
     <div class="actions">
       <%= f.submit %>
