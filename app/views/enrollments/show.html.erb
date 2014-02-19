@@ -1,13 +1,1 @@
 <h2> Ilmottautuminen onnistui! </h2>
-
-<li><strong>Etunimi:</strong> <%= @student.firstname %></li>
-<li><strong>Sukunimi:</strong> <%= @student.lastname %></li>
-<li><strong>Sähköpostiosoite:</strong> <%= @student.email %></li>
-
-<h3>Ilmottauduit projekteihin:</h3>
-
-<% @signups.each do |p| %>
-<li><%=p.priority %>. valinta: <%= p.project.name %></li>
-<% end %>
-
-<%= link_to 'Muokkaa valintojasi', "enrollments/edit/"+@student.id.to_s+"/"+@digest %>
