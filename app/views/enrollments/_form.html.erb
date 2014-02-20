@@ -27,9 +27,9 @@
 
         <%= f.fields_for :signups do |sf| %>
             Prioriteetti <%= sf.object.priority %>: <br />
-            <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
+            <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name, sf.object.project_id) %>
             <br />
-            <%= sf.hidden_field :enrollment_id %>
+            <%= sf.hidden_field :id, value:sf.object.id %>
             <%= sf.hidden_field :priority, value:"#{sf.object.priority}" %>
 
         <% end %>
