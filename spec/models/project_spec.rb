@@ -7,4 +7,4 @@ require 'spec_helper'
 Project
 ProjectbundlesController
 SignupsController
-StudentsController
+
