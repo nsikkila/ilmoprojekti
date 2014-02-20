@@ -123,12 +123,10 @@ describe "Enrollments page" do
       expect(page).to have_content('Opiskelijanumero: 1234567')
       expect(page).to have_content('Email: testi@testi.fi')
 
-      expect(page).to have_content('1')
-      expect(page).to have_content('2')
-      expect(page).to have_content('3')
-      expect(page).to have_content('4')
-      expect(page).to have_content('5')
-      expect(page).to have_content('6')
+      @projects.each do |pro|
+        expect(page).to have_content(pro.name)
+      end
+
     end
 
  
