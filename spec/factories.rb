@@ -18,7 +18,7 @@ end
 
 FactoryGirl.define do
   factory :signup do
-    student_id 1
+    enrollment_id 1
     project_id 1
     priority 1
     status true
@@ -34,7 +34,7 @@ FactoryGirl.define do
 end
 
 FactoryGirl.define do
-  factory :student do
+  factory :enrollment do
     firstname "Testi"
     lastname "Testinen"
     studentnumber "1234567"
@@ -48,7 +48,7 @@ FactoryGirl.define do
     description "This is a test project created by factorygirl"
     maxstudents 15
     user_id 1
-    bundle_id 1
+    projectbundle_id 1
   end
 end
 

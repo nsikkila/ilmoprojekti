@@ -10,7 +10,7 @@ module TestHelper
   def generate_six_unique_projects(bundle_id)
     projects = Array.new(6)
     (0..5).each do |i|
-      projects[i] = FactoryGirl.create(:project, name: i+1, bundle_id:i+1)
+      projects[i] = FactoryGirl.create(:project, name: i+1, projectbundle_id:i+1)
     end
     projects
   end
@@ -19,7 +19,7 @@ module TestHelper
     user = FactoryGirl.create(:user)
     projects = Array.new(6)
     (0..5).each do |i|
-      projects[i] = FactoryGirl.create(:project, name: i+1, bundle_id:i+1, user_id:user.id)
+      projects[i] = FactoryGirl.create(:project, name: i+1, projectbundle_id:i+1, user_id:user.id)
     end
     projects
   end
