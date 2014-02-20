@@ -54,23 +54,14 @@ describe "Enrollments page" do
       fill_in('enrollment_studentnumber', with:"1234567")
       fill_in('enrollment_email', with:"testi@testi.fi")
 
-<<<<<<< HEAD
+
       select('1', from:'p1[project_id]')
       select('2', from:'p2[project_id]')
       select('3', from:'p3[project_id]')
       select('4', from:'p4[project_id]')
       select('5', from:'p5[project_id]')
       select('6', from:'p6[project_id]')
-=======
 
-
-      select('1', from:'enrollment[signups_attributes][0][project_id]')
-      select('2', from:'enrollment[signups_attributes][0][project_id]')
-      select('3', from:'enrollment[signups_attributes][0][project_id]')
-      select('4', from:'enrollment[signups_attributes][0][project_id]')
-      select('5', from:'enrollment[signups_attributes][0][project_id]')
-      select('6', from:'enrollment[signups_attributes][0][project_id]')
->>>>>>> 247dbcf98175187329f2cbeedfd7f28289535f12
 
       expect {
         click_button('Ilmoittaudu')
