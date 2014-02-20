@@ -5,24 +5,33 @@ class EnrollmentsController < ApplicationController
   end
 
   def new
-    @Projectbundle = Projectbundle.first
-    #@projects = @Projectbundle.projects
-    @projects = Project.all
+    @projectbundle = Projectbundle.first
+    @projects = @projectbundle.projects
+    @enrollment = Enrollment.new
+
+    6.times do
+      @enrollment.signups << Signup.new
+    end
+    #@projects = Project.all
   end
 
   def create
 
-    @student = Student.create(firstname: params[:sfirstname], lastname: params[:slastname], studentnumber: params[:studentnumber], email: params[:email])
+    @enrollment = Enrollment.new(enrollment_params)
+    @enrollment.save
+
+=begin
     Signup.create(student_id: @student.id, priority: 1, status: false, project_id: params[:p1][:project_id])
     Signup.create(student_id: @student.id, priority: 2, status: false, project_id: params[:p2][:project_id])
     Signup.create(student_id: @student.id, priority: 3, status: false, project_id: params[:p3][:project_id])
     Signup.create(student_id: @student.id, priority: 4, status: false, project_id: params[:p4][:project_id])
     Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
     Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
-    @signups = @student.signups
     @digest=create_hash(@student)
     EnrollmentMail.confirmation_email(@student, @digest).deliver
+=end
     render action:'show'
+
   end
 
   # GET enrollments/edit/student_id/hash
@@ -50,6 +59,13 @@ class EnrollmentsController < ApplicationController
     end
 
   end
+
+private
+
+  def enrollment_params
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id])
+  end
+
   def create_hash(student)
      Digest::SHA1.hexdigest (student.id.to_s + student.studentnumber.to_s)
   end
