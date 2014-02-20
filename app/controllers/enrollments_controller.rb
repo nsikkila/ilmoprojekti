@@ -63,7 +63,7 @@ class EnrollmentsController < ApplicationController
 private
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id])
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id])
   end
 
   def create_hash(student)

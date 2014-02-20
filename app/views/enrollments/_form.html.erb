@@ -27,6 +27,7 @@
         <%= f.fields_for :signups do |sf| %>
             <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
             <br />
+            <%= sf.hidden_field :enrollment_id %>
         <% end %>
 
     <div class="actions">
