@@ -26,7 +26,7 @@ describe "Signup page" do
     create_objects_for_frontpage
 
     visit edit_signup_path(1)
-    expect(page).should_not have_content("Editing signup")
+    expect(page).not_to have_content("Editing signup")
   end
 
 end
