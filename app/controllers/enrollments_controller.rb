@@ -69,4 +69,6 @@ private
      Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
 
+  
+
 end
