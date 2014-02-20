@@ -33,7 +33,7 @@ class EnrollmentsController < ApplicationController
       end
     end
     @digest=create_hash(@enrollment)
-    #EnrollmentMail.confirmation_email(@student, @digest).deliver
+    EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
   end
 
   # GET enrollments/edit/enrollment_id/hash
@@ -61,15 +61,17 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  def create_hash(enrollment)
+     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+  end
+
 private
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority])
   end
 
-  def create_hash(enrollment)
-     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
-  end
+  
 
   
 
