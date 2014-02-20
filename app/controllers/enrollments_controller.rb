@@ -18,19 +18,18 @@ class EnrollmentsController < ApplicationController
   def create
 
     @enrollment = Enrollment.new(enrollment_params)
-    @enrollment.save
+    respond_to do |format|
+      if @enrollment.save
+        format.html { render action:'show' }
+      else
+        @projectbundle = Projectbundle.first
+        @projects = @projectbundle.projects
 
-=begin
-    Signup.create(student_id: @student.id, priority: 1, status: false, project_id: params[:p1][:project_id])
-    Signup.create(student_id: @student.id, priority: 2, status: false, project_id: params[:p2][:project_id])
-    Signup.create(student_id: @student.id, priority: 3, status: false, project_id: params[:p3][:project_id])
-    Signup.create(student_id: @student.id, priority: 4, status: false, project_id: params[:p4][:project_id])
-    Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
-    Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
-    @digest=create_hash(@student)
-    EnrollmentMail.confirmation_email(@student, @digest).deliver
-=end
-    render action:'show'
+        format.html { render action: 'new' }
+      end
+    end
+    #@digest=create_hash(@student)
+    #EnrollmentMail.confirmation_email(@student, @digest).deliver
 
   end
 
