@@ -18,6 +18,13 @@ class EnrollmentsController < ApplicationController
   def create
 
     @enrollment = Enrollment.new(enrollment_params)
+
+    priority = 1
+    @enrollment.signups.each do |signup|
+      signup.priority = priority
+      priority = priority + 1
+    end
+
     respond_to do |format|
       if @enrollment.save
         format.html { render action:'show' }
