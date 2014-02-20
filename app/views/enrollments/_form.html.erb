@@ -25,9 +25,12 @@
     <%= f.text_field :email %><br />
 
         <%= f.fields_for :signups do |sf| %>
+            Prioriteetti <%= sf.object.priority %>: <br />
             <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name) %>
             <br />
             <%= sf.hidden_field :enrollment_id %>
+            <%= sf.hidden_field :priority, value:"#{sf.object.priority}" %>
+
         <% end %>
 
     <div class="actions">
