@@ -14,7 +14,7 @@ class EnrollmentsController < ApplicationController
       @enrollment.signups << Signup.new(priority:priority)
       priority = priority + 1
     end
-    #@projects = Project.all
+
   end
 
   def create
@@ -28,12 +28,11 @@ class EnrollmentsController < ApplicationController
       else
         @projectbundle = Projectbundle.first
         @projects = @projectbundle.projects
-
         format.html { render action: 'new' }
       end
     end
     @digest=create_hash(@enrollment)
-    #EnrollmentMail.confirmation_email(@student, @digest).deliver
+    EnrollmentMail.confirmation_email(@student, @digest).deliver
   end
 
   # GET enrollments/edit/enrollment_id/hash
@@ -48,7 +47,6 @@ class EnrollmentsController < ApplicationController
   end
 
   def update
-
     @enrollment = Enrollment.find(params[:id])
 
     respond_to do |format|
@@ -70,7 +68,4 @@ private
   def create_hash(enrollment)
      Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
-
-  
-
 end
