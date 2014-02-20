@@ -1,1 +1,15 @@
 <h2> Ilmottautuminen onnistui! </h2>
+
+<p>
+    <h4>Henkilötiedot</h4>
+    Nimi: <%= "#{@enrollment.firstname} #{@enrollment.lastname}" %><br />
+    Opiskelijanumero: <%= @enrollment.studentnumber %><br />
+    Email: <%= @enrollment.email %><br />
+</p>
+
+<p>
+    <h4>Ilmoittautumiset</h4>
+    <% @enrollment.signups.each do | signup | %>
+        <%= signup.project.name %><br />
+    <% end %>
+</p>
