@@ -90,9 +90,9 @@ describe "Enrollments page" do
       select('5', from:'enrollment[signups_attributes][4][project_id]')
       select('6', from:'enrollment[signups_attributes][5][project_id]')
 
-      user= Enrollment.find_by_studentnumber:'1234567'
-  #    hash= Enrollment.create_hash(user)
-  #    expect(page).to have_content 'http://ilmoprojekti.herokuapp.com/enrollments/edit/' + user.id + '/' + hash 
+      #enroll= Enrollment.find_by_studentnumber:'1234567'
+      #hash= Enrollment.create_hash(enroll)
+      #expect(page).to have_content 'http://ilmoprojekti.herokuapp.com/enrollments/edit/' + user.id + '/' + hash 
     end
 
     it "redirets to confirmation page containing information about signups" do
