@@ -24,4 +24,15 @@ module TestHelper
     projects
   end
 
+  def create_objects_for_frontpage
+    #FactoryGirl.create(:signup)
+    @projectbundle = FactoryGirl.create(:projectbundle)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup)
+    end
+  end
+
 end

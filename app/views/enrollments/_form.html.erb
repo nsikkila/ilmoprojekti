@@ -1,4 +1,5 @@
 
+<% if not @enrollment.nil? %>
 <%= form_for(@enrollment) do |f| %>
     <% if @enrollment.errors.any? %>
         <div id="error_explanation">
@@ -33,4 +34,6 @@
     <div class="actions">
       <%= f.submit %>
     </div>
+<% end %>
+
 <% end %>
