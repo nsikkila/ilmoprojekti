@@ -69,15 +69,5 @@ private
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
-
-<<<<<<< HEAD
   
-
-  
-
-=======
-  def create_hash(enrollment)
-     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
-  end
->>>>>>> 900bd3099f8f119d4ae5151cd4b419136f43efc8
 end
