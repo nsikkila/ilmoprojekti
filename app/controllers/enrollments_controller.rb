@@ -9,8 +9,10 @@ class EnrollmentsController < ApplicationController
     @projects = @projectbundle.projects
     @enrollment = Enrollment.new
 
+    priority = 1
     6.times do
-      @enrollment.signups << Signup.new
+      @enrollment.signups << Signup.new(priority:priority)
+      priority = priority + 1
     end
     #@projects = Project.all
   end
@@ -18,8 +20,10 @@ class EnrollmentsController < ApplicationController
   def create
 
     @enrollment = Enrollment.new(enrollment_params)
+
     respond_to do |format|
       if @enrollment.save
+        @digest = create_hash(@enrollment)
         format.html { render action:'show' }
       else
         @projectbundle = Projectbundle.first
@@ -30,39 +34,37 @@ class EnrollmentsController < ApplicationController
     end
     @digest=create_hash(@enrollment)
     #EnrollmentMail.confirmation_email(@student, @digest).deliver
-
   end
 
-  # GET enrollments/edit/student_id/hash
+  # GET enrollments/edit/enrollment_id/hash
   def edit
-    @Projectbundle = Projectbundle.first
-    @projects = Project.all
-    @enrollment = Enrollment.new
+    @projectbundle = Projectbundle.first
+    @projects = @projectbundle.projects
+    @enrollment = Enrollment.find(params[:enrollment_id])
 
-    student = Student.last
-    student = Student.find(params[:student_id])
-
-    if params[:hash] == create_hash(student)
-      signups = Array.new(6)
-      student.signups.each do |s|
-        signups[s.priority-1] = s.project_id
-      end
-
-      @enrollment.signups = signups
-      @enrollment.sfirstname = student.firstname
-      @enrollment.slastname = student.lastname
-      @enrollment.studentnumber = student.studentnumber
-      @enrollment.email = student.email
-    else
+    if not params[:hash] == create_hash(@enrollment)
       redirect_to :root
     end
+  end
 
+  def update
+
+    @enrollment = Enrollment.find(params[:id])
+
+    respond_to do |format|
+      if @enrollment.update(enrollment_params)
+        @digest = create_hash(@enrollment)
+        format.html { render action:'show' }
+      else
+        format.html { render action: 'edit' }
+      end
+    end
   end
 
 private
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id])
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority])
   end
 
   def create_hash(enrollment)
