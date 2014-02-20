@@ -15,23 +15,28 @@
  /* Kenties koko ohjelmaan yleistettävää ccs:ää
  */
 
-.projectDiv {
+h1, h2 {
+    padding: 10px;
+}
+
+.subdiv {
     background-color: #FFFFFF;
     max-width: 100%;
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
-    padding: 3px;
+    padding: 10px;
     padding-left: 5px;
 }
 
-.bundle {
+.header {
     font-size: 14px;
     background-color: #FFFFFF;
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
-    padding: 3px;
+    margin-bottom: 10px;
+    padding: 5px;
 }
 
 .content {

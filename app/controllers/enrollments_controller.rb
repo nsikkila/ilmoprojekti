@@ -7,62 +7,65 @@ class EnrollmentsController < ApplicationController
   def new
     @projectbundle = Projectbundle.first
     @projects = @projectbundle.projects
-    #@projects = Project.all
+    @enrollment = Enrollment.new
+
+    priority = 1
+    6.times do
+      @enrollment.signups << Signup.new(priority:priority)
+      priority = priority + 1
+    end
+
   end
 
   def create
 
-    @student = Student.new(firstname: params[:sfirstname], lastname: params[:slastname], studentnumber: params[:studentnumber], email: params[:email])
+    @enrollment = Enrollment.new(enrollment_params)
 
-    if not @student.valid?
-      #redirect_to root_path
-      @projects = Project.all
-      render :new
-    else
-      @student.save
-      Signup.create(student_id: @student.id, priority: 1, status: false, project_id: params[:p1][:project_id])
-      Signup.create(student_id: @student.id, priority: 2, status: false, project_id: params[:p2][:project_id])
-      Signup.create(student_id: @student.id, priority: 3, status: false, project_id: params[:p3][:project_id])
-      Signup.create(student_id: @student.id, priority: 4, status: false, project_id: params[:p4][:project_id])
-      Signup.create(student_id: @student.id, priority: 5, status: false, project_id: params[:p5][:project_id])
-      Signup.create(student_id: @student.id, priority: 6, status: false, project_id: params[:p6][:project_id])
-      @signups = @student.signups
-      @digest=create_hash(@student)
-      EnrollmentMail.confirmation_email(@student, @digest).deliver
-      render action:'show'
+    respond_to do |format|
+      if @enrollment.save
+        @digest = create_hash(@enrollment)
+        format.html { render action:'show' }
+      else
+        @projectbundle = Projectbundle.first
+        @projects = @projectbundle.projects
+        format.html { render action: 'new' }
+      end
+    end
+    @digest=create_hash(@enrollment)
+    EnrollmentMail.confirmation_email(@student, @digest).deliver
+  end
+
+  # GET enrollments/edit/enrollment_id/hash
+  def edit
+    @projectbundle = Projectbundle.first
+    @projects = @projectbundle.projects
+    @enrollment = Enrollment.find(params[:enrollment_id])
+
+    if not params[:hash] == create_hash(@enrollment)
+      redirect_to :root
     end
   end
 
-  # GET enrollments/edit/student_id/hash
-  def edit
-    @Projectbundle = Projectbundle.first
-    @projects = Project.all
-    @enrollment = Enrollment.new
+  def update
+    @enrollment = Enrollment.find(params[:id])
 
-    student = Student.last
-    student = Student.find(params[:student_id])
-
-    if params[:hash] == create_hash(student)
-      signups = Array.new(6)
-      student.signups.each do |s|
-        signups[s.priority-1] = s.project_id
+    respond_to do |format|
+      if @enrollment.update(enrollment_params)
+        @digest = create_hash(@enrollment)
+        format.html { render action:'show' }
+      else
+        format.html { render action: 'edit' }
       end
-
-      @enrollment.signups = signups
-      @enrollment.sfirstname = student.firstname
-      @enrollment.slastname = student.lastname
-      @enrollment.studentnumber = student.studentnumber
-      @enrollment.email = student.email
-    else
-      redirect_to :root
     end
-
   end
 
 private
 
-  def create_hash(student)
-     Digest::SHA1.hexdigest (student.id.to_s + student.studentnumber.to_s)
+  def enrollment_params
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
 
+  def create_hash(enrollment)
+     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+  end
 end

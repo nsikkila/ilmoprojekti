@@ -10,7 +10,7 @@ module TestHelper
   def generate_six_unique_projects(bundle_id)
     projects = Array.new(6)
     (0..5).each do |i|
-      projects[i] = FactoryGirl.create(:project, name: i+1, bundle_id:i+1)
+      projects[i] = FactoryGirl.create(:project, name: i+1, projectbundle_id:bundle_id)
     end
     projects
   end
@@ -19,9 +19,21 @@ module TestHelper
     user = FactoryGirl.create(:user)
     projects = Array.new(6)
     (0..5).each do |i|
-      projects[i] = FactoryGirl.create(:project, name: i+1, bundle_id:i+1, user_id:user.id)
+      projects[i] = FactoryGirl.create(:project, name: i+1, projectbundle_id:bundle_id, user_id:user.id)
     end
     projects
+  end
+
+  def create_objects_for_frontpage
+    #FactoryGirl.create(:signup)
+    FactoryGirl.create(:user)
+    @projectbundle = FactoryGirl.create(:projectbundle)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup)
+    end
   end
 
 end
