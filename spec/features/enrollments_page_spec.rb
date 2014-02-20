@@ -54,15 +54,6 @@ describe "Enrollments page" do
       fill_in('enrollment_studentnumber', with:"1234567")
       fill_in('enrollment_email', with:"testi@testi.fi")
 
-<<<<<<< HEAD
-      select('1', from:'p1[project_id]')
-      select('2', from:'p2[project_id]')
-      select('3', from:'p3[project_id]')
-      select('4', from:'p4[project_id]')
-      select('5', from:'p5[project_id]')
-      select('6', from:'p6[project_id]')
-=======
-
 
       select('1', from:'enrollment[signups_attributes][0][project_id]')
       select('2', from:'enrollment[signups_attributes][0][project_id]')
@@ -70,7 +61,6 @@ describe "Enrollments page" do
       select('4', from:'enrollment[signups_attributes][0][project_id]')
       select('5', from:'enrollment[signups_attributes][0][project_id]')
       select('6', from:'enrollment[signups_attributes][0][project_id]')
->>>>>>> 247dbcf98175187329f2cbeedfd7f28289535f12
 
       expect {
         click_button('Ilmoittaudu')
@@ -89,17 +79,17 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('sfirstname', with:"Testi")
-      fill_in('slastname', with:"Testinen")
+      fill_in('firstname', with:"Testi")
+      fill_in('lastname', with:"Testinen")
       fill_in('studentnumber', with:"1234567")
       fill_in('email', with:"testi@testi.fi")
 
-      select('1', from:'p1[project_id]')
-      select('2', from:'p2[project_id]')
-      select('3', from:'p3[project_id]')
-      select('4', from:'p4[project_id]')
-      select('5', from:'p5[project_id]')
-      select('6', from:'p6[project_id]')
+      select('1', from:'enrollment[signups_attributes][0][project_id]')
+      select('2', from:'enrollment[signups_attributes][0][project_id]')
+      select('3', from:'enrollment[signups_attributes][0][project_id]')
+      select('4', from:'enrollment[signups_attributes][0][project_id]')
+      select('5', from:'enrollment[signups_attributes][0][project_id]')
+      select('6', from:'enrollment[signups_attributes][0][project_id]')
 
       user= Student.find_by studentnumber:'1234567'
   #    hash= Enrollment.create_hash(user)
@@ -116,25 +106,25 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('sfirstname', with:"Testi")
-      fill_in('slastname', with:"Testinen")
+      fill_in('firstname', with:"Testi")
+      fill_in('lastname', with:"Testinen")
       fill_in('studentnumber', with:"1234567")
       fill_in('email', with:"testi@testi.fi")
 
-      select('1', from:'p1[project_id]')
-      select('2', from:'p2[project_id]')
-      select('3', from:'p3[project_id]')
-      select('4', from:'p4[project_id]')
-      select('5', from:'p5[project_id]')
-      select('6', from:'p6[project_id]')
+      select('1', from:'enrollment[signups_attributes][0][project_id]')
+      select('2', from:'enrollment[signups_attributes][0][project_id]')
+      select('3', from:'enrollment[signups_attributes][0][project_id]')
+      select('4', from:'enrollment[signups_attributes][0][project_id]')
+      select('5', from:'enrollment[signups_attributes][0][project_id]')
+      select('6', from:'enrollment[signups_attributes][0][project_id]')
 
       click_button('Ilmoittaudu')
-      expect(page).to have_content('1. valinta:' )
+      expect(page).to have_content('1. valinta: ')
       expect(page).to have_content('2. valinta: ')
-      expect(page).to have_content('3. valinta: p3[name]')
-      expect(page).to have_content('4. valinta: p4[name]')
-      expect(page).to have_content('5. valinta: p5[name]')
-      expect(page).to have_content('6. valinta: p6[name]')
+      expect(page).to have_content('3. valinta: ')
+      expect(page).to have_content('4. valinta: ')
+      expect(page).to have_content('5. valinta: ')
+      expect(page).to have_content('6. valinta: ')
     end
 
  
