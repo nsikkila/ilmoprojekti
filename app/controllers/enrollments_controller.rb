@@ -28,7 +28,7 @@ class EnrollmentsController < ApplicationController
         format.html { render action: 'new' }
       end
     end
-    #@digest=create_hash(@student)
+    @digest=create_hash(@enrollment)
     #EnrollmentMail.confirmation_email(@student, @digest).deliver
 
   end
@@ -65,8 +65,8 @@ private
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id])
   end
 
-  def create_hash(student)
-     Digest::SHA1.hexdigest (student.id.to_s + student.studentnumber.to_s)
+  def create_hash(enrollment)
+     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
 
 end
