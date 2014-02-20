@@ -3,7 +3,6 @@ class Enrollment < ActiveRecord::Base
   has_many :signups
   accepts_nested_attributes_for :signups
 
-
   validates :firstname, length: {minimum: 2}
   validates :lastname, length: {minimum: 2}
   validates_numericality_of :studentnumber, length: {minimum: 7}

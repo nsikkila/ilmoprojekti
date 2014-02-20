@@ -12,7 +12,7 @@ describe Signup do
 
     signup.project_id.should == 1
     signup.priority.should == 1
-    signup.student_id.should == 1
+    signup.enrollment_id.should == 1
     signup.status.should == true
   end
 
