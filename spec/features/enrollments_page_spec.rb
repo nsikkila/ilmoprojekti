@@ -21,8 +21,6 @@ describe "Enrollments page" do
       fill_in('enrollment_studentnumber', with:"1234567")
       fill_in('enrollment_email', with:"testi@testi.fi")
 
-
-
       select('1', from:'enrollment[signups_attributes][0][project_id]')
       select('2', from:'enrollment[signups_attributes][0][project_id]')
       select('3', from:'enrollment[signups_attributes][0][project_id]')
