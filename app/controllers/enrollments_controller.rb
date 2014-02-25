@@ -66,6 +66,7 @@ class EnrollmentsController < ApplicationController
 
     respond_to do |format|
       if @enrollment.update(enrollment_params) and Enrollment.create_hash(@enrollment) == session[:hash]
+        @enrollment= Enrollment.find(params[:id])
         @digest = create_hash(@enrollment)
         session[:enrollment_id] = nil
         session[:hash] = nil
