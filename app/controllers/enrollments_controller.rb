@@ -1,5 +1,6 @@
 class EnrollmentsController < ApplicationController
   require 'digest/sha1'
+  require 'enrollment.rb'
   
   def index
   end
@@ -23,7 +24,7 @@ class EnrollmentsController < ApplicationController
 
     respond_to do |format|
       if @enrollment.save
-        @digest = create_hash(@enrollment)
+        @digest = Enrollment.create_hash(@enrollment)
         format.html { render action:'show' }
       else
         @projectbundle = Projectbundle.first
@@ -31,7 +32,7 @@ class EnrollmentsController < ApplicationController
         format.html { render action: 'new' }
       end
     end
-    @digest=create_hash(@enrollment)
+    @digest=Enrollment.create_hash(@enrollment)
 
     EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
   end
@@ -39,7 +40,7 @@ class EnrollmentsController < ApplicationController
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
 
-    if @enrollment.nil? or not params[:hash] == create_hash(@enrollment)
+    if @enrollment.nil? or not params[:hash] == Enrollment.create_hash(@enrollment)
       redirect_to :root
     else
 
@@ -64,23 +65,20 @@ class EnrollmentsController < ApplicationController
     @enrollment = Enrollment.find(params[:id])
 
     respond_to do |format|
-      if @enrollment.update(enrollment_params) and create_hash(@enrollment) == session[:hash]
+      if @enrollment.update(enrollment_params) and Enrollment.create_hash(@enrollment) == session[:hash]
         @digest = create_hash(@enrollment)
         session[:enrollment_id] = nil
         session[:hash] = nil
         format.html { render action:'show' }
       else
-        @projectbundle = Projectbundle.first
-        @projects = @projectbundle.projects
-        format.html { render Rails.application.routes.recognize_path(request.referer)[:action] }
+        format.html { render action: 'edit' }
       end
     end
   end
 
   def create_hash(enrollment)
-    Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
-
 
 private
 
