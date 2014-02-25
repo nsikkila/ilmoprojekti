@@ -94,8 +94,8 @@ describe "Enrollments page" do
       click_button('Create Enrollment')
 
       expect(Enrollment.count).to eq(0)
-      #expect(page).to have_content 'studentnumberin validointierrori tähän'
-      expect(page).to have_content 'Email has to be a valid email address'
+      expect(page).to have_content 'Opiskelijanumeron täytyy olla numeroista koostuva ja 7 merkkiä pitkä'
+      expect(page).to have_content 'Sähköpostiosoitteen täytyy olla muotoa esi@merk.ki'
 
     end
 
@@ -216,7 +216,7 @@ describe "Enrollments page" do
 
       click_button('Update Enrollment')
 
-      expect(page).to have.content("Ilmoittautuminen onnistui!")
+      expect(page).to have_content("Ilmoittautuminen onnistui!")
       expect(page).to have_content("edit")
       expect(page).to have_content("7654321")
       #save_and_open_page
