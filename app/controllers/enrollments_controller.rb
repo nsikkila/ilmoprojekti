@@ -55,7 +55,9 @@ class EnrollmentsController < ApplicationController
         @digest = create_hash(@enrollment)
         format.html { render action:'show' }
       else
-        format.html { render action: 'edit' }
+        @projectbundle = Projectbundle.first
+        @projects = @projectbundle.projects
+        format.html { render Rails.application.routes.recognize_path(request.referer)[:action] }
       end
     end
   end
