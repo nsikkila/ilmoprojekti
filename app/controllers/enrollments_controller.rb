@@ -1,5 +1,6 @@
 class EnrollmentsController < ApplicationController
   require 'digest/sha1'
+  require 'enrollment.rb'
   
   def index
   end
@@ -23,7 +24,7 @@ class EnrollmentsController < ApplicationController
 
     respond_to do |format|
       if @enrollment.save
-        @digest = create_hash(@enrollment)
+        @digest = Enrollment.create_hash(@enrollment)
         format.html { render action:'show' }
       else
         @projectbundle = Projectbundle.first
@@ -31,7 +32,7 @@ class EnrollmentsController < ApplicationController
         format.html { render action: 'new' }
       end
     end
-    @digest=create_hash(@enrollment)
+    @digest=Enrollment.create_hash(@enrollment)
 
     EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
   end
@@ -42,7 +43,7 @@ class EnrollmentsController < ApplicationController
     @projects = @projectbundle.projects
     @enrollment = Enrollment.find(params[:enrollment_id])
 
-    if not params[:hash] == create_hash(@enrollment)
+    if not params[:hash] == Enrollment.create_hash(@enrollment)
       redirect_to :root
     end
   end
@@ -52,7 +53,7 @@ class EnrollmentsController < ApplicationController
 
     respond_to do |format|
       if @enrollment.update(enrollment_params)
-        @digest = create_hash(@enrollment)
+        @digest = Enrollment.create_hash(@enrollment)
         format.html { render action:'show' }
       else
         format.html { render action: 'edit' }
@@ -60,14 +61,10 @@ class EnrollmentsController < ApplicationController
     end
   end
 
-  def create_hash(enrollment)
-     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
-  end
-
 private
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
-  
+
 end

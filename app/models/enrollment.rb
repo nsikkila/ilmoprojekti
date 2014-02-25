@@ -8,4 +8,8 @@ class Enrollment < ActiveRecord::Base
   validates_numericality_of :studentnumber, length: {minimum: 7}
   validates :email, presence: {on: :create}, format: {with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, message: "has to be a valid email address"}
 
+  def self.create_hash(enrollment)
+    Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+  end
+
 end
