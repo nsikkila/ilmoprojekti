@@ -36,23 +36,38 @@ class EnrollmentsController < ApplicationController
     EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
   end
 
-  # GET enrollments/edit/enrollment_id/hash
-  def edit
-    @projectbundle = Projectbundle.first
-    @projects = @projectbundle.projects
+  def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
 
-    if not params[:hash] == create_hash(@enrollment)
+    if @enrollment.nil? or not params[:hash] == create_hash(@enrollment)
       redirect_to :root
+    else
+
+    session[:enrollment_id] = @enrollment.id
+    session[:hash] = params[:hash]
+
+    redirect_to action: 'edit', id:params[:enrollment_id]
+
     end
+  end
+
+  def edit
+
+    redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
+
+    @projectbundle = Projectbundle.first
+    @projects = @projectbundle.projects
+    @enrollment = Enrollment.find(session[:enrollment_id])
   end
 
   def update
     @enrollment = Enrollment.find(params[:id])
 
     respond_to do |format|
-      if @enrollment.update(enrollment_params)
+      if @enrollment.update(enrollment_params) and create_hash(@enrollment) == session[:hash]
         @digest = create_hash(@enrollment)
+        session[:enrollment_id] = nil
+        session[:hash] = nil
         format.html { render action:'show' }
       else
         @projectbundle = Projectbundle.first
@@ -63,8 +78,9 @@ class EnrollmentsController < ApplicationController
   end
 
   def create_hash(enrollment)
-     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+    Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
+
 
 private
 
