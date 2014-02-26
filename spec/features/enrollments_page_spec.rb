@@ -167,14 +167,15 @@ describe "Enrollments page" do
   describe "Enrollment edit" do
 
    # before :each do
-   #   FactoryGirl.create(:projectbundle)
-   #   generate_six_unique_projects_with_user(1)
-   # end
+    # FactoryGirl.create(:projectbundle)
+    #  generate_six_unique_projects_with_user(1)
+   #end
     it "does NOT display the edit page if the correct hash is not present" do
         enrollment = create_enrollment_with_signups()
 
         #visit enrollment_path(enrollment)
         visit "enrollments/#{enrollment.id}/feikkihash"
+
 
         expect(page).to have_content("Testibundle")
 
