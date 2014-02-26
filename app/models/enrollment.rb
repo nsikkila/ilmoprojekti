@@ -15,7 +15,7 @@ end
 
 class Enrollment < ActiveRecord::Base
 
-  has_many :signups
+  has_many :signups, order:'id ASC'
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator
