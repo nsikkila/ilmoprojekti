@@ -72,6 +72,8 @@ class EnrollmentsController < ApplicationController
         session[:hash] = nil
         format.html { render action:'show' }
       else
+        @projectbundle = Projectbundle.first
+        @projects = @projectbundle.projects
         format.html { render action: 'edit' }
       end
     end
