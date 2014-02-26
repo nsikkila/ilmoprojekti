@@ -9,11 +9,12 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :users
 
-  resources :enrollments, only: [:new, :create, :destroy, :update]
+  resources :enrollments
 
   resources :sessions, only: [:new, :create, :destroy]
 
-  get 'enrollments/edit/:enrollment_id/:hash', to: 'enrollments#edit'
+
+  get 'enrollments/:enrollment_id/:hash', to: 'enrollments#edithash'
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
 
