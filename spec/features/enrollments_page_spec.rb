@@ -210,8 +210,6 @@ describe "Enrollments page" do
 
       visit "enrollments/#{enrollment.id}/#{hash}"
 
-      save_and_open_page
-
       fill_in('enrollment_firstname', with:"edit")
       fill_in('enrollment_lastname', with:"edit")
       fill_in('enrollment_studentnumber', with:"7654321")
