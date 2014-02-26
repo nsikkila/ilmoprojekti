@@ -25,7 +25,7 @@
     <%= f.label :email %><br />
     <%= f.text_field :email %><br />
 
-        <%= f.fields_for :signups, @enrollment.signups.to_a  do |sf| %>
+        <%= f.fields_for :signups do |sf| %>
             Prioriteetti <%= sf.object.priority %>: <br />
             <%= sf.select :project_id, options_from_collection_for_select(@projects, :id, :name, sf.object.project_id) %>
             <br />
