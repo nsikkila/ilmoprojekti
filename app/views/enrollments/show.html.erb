@@ -15,5 +15,5 @@
 </p>
 
 <p>Digest: <%= @digest %></p>
-<%= link_to 'Muokkaa valintojasi', "enrollments/edit/"+@enrollment.id.to_s+"/"+@digest %>
+<%= link_to 'Muokkaa', enrollments_path+"/"+@enrollment.id.to_s+"/"+@digest %>
 

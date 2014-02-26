@@ -167,14 +167,15 @@ describe "Enrollments page" do
   describe "Enrollment edit" do
 
    # before :each do
-   #   FactoryGirl.create(:projectbundle)
-   #   generate_six_unique_projects_with_user(1)
-   # end
+    # FactoryGirl.create(:projectbundle)
+    #  generate_six_unique_projects_with_user(1)
+   #end
     it "does NOT display the edit page if the correct hash is not present" do
         enrollment = create_enrollment_with_signups()
 
         #visit enrollment_path(enrollment)
-        visit "enrollments/edit/#{enrollment.id}/feikkihash"
+        visit "enrollments/#{enrollment.id}/feikkihash"
+
 
         expect(page).to have_content("Testibundle")
 
@@ -196,7 +197,7 @@ describe "Enrollments page" do
 
       #visit enrollment_path(enrollment)
       hash = Enrollment.create_hash(enrollment)
-      visit "enrollments/edit/#{enrollment.id}/#{hash}"
+      visit "enrollments/#{enrollment.id}/#{hash}"
 
       expect(page).to have_content("Ilmoittautumisen muokkaus")
 
@@ -207,7 +208,9 @@ describe "Enrollments page" do
 
       hash = Enrollment.create_hash(enrollment)
 
-      visit "enrollments/edit/#{enrollment.id}/#{hash}"
+      visit "enrollments/#{enrollment.id}/#{hash}"
+
+      save_and_open_page
 
       fill_in('enrollment_firstname', with:"edit")
       fill_in('enrollment_lastname', with:"edit")
