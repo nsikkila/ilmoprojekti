@@ -1,10 +1,5 @@
-<div class="content">
 
-<div class="header"><h1><%= @projectbundle.name unless @projectbundle.nil? %></h1></div>
-  <div style="margin-top: 10px;">
-    <div class="subdiv" style="padding: 15px;">
-
-      <div class="projectInfo" style="max-width: 600px;">
+     <div class="projectInfo" style="max-width: 600px;">
         <% @projects.each do |p| %>
             <h3><%= p.name %></h3>
             <div id="<%= p.id %>" >
@@ -27,12 +22,13 @@
       <% end %>
   <%= render 'form' %>
 
-    </div>
-  </div>
-</div>
+<% content_for :header do %>
+       <%= @projectbundle.name unless @projectbundle.nil? %>
+<% end %>
 
 <script>
     $(function() {
         $( ".projectInfo" ).accordion();
     });
 </script>
+
