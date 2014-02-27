@@ -51,7 +51,7 @@ gem 'coveralls', require: false
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
-  gem 'launchy'
+  gem "launchy", "~> 2.4.2"
   gem 'simplecov', :require => false
 
 end

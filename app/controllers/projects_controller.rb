@@ -35,6 +35,7 @@ class ProjectsController < ApplicationController
       redirect_to :root
     end
       @project = Project.new(project_params)
+      @project.projectbundle_id=1
       respond_to do |format|
         if @project.save
           format.html { redirect_to @project, notice: 'Project was successfully created.' }
