@@ -1,4 +1,3 @@
-<h1>Sign in</h1>
 
 <p id="notice"><%= notice %></p>
 
@@ -6,4 +5,8 @@
     <pre>Username: <%= text_field_tag :username, params[:username] %></pre>
     <pre>Password: <%= password_field_tag :password, params[:password] %></pre>
     <%= submit_tag "Log in" %>
+<% end %>
+
+<% content_for :header do %>
+    Kirjaudu sisään
 <% end %>
