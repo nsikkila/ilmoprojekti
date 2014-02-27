@@ -79,7 +79,7 @@ describe "User" do
 		it "can access user creation" do
 			visit new_user_path
 
-			expect(page).to have_content 'New user'
+			expect(page).to have_content 'Uusi käyttäjä'
 			expect(current_path).to eq(new_user_path)
 		end
 
