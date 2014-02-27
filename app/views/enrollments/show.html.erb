@@ -1,5 +1,4 @@
-<h2> Ilmoittautuminen onnistui! </h2>
-
+<h2>Ilmoittautuminen onnistui!</h2>
 <p>
     <h4>Henkilötiedot</h4>
     Nimi: <%= "#{@enrollment.firstname} #{@enrollment.lastname}" %><br />
@@ -17,3 +16,6 @@
 <p>Digest: <%= @digest %></p>
 <%= link_to 'Muokkaa', enrollments_path+"/"+@enrollment.id.to_s+"/"+@digest %>
 
+<% content_for :header do %>
+    Ilmoittautumisen yhteenveto
+<% end %>

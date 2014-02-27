@@ -1,7 +1,4 @@
-<div class="content">
-<div class="header"><h1>Käyttäjät</h1></div>
 
-<div class="subdiv">
 <table>
   <thead>
     <tr>
@@ -24,6 +21,8 @@
   </tbody>
 </table>
 
-</div>
 <%= link_to 'New User', new_user_path %>
-</div>
+
+<% content_for :header do %>
+    Käyttäjät
+<% end %>

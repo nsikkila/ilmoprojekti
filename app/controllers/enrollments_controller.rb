@@ -9,7 +9,7 @@ class EnrollmentsController < ApplicationController
   def new
     set_projectbundle_and_projects
     @enrollment = Enrollment.new
-    set_signups_to_enrollment(@enrollment, 6)
+    set_signups_to_enrollment(6)
   end
 
   def create
@@ -69,7 +69,7 @@ class EnrollmentsController < ApplicationController
 
 private
 
-  def set_signups_to_enrollment(enrollment, number_of_signups)
+  def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
       @enrollment.signups << Signup.new(priority:priority)
