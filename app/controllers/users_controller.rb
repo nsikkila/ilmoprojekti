@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if not current_user.id == params[:id].to_i
+    if not (is_at_least(:admin) or current_user.id == params[:id].to_i)
       redirect_to :root
     end
   end
