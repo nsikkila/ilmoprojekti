@@ -1,5 +1,3 @@
-<div class="content">
-<div class="header"><h1>Projektit</h1></div>
 
 <% @projectbundles.each do |pb| %>
 
@@ -35,3 +33,6 @@
 <%= link_to 'New Project', new_project_path %>
 
 </div>
+<% content_for :header do %>
+    Projektit
+<% end %>

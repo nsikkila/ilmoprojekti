@@ -20,5 +20,31 @@
   <%= @project.signup_end %>
 </p>
 
+<h2>Signups for this project: </h2>
+<table>
+  <tr>
+    <th>
+      <a ng-click="click('lastname')">Opiskelija</a>
+    </th>
+    <th>
+      <a ng-click="click('priority')">Prioriteetti</a>
+    </th>
+  </tr>
+<% @project.signups.each do |signup| %>
+    <tr>
+      <td>
+        <%= "#{signup.enrollment.firstname} #{signup.enrollment.lastname}" %>
+      </td>
+      <td>
+        <%= signup.priority %>
+      </td>
+    </tr>
+<% end %>
+</table>
+<br />
 <%= link_to 'Edit', edit_project_path(@project) %> |
 <%= link_to 'Back', projects_path %>
+
+<% content_for :header do %>
+    <%= "Projekti: #{@project.name}" %>
+<% end %>

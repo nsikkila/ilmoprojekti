@@ -27,8 +27,16 @@
 
 </div>
 
-
-<%= yield %>
-
+<div class="content">
+    <div class="header">
+      <h1><%= yield :header %></h1>
+    </div>
+    <div style="margin-top: 10px;">
+        <div class="subdiv" style="padding: 15px;">
+          <%= yield %>
+        </div>
+    </div>
+</div>
 </body>
+
 </html>
