@@ -4,7 +4,7 @@
     ... work in progress ...
 <% end %>
 
-<table>
+<table id="enrollmenttable">
     <tr>
       <td>
         Opiskelija
@@ -18,7 +18,7 @@
 
         <tr>
             <td>
-                <%= enrollment.firstname %>
+                <%= enrollment.name %>
             </td>
             <% @projects.each do |project| %>
                 <td>
