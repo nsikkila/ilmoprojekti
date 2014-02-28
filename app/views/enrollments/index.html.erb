@@ -1,0 +1,32 @@
+
+
+<% content_for :header do %>
+    ... work in progress ...
+<% end %>
+
+<table>
+    <tr>
+      <td>
+        Opiskelija
+      </td>
+      <% @projects.each do |project| %>
+        <td>
+          <%= project.name %>
+        </td>
+      <% end %>
+      <% @enrollments.each do |enrollment| %>
+
+        <tr>
+            <td>
+                <%= enrollment.firstname %>
+            </td>
+            <% @projects.each do |project| %>
+                <td>
+                  <%= enrollment.signups.find_by(project_id:project.id).priority unless enrollment.signups.find_by(project_id:project.id).nil? %>
+                </td>
+            <% end %>
+        </tr>
+
+      <% end %>
+    </tr>
+</table>

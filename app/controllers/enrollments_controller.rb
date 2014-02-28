@@ -3,7 +3,8 @@ class EnrollmentsController < ApplicationController
   require 'enrollment.rb'
   
   def index
-    redirect_to :root
+    set_projectbundle_and_projects
+    @enrollments = Enrollment.all
   end
 
   def new
