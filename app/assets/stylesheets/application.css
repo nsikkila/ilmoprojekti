@@ -44,6 +44,16 @@ h1, h2 {
     padding: 20px;
 }
 
+
+table, .enrollmenttable {
+    border-collapse: collapse;
+}
+
+.enrollmenttable, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
 li {
     list-style: none;
 }
