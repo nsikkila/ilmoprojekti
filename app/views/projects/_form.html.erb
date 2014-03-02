@@ -1,33 +1,43 @@
 <%= form_for(@project) do |f| %>
-  <% if @project.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
+    <% if @project.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
 
-      <ul>
-      <% @project.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @project.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :name %>
+      <br>
+      <%= f.text_field :name, size: 40 %>
     </div>
-  <% end %>
+    <div class="field">
+      <%= f.label :description %>
+      <br>
+      <%= f.text_area :description, cols: 40, rows: 15 %>
+    </div>
+    <div class="field">
+      <%= f.label :signup_start %>
+      <br>
+      <%= f.date_select :signup_start %>
+    </div>
+    <div class="field">
+      <%= f.label :signup_end %>
+      <br>
+      <%= f.date_select :signup_end %>
+    </div>
+    <div class="field">
+      <%= f.label :projectbundle_id %>
+      <br>
+      <%= f.select :projectbundle_id, options_from_collection_for_select(@bundle, :id, :to_s) %>
+    </div>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name, size:40 %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description, cols: 40, rows: 15 %>
-  </div>
-  <div class="field">
-    <%= f.label :signup_start %><br>
-    <%= f.date_select :signup_start %>
-  </div>
-  <div class="field">
-    <%= f.label :signup_end %><br>
-    <%= f.date_select :signup_end %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
 <% end %>

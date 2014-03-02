@@ -19,6 +19,7 @@ class ProjectsController < ApplicationController
       redirect_to :root
     end
       @project = Project.new
+      @bundle = Projectbundle.all
   end
 
   # GET /projects/1/edit
@@ -35,7 +36,7 @@ class ProjectsController < ApplicationController
       redirect_to :root
     end
       @project = Project.new(project_params)
-      @project.projectbundle_id=1
+
       respond_to do |format|
         if @project.save
           format.html { redirect_to @project, notice: 'Project was successfully created.' }
@@ -85,6 +86,6 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :description, :signup_start, :signup_end)
+      params.require(:project).permit(:name, :description, :signup_start, :signup_end, :projectbundle_id)
     end
 end
