@@ -6,7 +6,7 @@
      <table>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Nimi</th>
               <th>Signup start</th>
               <th>Signup end</th>
 
@@ -20,8 +20,8 @@
                 <td><%= link_to project.name, project %></td>
                 <td><%= project.signup_start %></td>
                 <td><%= project.signup_end %></td>
-                <td><%= link_to 'Edit', edit_project_path(project) %></td>
-                <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <td><%= link_to 'Muokkaa', edit_project_path(project) %></td>
+                <td><%= link_to 'Poista', project, method: :delete, data: { confirm: 'Oletko varma?' } %></td>
               </tr>
             <% end %>
           </tbody>
@@ -30,7 +30,7 @@
 <% end %>
 <br>
 
-<%= link_to 'New Project', new_project_path %>
+<%= link_to 'Luo uusi projekti', new_project_path %>
 
 </div>
 <% content_for :header do %>
