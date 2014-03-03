@@ -1,27 +1,29 @@
 
-     <div class="projectInfo" style="max-width: 600px;">
-        <% @projects.each do |p| %>
-            <h3><%= p.name %></h3>
-            <div id="<%= p.id %>" >
-              <p>
-                <%= p.description %><br/>
-                Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
-                Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
-                Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
-              </p>
-            </div>
-        <% end %>
-      </div>
 
-      <br/>
-
-      <% if not @student.nil? %>
-          <% if @student.errors.any? %>
-              <%= @student.errors.inspect %>
-          <% end %>
-      <% end %>
   <%= render 'form' %>
+  <br/>
+  <br/>
+  <div class="projectInfo" style="max-width: 600px;">
+    <% @projects.each do |p| %>
+        <h3><%= p.name %></h3>
+        <div id="<%= p.id %>" >
+          <p>
+            <%= p.description %><br/>
+            Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
+            Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
+            Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+          </p>
+        </div>
+    <% end %>
+  </div>
 
+  <br/>
+
+  <% if not @student.nil? %>
+      <% if @student.errors.any? %>
+          <%= @student.errors.inspect %>
+      <% end %>
+  <% end %>
 <% content_for :header do %>
        <%= @projectbundle.name unless @projectbundle.nil? %>
 <% end %>

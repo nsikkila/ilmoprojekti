@@ -20,7 +20,7 @@
   <%= @project.signup_end %>
 </p>
 
-<h2>Signups for this project: </h2>
+<h2>Projektiin halukkuutensa ilmoittaneet: </h2>
 <table>
   <tr>
     <th>
@@ -42,8 +42,8 @@
 <% end %>
 </table>
 <br />
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Back', projects_path %>
+<%= link_to 'Muokkaa', edit_project_path(@project) %> |
+<%= link_to 'Takaisin', projects_path %>
 
 <% content_for :header do %>
     <%= "Projekti: #{@project.name}" %>

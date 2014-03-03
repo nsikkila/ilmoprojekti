@@ -1,10 +1,10 @@
-<h1>Listing projectbundles</h1>
+<h1>Projektiryhmät</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Description</th>
+      <th>Nimi</th>
+      <th>Kuvaus</th>
       <th>Active</th>
       <th></th>
       <th></th>
@@ -18,9 +18,9 @@
         <td><%= projectbundle.name %></td>
         <td><%= projectbundle.description %></td>
         <td><%= projectbundle.active %></td>
-        <td><%= link_to 'Show', projectbundle %></td>
-        <td><%= link_to 'Edit', edit_projectbundle_path(projectbundle) %></td>
-        <td><%= link_to 'Destroy', projectbundle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Näytä', projectbundle %></td>
+        <td><%= link_to 'Muokkaa', edit_projectbundle_path(projectbundle) %></td>
+        <td><%= link_to 'Poista', projectbundle, method: :delete, data: { confirm: 'Haluatko varmasti poistaa projektiryhmän?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Projectbundle', new_projectbundle_path %>
+<%= link_to 'Uusi projektiryhmä', new_projectbundle_path %>

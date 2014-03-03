@@ -13,26 +13,26 @@
 
 
   <div class="field">
-    <%= f.label :firstname %><br>
+    <%= f.label :firstname ,'Etunimi'%><br>
     <%= f.text_field :firstname %>
   </div>
   <div class="field">
-    <%= f.label :lastname %><br>
+    <%= f.label :lastname, 'Sukunimi' %><br>
     <%= f.text_field :lastname %>
   </div>
   <div class="field">
-    <%= f.label :username %><br>
+    <%= f.label :username, 'Käyttäjätunnus' %><br>
     <%= f.text_field :username %>
   </div>
   <div class="field">
-    <%= f.label :password %><br>
+    <%= f.label :password, 'Salasana'%><br>
     <%= f.password_field :password %>
   </div>
   <div class="field">
-    <%= f.label :password %><br>
+    <%= f.label :password, 'Salasana uudelleen' %><br>
     <%= f.password_field :password_confirmation %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Tallenna käyttäjä' %>
   </div>
 <% end %>

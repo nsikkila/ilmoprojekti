@@ -13,16 +13,16 @@
         </div>
     <% end %>
 
-    <%= f.label :firstname %><br />
+    <%= f.label :firstname, 'Etunimi' %><br />
     <%= f.text_field :firstname %><br />
 
-    <%= f.label :lastname %><br />
+    <%= f.label :lastname, 'Sukunimi'%><br />
     <%= f.text_field :lastname %><br />
 
-    <%= f.label :studentnumber %><br />
+    <%= f.label :studentnumber, 'Opiskelijanumero' %><br />
     <%= f.text_field :studentnumber %><br />
 
-    <%= f.label :email %><br />
+    <%= f.label :email, 'Sähköpostiosoite' %><br />
     <%= f.text_field :email %><br />
 
         <%= f.fields_for :signups do |sf| %>
@@ -33,9 +33,10 @@
             <%= sf.hidden_field :priority, value:"#{sf.object.priority}" %>
 
         <% end %>
-
+        <br>
+        <br/>
     <div class="actions">
-      <%= f.submit %>
+      <%= f.submit 'Tallenna ilmoittautuminen'%>
     </div>
 <% end %>
 

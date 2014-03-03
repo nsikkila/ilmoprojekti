@@ -12,32 +12,32 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :name %>
+      <%= f.label :name, 'Projektin nimi' %>
       <br>
       <%= f.text_field :name, size: 40 %>
     </div>
     <div class="field">
-      <%= f.label :description %>
+      <%= f.label :description, 'Kuvaus' %>
       <br>
       <%= f.text_area :description, cols: 40, rows: 15 %>
     </div>
     <div class="field">
-      <%= f.label :signup_start %>
+      <%= f.label :signup_start, 'Ilmoittautuminen alkaa'%>
       <br>
       <%= f.date_select :signup_start %>
     </div>
     <div class="field">
-      <%= f.label :signup_end %>
+      <%= f.label :signup_end, 'Ilmoittautuminen päättyy' %>
       <br>
       <%= f.date_select :signup_end %>
     </div>
     <div class="field">
-      <%= f.label :projectbundle_id %>
+      <%= f.label :projectbundle_id, 'Projektiryhmä'%>
       <br>
       <%= f.select :projectbundle_id, options_from_collection_for_select(@bundle, :id, :to_s) %>
     </div>
 
     <div class="actions">
-      <%= f.submit %>
+      <%= f.submit 'Luo projekti'%>
     </div>
 <% end %>
