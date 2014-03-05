@@ -1,4 +1,4 @@
-<h1>Listing signups</h1>
+<h1>Ilmottautumisten listaus</h1>
 
 <table>
   <thead>
@@ -16,9 +16,9 @@
       <tr>
         <td><%= signup.enrollment_id %></td>
         <td><%= signup.project_id %></td>
-        <td><%= link_to 'Show', signup %></td>
-        <td><%= link_to 'Edit', edit_signup_path(signup) %></td>
-        <td><%= link_to 'Destroy', signup, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Näytä', signup %></td>
+        <td><%= link_to 'Muokkaa', edit_signup_path(signup) %></td>
+        <td><%= link_to 'Poista', signup, method: :delete, data: { confirm: 'Oletko varma?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Signup', new_signup_path %>
+<%= link_to 'Uusi ilmottautuminen', new_signup_path %>

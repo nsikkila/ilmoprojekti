@@ -8,10 +8,10 @@ class SessionsController < ApplicationController
     # haetaan usernamea vastaava käyttäjä tietokannasta
     user = User.find_by username: params[:username]
     if user.nil? or not user.authenticate params[:password]
-      redirect_to signin_path, notice: "Username and password do not match"
+      redirect_to signin_path, notice: "Käyttäjätunnus tai salasana ei täsmää"
     else
       session[:user_id] = user.id
-      redirect_to user, notice: "Welcome back!"
+      redirect_to user, notice: "Tervetuloa takaisin!"
     end
   end
 

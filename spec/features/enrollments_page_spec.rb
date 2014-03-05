@@ -16,10 +16,10 @@ describe "Enrollments page" do
 
       expect(page).to have_content("Testibundle")
 
-      expect(page).to have_content("Firstname")
-      expect(page).to have_content("Lastname")
-      expect(page).to have_content("Studentnumber")
-      expect(page).to have_content("Email")
+      expect(page).to have_content("Etunimi")
+      expect(page).to have_content("Sukunimi")
+      expect(page).to have_content("Opiskelijanumero")
+      expect(page).to have_content("Sähköpostiosoite")
 
       expect(page).to have_content("1 This is a")
       expect(page).to have_content("2 This is a")
@@ -62,7 +62,7 @@ describe "Enrollments page" do
       select('6', from:'enrollment[signups_attributes][5][project_id]')
 
       expect {
-        click_button('Create Enrollment')
+        click_button('Tallenna ilmoittautuminen')
       }.to change{Signup.count}.by(6)
 
       expect(page).to have_content 'Nimi: Testi Testinen'
@@ -91,7 +91,7 @@ describe "Enrollments page" do
       select('5', from:'enrollment[signups_attributes][4][project_id]')
       select('6', from:'enrollment[signups_attributes][5][project_id]')
 
-      click_button('Create Enrollment')
+      click_button('Tallenna ilmoittautuminen')
 
       expect(Enrollment.count).to eq(0)
       expect(page).to have_content 'Opiskelijanumeron täytyy olla numeroista koostuva ja 7 merkkiä pitkä'
@@ -148,7 +148,7 @@ describe "Enrollments page" do
       select('5', from:'enrollment[signups_attributes][4][project_id]')
       select('6', from:'enrollment[signups_attributes][5][project_id]')
 
-      click_button('Create Enrollment')
+      click_button('Tallenna ilmoittautuminen')
       expect(page).to have_content('Henkilötiedot')
       expect(page).to have_content('Nimi: Testi Testinen')
       expect(page).to have_content('Opiskelijanumero: 1234567')
@@ -179,10 +179,10 @@ describe "Enrollments page" do
 
         expect(page).to have_content("Testibundle")
 
-        expect(page).to have_content("Firstname")
-        expect(page).to have_content("Lastname")
-        expect(page).to have_content("Studentnumber")
-        expect(page).to have_content("Email")
+        expect(page).to have_content("Etunimi")
+        expect(page).to have_content("Sukunimi")
+        expect(page).to have_content("Opiskelijanumero")
+        expect(page).to have_content("Sähköpostiosoite")
 
         expect(page).to have_content("1 This is a")
         expect(page).to have_content("2 This is a")
@@ -215,10 +215,10 @@ describe "Enrollments page" do
       fill_in('enrollment_studentnumber', with:"7654321")
       fill_in('enrollment_email', with:"edit@testi.fi")
 
-      click_button('Update Enrollment')
+      click_button('Tallenna ilmoittautuminen')
 
       expect(page).to have_content("Ilmoittautuminen onnistui!")
-      expect(page).to have_content("edit")
+      expect(page).to have_content("Muokkaa")
       expect(page).to have_content("7654321")
       #save_and_open_page
 

@@ -10,7 +10,7 @@ describe "User" do
 		it "can sign in with right credentials" do
 			sign_in
 
-			expect(page).to have_content 'Welcome back!'
+			expect(page).to have_content 'Tervetuloa takaisin!'
 			expect(page).to have_content 'Maija'
 		end
 
@@ -18,18 +18,18 @@ describe "User" do
 			visit signin_path
 			fill_in('username', with:"Maija")
 			fill_in('password', with:"Tatti123")
-			click_button('Log in')
+			click_button('Kirjaudu sisään')
 
-			expect(page).to have_content 'Username and password do not match'
+			expect(page).to have_content 'Käyttäjätunnus tai salasana ei täsmää'
 		end
 
 		it "can not sign in with incorrect username" do
 			visit signin_path
 			fill_in('username', with:"Matti")
 			fill_in('password', with:"Test123")
-			click_button('Log in')
+			click_button('Kirjaudu sisään')
 
-			expect(page).to have_content 'Username and password do not match'
+			expect(page).to have_content 'Käyttäjätunnus tai salasana ei täsmää'
 		end
 		
 	end
@@ -44,7 +44,7 @@ describe "User" do
 		it "can access project creation" do
 			visit projects_path
 
-			click_link "New Project"
+			click_link "Luo uusi projekti"
 			expect(current_path).to eq(new_project_path)
 		end
 
@@ -72,7 +72,7 @@ describe "User" do
 		it "can access project creation" do
 			visit projects_path
 
-			click_link "New Project"
+			click_link "Luo uusi projekti"
 			expect(current_path).to eq(new_project_path)
 		end
 
@@ -98,5 +98,5 @@ def sign_in
 	visit signin_path
 	fill_in('username', with:"Maija")
 	fill_in('password', with:"Test123")
-	click_button('Log in')
+	click_button('Kirjaudu sisään')
 end

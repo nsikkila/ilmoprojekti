@@ -8,7 +8,7 @@ describe "Signup page" do
       create_objects_for_frontpage
 
       visit signups_path
-      expect(page).to have_content("Student")
+      expect(page).to have_content("Opiskelija")
     end
 
     it "can be accessed if the user is logged in as a teacher" do
@@ -16,7 +16,7 @@ describe "Signup page" do
       signin(username:user.username, password:user.password)
 
       visit signups_path
-      expect(page).to have_content("Listing signups")
+      expect(page).to have_content("Ilmottautumisten listaus")
     end
 
   #Turha testi?
@@ -26,7 +26,7 @@ describe "Signup page" do
     create_objects_for_frontpage
 
     visit edit_signup_path(1)
-    expect(page).not_to have_content("Editing signup")
+    expect(page).not_to have_content("Ilmottautumisten muokkaus")
   end
 
 end

@@ -4,7 +4,7 @@ module TestHelper
     visit signin_path
     fill_in('username', with:credentials[:username])
     fill_in('password', with:credentials[:password])
-    click_button('Log in')
+    click_button('Kirjaudu sisään')
   end
 
   def generate_six_unique_projects(bundle_id)

@@ -11,7 +11,7 @@
             <%= p.description %><br/>
             Ilmoittautumisaika: <%= p.signup_start %> - <%= p.signup_end %><br/>
             Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
-            Vastuuhenkilö: <%= p.user.firstname %> <%= p.user.lastname %>
+            Vastuuhenkilö: <%= p.user.to_s %>
           </p>
         </div>
     <% end %>

@@ -1,14 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Student:</strong>
+  <strong>Opiskelija:</strong>
   <%= @signup.student_id %>
 </p>
 
 <p>
-  <strong>Project:</strong>
+  <strong>Projekti:</strong>
   <%= @signup.project_id %>
 </p>
 
-<%= link_to 'Edit', edit_signup_path(@signup) %> |
-<%= link_to 'Back', signups_path %>
+<%= link_to 'Muokkaa', edit_signup_path(@signup) %> |
+<%= link_to 'Takaisin', signups_path %>

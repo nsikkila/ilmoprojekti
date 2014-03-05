@@ -2,9 +2,9 @@
 <p id="notice"><%= notice %></p>
 
 <%= form_tag sessions_path do %>
-    <pre>Username: <%= text_field_tag :username, params[:username] %></pre>
-    <pre>Password: <%= password_field_tag :password, params[:password] %></pre>
-    <%= submit_tag "Log in" %>
+    <pre>Käyttäjätunnus: <%= text_field_tag :username, params[:username] %></pre>
+    <pre>Salasana: <%= password_field_tag :password, params[:password] %></pre>
+    <%= submit_tag "Kirjaudu sisään" %>
 <% end %>
 
 <% content_for :header do %>
