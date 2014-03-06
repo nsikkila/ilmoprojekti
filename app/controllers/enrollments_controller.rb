@@ -3,6 +3,9 @@ class EnrollmentsController < ApplicationController
   require 'enrollment.rb'
   
   def index
+    if current_user.nil? or not is_at_least(:teacher)
+      redirect_to :root
+    end
     set_projectbundle_and_projects
     @enrollments = Enrollment.all
   end

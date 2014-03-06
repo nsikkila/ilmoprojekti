@@ -10,7 +10,6 @@ class UniqueSignupValidator < ActiveModel::Validator
       end
     end
   end
-
 end
 
 class Enrollment < ActiveRecord::Base
@@ -26,6 +25,16 @@ class Enrollment < ActiveRecord::Base
 
   def name
     "#{firstname} #{lastname} "
+  end
+
+  def acceptedAmount
+    accepted = 0
+    signups.each do |signup|
+      if signup.status
+        accepted = accepted + 1
+      end
+    end
+    accepted
   end
 
   def self.create_hash(enrollment)
