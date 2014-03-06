@@ -42,6 +42,9 @@ h1, h2 {
 .content {
     background-color: rgb(47, 99, 148);
     padding: 20px;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
 }
 
 

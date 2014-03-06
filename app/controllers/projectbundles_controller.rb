@@ -1,43 +1,32 @@
 class ProjectbundlesController < ApplicationController
   before_action :set_projectbundle, only: [:show, :edit, :update, :destroy]
+  before_action only: [:edit, :new, :create, :update, :destroy] do
+    is_at_least(:teacher)
+  end
 
   # GET /projectbundles
   # GET /projectbundles.json
   def index
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
     @projectbundles = Projectbundle.all
   end
 
   # GET /projectbundles/1
   # GET /projectbundles/1.json
   def show
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
   end
 
   # GET /projectbundles/new
   def new
-    if is_at_least(:teacher)
-      @projectbundle = Projectbundle.new
-    else
-      redirect_to :root
-    end
+    @projectbundle = Projectbundle.new
   end
 
   # GET /projectbundles/1/edit
   def edit
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
   end
 
   # POST /projectbundles
   # POST /projectbundles.json
   def create
-    if is_at_least(:teacher)
       @projectbundle = Projectbundle.new(projectbundle_params)
 
       respond_to do |format|
@@ -49,15 +38,11 @@ class ProjectbundlesController < ApplicationController
           format.json { render json: @projectbundle.errors, status: :unprocessable_entity }
         end
       end
-    else
-      redirect_to :root
-    end
   end
 
   # PATCH/PUT /projectbundles/1
   # PATCH/PUT /projectbundles/1.json
   def update
-    if is_at_least(:teacher)
       respond_to do |format|
         if @projectbundle.update(projectbundle_params)
           format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully updated.' }
@@ -67,23 +52,16 @@ class ProjectbundlesController < ApplicationController
           format.json { render json: @projectbundle.errors, status: :unprocessable_entity }
         end
       end
-    else
-      redirect_to :root
-    end
   end
 
   # DELETE /projectbundles/1
   # DELETE /projectbundles/1.json
   def destroy
-    if is_at_least(:teacher)
       @projectbundle.destroy
       respond_to do |format|
         format.html { redirect_to projectbundles_url }
         format.json { head :no_content }
       end
-    else
-      redirect_to :root
-    end
   end
 
   private

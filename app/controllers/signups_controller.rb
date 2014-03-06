@@ -1,12 +1,12 @@
 class SignupsController < ApplicationController
   before_action :set_signup, only: [:show, :edit, :update, :destroy]
+  before_action only: [:edit, :create, :update, :destroy] do
+    is_at_least(:teacher)
+  end
   
   # GET /signups
   # GET /signups.json
   def index
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
       @signups = Signup.all
   end
 
@@ -22,9 +22,6 @@ class SignupsController < ApplicationController
 
   # GET /signups/1/edit
   def edit
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
   end
 
   # POST /signups
@@ -45,9 +42,6 @@ class SignupsController < ApplicationController
   # PATCH/PUT /signups/1
   # PATCH/PUT /signups/1.json
   def update
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
       respond_to do |format|
         if @signup.update(signup_params)
           format.html { redirect_to @signup, notice: 'Signup was successfully updated.' }
@@ -61,9 +55,6 @@ class SignupsController < ApplicationController
   # DELETE /signups/1
   # DELETE /signups/1.json
   def destroy
-    if not is_at_least(:teacher)
-      redirect_to :root
-    end
       @signup.destroy
       respond_to do |format|
         format.html { redirect_to signups_url }

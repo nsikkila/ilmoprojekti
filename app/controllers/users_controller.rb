@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+  before_action only: [:new, :create, :destroy] do
+    is_at_least(:admin)
+  end
+  before_action only: [:show] do
+     current_user.id == params[:id].to_i or is_at_least(:admin)
+  end
 
   # GET /users
   # GET /users.json
@@ -11,25 +16,19 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if not (is_at_least(:admin) or current_user.id == params[:id].to_i)
-      redirect_to :root
-    end
   end
 
   # GET /users/new  
   def new
-    if not is_at_least(:admin)
-      redirect_to :root
-    end
       @user = User.new
   end
 
   # GET /users/1/edit
   def edit
-    if is_at_least(:admin)
-      @users = User.all
-    elsif current_user.id == params[:id].to_i
+    if current_user.id == params[:id].to_i
       @users = current_user
+    elsif is_at_least(:admin)
+      @users = User.all
     else
       redirect_to :root
     end
@@ -39,9 +38,6 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    if not is_at_least(:admin)
-      redirect_to :root
-    end
     @user = User.new(user_params)
     @user.accesslevel=0;
 
@@ -78,9 +74,6 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if not is_at_least(:admin)
-      redirect_to :root
-    end
     @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url }

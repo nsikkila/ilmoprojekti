@@ -22,6 +22,11 @@
       <%= f.text_area :description, cols: 40, rows: 15 %>
     </div>
     <div class="field">
+      <%= f.label :website, 'Kotisivu' %>
+      <br>
+      <%= f.text_field :website, size: 40 %>
+    </div>
+    <div class="field">
       <%= f.label :signup_start, 'Ilmoittautuminen alkaa'%>
       <br>
       <%= f.date_select :signup_start %>
