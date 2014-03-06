@@ -1,7 +1,7 @@
 class EnrollmentsController < ApplicationController
   require 'digest/sha1'
   require 'enrollment.rb'
-  
+
   def index
     set_projectbundle_and_projects
     @enrollments = Enrollment.all
@@ -20,7 +20,7 @@ class EnrollmentsController < ApplicationController
       if @enrollment.save
         @digest = Enrollment.create_hash(@enrollment)
         EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
-        format.html { render action:'show' }
+        format.html { render action: 'show' }
       else
         set_projectbundle_and_projects
         format.html { render action: 'new' }
@@ -35,10 +35,10 @@ class EnrollmentsController < ApplicationController
       redirect_to :root
     else
 
-    session[:enrollment_id] = @enrollment.id
-    session[:hash] = params[:hash]
+      session[:enrollment_id] = @enrollment.id
+      session[:hash] = params[:hash]
 
-    redirect_to action: 'edit', id:params[:enrollment_id]
+      redirect_to action: 'edit', id: params[:enrollment_id]
 
     end
   end
@@ -52,15 +52,17 @@ class EnrollmentsController < ApplicationController
 
   def update
     @enrollment = Enrollment.find(params[:id])
-  #  raise params.inspect
-    db_delete_empty_signups(@enrollment)
+    # raise params.inspect
+    #  @signups = params.select(:signup_attributes)
+    @params = params[:enrollment][:signups_attributes]
+    db_delete_empty_signups(@params)
     @digest = Enrollment.create_hash(@enrollment)
 
     if session_variables_are_valid
       respond_to do |format|
         if @enrollment.update(enrollment_params)
           clear_session_variables
-          format.html { render action:'show' }
+          format.html { render action: 'show' }
         else
           set_projectbundle_and_projects
           format.html { render action: 'edit' }
@@ -71,12 +73,12 @@ class EnrollmentsController < ApplicationController
     end
   end
 
-private
+  private
 
   def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
-      @enrollment.signups << Signup.new(priority:priority)
+      @enrollment.signups << Signup.new(priority: priority)
       priority = priority + 1
     end
   end
@@ -112,19 +114,18 @@ private
 #    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
   end
 
-  def db_delete_empty_signups(enrollment)
-    i=-1
-    enrollment.signups.map! { |sign|
-      if sign.project_id.blank? or sign.project_id.nil? or sign.project_id == ""
-        sign.project_id = i
-        raise params.inspect
+  def db_delete_empty_signups(prms)
+    prms.each do |para|
+      i=-1
+      para.each do |sign|
+           raise sign.last[:project_id].inspect
+        vittu = sign[:project_id].last
+
+        vittu = i
+
         i=i-1
-
+        #   raise i.inspect
       end
-    }
-
-
-#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
+    end
   end
-  
 end
