@@ -10,6 +10,13 @@
   <%= @project.description %>
 </p>
 
+<% if not @project.website.nil? %>
+<p>
+  <strong>Website</strong>
+  <%= link_to @project.website, @project.website %>
+</p>
+<% end %>
+
 <p>
   <strong>Ilmottautumisen alkamispäivä:</strong>
   <%= @project.signup_start %>

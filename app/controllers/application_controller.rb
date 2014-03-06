@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :is_at_least
+  helper_method :compare_accesslevel
 
   def current_user
     return nil if session[:user_id].nil? 
@@ -14,7 +15,20 @@ class ApplicationController < ActionController::Base
   def is_at_least(level)
   	if not current_user.nil?
   		list = {:admin => 1, :teacher => 0 }
-  	  list[level] <= current_user.accesslevel
+      if list[level] > current_user.accesslevel #ohjataan käyttäjä roottiin jos ei tarpeeksi iso accesslevel
+        redirect_to :root
+      else
+        list[level] <= current_user.accesslevel
+      end
+    else #ohjataan kirjautumaton käyttäjä roottiin
+      redirect_to :root
 	  end
+  end
+
+  def compare_accesslevel(accesslevel)
+    if not current_user.nil?
+      list = {:admin => 1, :teacher => 0 }
+      list[accesslevel] <= current_user.accesslevel
+    end
   end
 end
