@@ -52,7 +52,8 @@ class EnrollmentsController < ApplicationController
 
   def update
     @enrollment = Enrollment.find(params[:id])
-    delete_empty_signups(@enrollment)
+  #  raise params.inspect
+    db_delete_empty_signups(@enrollment)
     @digest = Enrollment.create_hash(@enrollment)
 
     if session_variables_are_valid
@@ -99,16 +100,31 @@ private
   end
 
   def delete_empty_signups(enrollment)
-   # i=-1
-   # enrollment.signups.map! { |sign|
-     # if sign.project_id.blank?
-     #   sign.project_id = i
-    #    i=i-1
-   #   end
+    i=-1
+    enrollment.signups.map! { |sign|
+      if sign.project_id.blank?
+        sign.project_id = i
+        i=i-1
+      end
 
-  #  }
+    }
 
-    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
+#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
+  end
+
+  def db_delete_empty_signups(enrollment)
+    i=-1
+    enrollment.signups.map! { |sign|
+      if sign.project_id.blank? or sign.project_id.nil? or sign.project_id == ""
+        sign.project_id = i
+        raise params.inspect
+        i=i-1
+
+      end
+    }
+
+
+#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
   end
   
 end
