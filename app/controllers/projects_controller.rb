@@ -24,12 +24,16 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
+    #@project = Project.find(params[:project_id])
+    #@bundle = @project.projectbundle
+    @bundle = Projectbundle.all
   end
 
   # POST /projects
   # POST /projects.json
   def create
       @project = Project.new(project_params)
+      @project.user = current_user
 
       respond_to do |format|
         if @project.save
@@ -46,6 +50,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
+      @bundle = Projectbundle.all
       respond_to do |format|
         if @project.update(project_params)
           format.html { redirect_to @project, notice: 'Project was successfully updated.' }
@@ -75,6 +80,6 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :description, :signup_start, :signup_end, :projectbundle_id)
+      params.require(:project).permit(:name, :description, :signup_start, :signup_end, :projectbundle_id, :website, :maxstudents)
     end
 end
