@@ -14,7 +14,7 @@
 
 <div id="navi">
 	<%= link_to 'Etusivu', root_path %>
-	<% if not current_user.nil? and is_at_least(:admin) %>
+	<% if not current_user.nil? and compare_accesslevel(:admin) %>
 	<%= link_to 'Käyttäjät', users_path %>
 	<% end %>
 	<%= link_to 'Projektit', projects_path %> |

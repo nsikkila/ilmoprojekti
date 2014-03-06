@@ -1,22 +1,29 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Nimi:</strong>
   <%= @project.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong>Kuvaus:</strong>
   <%= @project.description %>
 </p>
 
+<% if not @project.website.nil? %>
 <p>
-  <strong>Signup start:</strong>
+  <strong>Website</strong>
+  <%= link_to @project.website, @project.website %>
+</p>
+<% end %>
+
+<p>
+  <strong>Ilmottautumisen alkamispäivä:</strong>
   <%= @project.signup_start %>
 </p>
 
 <p>
-  <strong>Signup end:</strong>
+  <strong>Ilmottautumisen päättymispäivä:</strong>
   <%= @project.signup_end %>
 </p>
 
