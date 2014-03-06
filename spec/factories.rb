@@ -10,6 +10,8 @@ end
 FactoryGirl.define do
   factory :teacher, class: User do
     username "testi"
+    firstname "testi"
+    lastname "testinen"
     password "Opettaja1"
     password_confirmation "Opettaja1"
     accesslevel 1

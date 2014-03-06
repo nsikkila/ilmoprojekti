@@ -11,11 +11,16 @@
 </p>
 
 <% if not @project.website.nil? %>
-<p>
-  <strong>Website</strong>
-  <%= link_to @project.website, @project.website %>
-</p>
+    <p>
+      <strong>Website</strong>
+      <%= link_to @project.website, @project.website %>
+    </p>
 <% end %>
+
+<p>
+  <strong>Projektiin hyväksyttävien opiskelijoiden määrä:</strong>
+  <%= @project.maxstudents %>
+</p>
 
 <p>
   <strong>Ilmottautumisen alkamispäivä:</strong>
@@ -37,16 +42,16 @@
       <a ng-click="click('priority')">Prioriteetti</a>
     </th>
   </tr>
-<% @project.signups.each do |signup| %>
-    <tr>
-      <td>
-        <%= "#{signup.enrollment.firstname} #{signup.enrollment.lastname}" %>
-      </td>
-      <td>
-        <%= signup.priority %>
-      </td>
-    </tr>
-<% end %>
+  <% @project.signups.each do |signup| %>
+      <tr>
+        <td>
+          <%= "#{signup.enrollment.firstname} #{signup.enrollment.lastname}" %>
+        </td>
+        <td>
+          <%= signup.priority %>
+        </td>
+      </tr>
+  <% end %>
 </table>
 <br />
 <%= link_to 'Muokkaa', edit_project_path(@project) %> |

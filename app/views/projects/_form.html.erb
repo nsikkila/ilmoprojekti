@@ -27,6 +27,11 @@
       <%= f.text_field :website, size: 40 %>
     </div>
     <div class="field">
+      <%= f.label :maxstudents, 'Ryhmään hyväksyttävien opiskelijoiden maksimimäärä' %>
+      <br>
+      <%= f.text_field :maxstudents, size: 40 %>
+    </div>
+    <div class="field">
       <%= f.label :signup_start, 'Ilmoittautuminen alkaa'%>
       <br>
       <%= f.date_select :signup_start %>
