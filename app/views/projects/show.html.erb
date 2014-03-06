@@ -1,0 +1,62 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nimi:</strong>
+  <%= @project.name %>
+</p>
+
+<p>
+  <strong>Kuvaus:</strong>
+  <%= @project.description %>
+</p>
+
+<% if not @project.website.nil? %>
+    <p>
+      <strong>Website</strong>
+      <%= link_to @project.website, @project.website %>
+    </p>
+<% end %>
+
+<p>
+  <strong>Projektiin hyväksyttävien opiskelijoiden määrä:</strong>
+  <%= @project.maxstudents %>
+</p>
+
+<p>
+  <strong>Ilmottautumisen alkamispäivä:</strong>
+  <%= @project.signup_start %>
+</p>
+
+<p>
+  <strong>Ilmottautumisen päättymispäivä:</strong>
+  <%= @project.signup_end %>
+</p>
+
+<h2>Projektiin halukkuutensa ilmoittaneet: </h2>
+<table>
+  <tr>
+    <th>
+      <a ng-click="click('lastname')">Opiskelija</a>
+    </th>
+    <th>
+      <a ng-click="click('priority')">Prioriteetti</a>
+    </th>
+  </tr>
+  <% @project.signups.each do |signup| %>
+      <tr>
+        <td>
+          <%= "#{signup.enrollment.firstname} #{signup.enrollment.lastname}" %>
+        </td>
+        <td>
+          <%= signup.priority %>
+        </td>
+      </tr>
+  <% end %>
+</table>
+<br />
+<%= link_to 'Muokkaa', edit_project_path(@project) %> |
+<%= link_to 'Takaisin', projects_path %>
+
+<% content_for :header do %>
+    <%= "Projekti: #{@project.name}" %>
+<% end %>
