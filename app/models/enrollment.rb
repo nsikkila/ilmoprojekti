@@ -10,7 +10,6 @@ class UniqueSignupValidator < ActiveModel::Validator
       end
     end
   end
-
 end
 
 class Enrollment < ActiveRecord::Base

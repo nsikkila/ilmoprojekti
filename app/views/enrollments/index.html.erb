@@ -1,6 +1,8 @@
 <% content_for :header do %>
-    ... work in progress ...
+    Ilmottautumisnäkymä
 <% end %>
+
+<% unless @enrollments.first.nil? %>
 
 <table id="enrollmenttable">
     <tr>
@@ -30,7 +32,10 @@
                 <%= enrollment.acceptedAmount %>
             </td>
         </tr>
-
       <% end %>
     </tr>
 </table>
+
+<% else %>
+    <h2>Ei ilmottautumisia.</h2>
+<% end %>
