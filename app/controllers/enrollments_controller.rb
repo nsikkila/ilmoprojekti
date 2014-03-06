@@ -3,6 +3,9 @@ class EnrollmentsController < ApplicationController
   require 'enrollment.rb'
   
   def index
+    if current_user.nil? or not is_at_least(:teacher)
+      redirect_to :root
+    end
     set_projectbundle_and_projects
     @enrollments = Enrollment.all
   end
@@ -15,7 +18,7 @@ class EnrollmentsController < ApplicationController
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
-
+    delete_empty_signups(@enrollment)
     respond_to do |format|
       if @enrollment.save
         @digest = Enrollment.create_hash(@enrollment)
@@ -47,10 +50,13 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
+#    @projects = set_editable_projects(:enrollment_id)
   end
 
   def update
     @enrollment = Enrollment.find(params[:id])
+  #  raise params.inspect
+    db_delete_empty_signups(@enrollment)
     @digest = Enrollment.create_hash(@enrollment)
 
     if session_variables_are_valid
@@ -94,6 +100,34 @@ private
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
+  end
+
+  def delete_empty_signups(enrollment)
+    i=-1
+    enrollment.signups.map! { |sign|
+      if sign.project_id.blank?
+        sign.project_id = i
+        i=i-1
+      end
+
+    }
+
+#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
+  end
+
+  def db_delete_empty_signups(enrollment)
+    i=-1
+    enrollment.signups.map! { |sign|
+      if sign.project_id.blank? or sign.project_id.nil? or sign.project_id == ""
+        sign.project_id = i
+        raise params.inspect
+        i=i-1
+
+      end
+    }
+
+
+#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
   end
   
 end
