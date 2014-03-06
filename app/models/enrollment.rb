@@ -28,6 +28,16 @@ class Enrollment < ActiveRecord::Base
     "#{firstname} #{lastname} "
   end
 
+  def acceptedAmount
+    accepted = 0
+    signups.each do |signup|
+      if signup.status
+        accepted = accepted + 1
+      end
+    end
+    accepted
+  end
+
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end

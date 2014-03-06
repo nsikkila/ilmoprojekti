@@ -1,19 +1,20 @@
-<
-
 <% content_for :header do %>
     ... work in progress ...
 <% end %>
 
 <table id="enrollmenttable">
     <tr>
-      <td>
+      <th>
         Opiskelija
-      </td>
+      </th>
       <% @projects.each do |project| %>
-        <td>
+        <th>
           <%= project.name %>
-        </td>
+        </th>
       <% end %>
+      <th>
+        Hyväksyttyjen lukumäärä
+      </th>
       <% @enrollments.each do |enrollment| %>
 
         <tr>
@@ -25,6 +26,9 @@
                   <%= enrollment.signups.find_by(project_id:project.id).priority unless enrollment.signups.find_by(project_id:project.id).nil? %>
                 </td>
             <% end %>
+            <td>
+                <%= enrollment.acceptedAmount %>
+            </td>
         </tr>
 
       <% end %>
