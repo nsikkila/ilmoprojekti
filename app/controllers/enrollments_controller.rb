@@ -18,7 +18,7 @@ class EnrollmentsController < ApplicationController
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
-    delete_empty_signups(@enrollment)
+    #delete_empty_signups(@enrollment)
     respond_to do |format|
       if @enrollment.save
         @digest = Enrollment.create_hash(@enrollment)
@@ -73,7 +73,7 @@ class EnrollmentsController < ApplicationController
     # raise params.inspect
     #  @signups = params.select(:signup_attributes)
     @params = params[:enrollment][:signups_attributes]
-    db_delete_empty_signups(@params)
+    #db_delete_empty_signups(@params)
     @digest = Enrollment.create_hash(@enrollment)
 
     if session_variables_are_valid

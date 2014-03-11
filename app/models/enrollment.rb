@@ -3,10 +3,12 @@ class UniqueSignupValidator < ActiveModel::Validator
   def validate(record)
     arr = Array.new
     record.signups.each do | signup |
-      if arr.include?(signup.project_id)
-        record.errors[:project] << 'can only have one priority'
-      else
-        arr << signup.project_id
+      if not signup.project_id.nil?
+        if arr.include?(signup.project_id)
+          record.errors[:project] << 'can only have one priority'
+        else
+          arr << signup.project_id
+        end
       end
     end
   end
