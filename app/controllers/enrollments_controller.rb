@@ -18,7 +18,9 @@ class EnrollmentsController < ApplicationController
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
-    #delete_empty_signups(@enrollment)
+    @enrollment.signups.each do |signup|
+      signup.status = false
+    end
     respond_to do |format|
       if @enrollment.save
         @digest = Enrollment.create_hash(@enrollment)
@@ -50,7 +52,6 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-#    @projects = set_editable_projects(:enrollment_id)
   end
 
   def toggle
@@ -70,12 +71,8 @@ class EnrollmentsController < ApplicationController
 
   def update
     @enrollment = Enrollment.find(params[:id])
-    # raise params.inspect
-    #  @signups = params.select(:signup_attributes)
-    @params = params[:enrollment][:signups_attributes]
-    #db_delete_empty_signups(@params)
+    @params = params[:enrollment][:signups_attribute]
     @digest = Enrollment.create_hash(@enrollment)
-
     if session_variables_are_valid
       respond_to do |format|
         if @enrollment.update(enrollment_params)
@@ -119,31 +116,4 @@ class EnrollmentsController < ApplicationController
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
 
-  def delete_empty_signups(enrollment)
-    i=-1
-    enrollment.signups.map! { |sign|
-      if sign.project_id.blank?
-        sign.project_id = i
-        i=i-1
-      end
-
-    }
-
-#    enrollment.signups.keep_if {|sign| not sign.project_id.blank?}
-  end
-
-  def db_delete_empty_signups(prms)
-    prms.each do |para|
-      i=-1
-      para.each do |sign|
-        raise sign.last[:project_id].inspect
-        vittu = sign[:project_id].last
-
-        vittu = i
-
-        i=i-1
-        #   raise i.inspect
-      end
-    end
-  end
 end
