@@ -3,10 +3,12 @@ class UniqueSignupValidator < ActiveModel::Validator
   def validate(record)
     arr = Array.new
     record.signups.each do | signup |
-      if arr.include?(signup.project_id)
-        record.errors[:project] << 'can only have one priority'
-      else
-        arr << signup.project_id
+      if not signup.project_id.nil?
+        if arr.include?(signup.project_id)
+          record.errors[:project] << 'can only have one priority'
+        else
+          arr << signup.project_id
+        end
       end
     end
   end
@@ -27,7 +29,7 @@ class Enrollment < ActiveRecord::Base
     "#{firstname} #{lastname} "
   end
 
-  def acceptedAmount
+  def accepted_amount
     accepted = 0
     signups.each do |signup|
       if signup.status
@@ -35,6 +37,16 @@ class Enrollment < ActiveRecord::Base
       end
     end
     accepted
+  end
+
+  def compute_magic_number
+    number = 0
+    signups.each do | signup |
+      if signup.status
+        number = number + signup.priority
+      end
+    end
+    number
   end
 
   def self.create_hash(enrollment)
