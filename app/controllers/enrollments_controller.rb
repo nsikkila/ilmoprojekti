@@ -53,6 +53,21 @@ class EnrollmentsController < ApplicationController
 #    @projects = set_editable_projects(:enrollment_id)
   end
 
+  def toggle
+    enrollment = Enrollment.find params[:enrollment_id]
+    signup = enrollment.signups.find_by_project_id(params[:project_id])
+    project = signup.project
+    if signup.status
+      signup.status = false
+      signup.save
+    else
+      signup.status = true
+      signup.save
+    end
+
+    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+  end
+
   def update
     @enrollment = Enrollment.find(params[:id])
     # raise params.inspect
@@ -121,7 +136,7 @@ class EnrollmentsController < ApplicationController
     prms.each do |para|
       i=-1
       para.each do |sign|
-           raise sign.last[:project_id].inspect
+        raise sign.last[:project_id].inspect
         vittu = sign[:project_id].last
 
         vittu = i

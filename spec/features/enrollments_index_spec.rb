@@ -18,7 +18,7 @@ describe "Enrollment table view" do
     signin(username:@user.username, password:@user.password)
 
     visit enrollments_path
-    expect(page).to have_content 'Ilmottautumisnäkymä'
+    expect(page).to have_content 'Ilmoittautumisnäkymä'
   end
 
   describe "when enrollments have not been made" do
@@ -28,7 +28,7 @@ describe "Enrollment table view" do
 
       visit enrollments_path
 
-      expect(page).to have_content 'Ei ilmottautumisia.'
+      expect(page).to have_content 'Ei ilmoittautumisia.'
     end
   end
 

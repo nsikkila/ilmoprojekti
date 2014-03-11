@@ -39,6 +39,10 @@ h1, h2 {
     padding: 5px;
 }
 
+.formtable {
+    position: relative;
+}
+
 .content {
     background-color: rgb(47, 99, 148);
     padding: 20px;
@@ -47,14 +51,17 @@ h1, h2 {
     -webkit-border-radius: 15px;
 }
 
-
-table, .enrollmenttable {
-    border-collapse: collapse;
+.enrollmenttable {
+    border: 1px solid black;
 }
 
-.enrollmenttable, td {
+.enrollmenttable tfoot {
+    background-color: lightgray;
+}
+
+.enrollmenttable td {
+    text-align: center;
     border: 1px solid black;
-    border-collapse: collapse;
 }
 
 li {

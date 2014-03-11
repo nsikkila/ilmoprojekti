@@ -27,7 +27,7 @@ class Enrollment < ActiveRecord::Base
     "#{firstname} #{lastname} "
   end
 
-  def acceptedAmount
+  def accepted_amount
     accepted = 0
     signups.each do |signup|
       if signup.status
@@ -35,6 +35,16 @@ class Enrollment < ActiveRecord::Base
       end
     end
     accepted
+  end
+
+  def compute_magic_number
+    number = 0
+    signups.each do | signup |
+      if signup.status
+        number = number + signup.priority
+      end
+    end
+    number
   end
 
   def self.create_hash(enrollment)
