@@ -53,15 +53,24 @@ h1, h2 {
 
 .enrollmenttable {
     border: 1px solid black;
+    border-collapse: collapse;
 }
 
-.enrollmenttable tfoot {
-    background-color: lightgray;
+.tableSummary {
+    background-color: #dcdcdc;
 }
 
 .enrollmenttable td {
     text-align: center;
     border: 1px solid black;
+}
+
+.prioritycell {
+
+}
+
+.prioritycell.accepted {
+    background-color: lightgreen;
 }
 
 li {
