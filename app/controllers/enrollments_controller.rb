@@ -35,7 +35,6 @@ class EnrollmentsController < ApplicationController
 
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
-
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
       redirect_to :root
     else
@@ -52,11 +51,10 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if @enrollment.signups.first.project.signup_end > Time.now
-      raise 'hahahahaahah'
-      redirect_to new_enrollment_path, @enrollment.errors << 'Ilmottautumista ei voi enää muokata'
+    if @enrollment.signups.first.project.signup_end < Date.today
+    #  format.html { render json: 'new', notice: 'Ilmoa ei ole enää mahdollista muokata'}
+      redirect_to :root, notice: 'Ilmoa ei ole enää mahdollista muokata'
     end
-    raise Time.now
   end
 
   def toggle
