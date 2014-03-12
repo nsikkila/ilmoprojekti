@@ -52,6 +52,11 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
+    if @enrollment.signups.first.project.signup_end > Time.now
+      raise 'hahahahaahah'
+      redirect_to new_enrollment_path, @enrollment.errors << 'Ilmottautumista ei voi enää muokata'
+    end
+    raise Time.now
   end
 
   def toggle
@@ -110,10 +115,13 @@ class EnrollmentsController < ApplicationController
   def set_projectbundle_and_projects
     @projectbundle = Projectbundle.first
     @projects = @projectbundle.projects
+
   end
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
+
+
 
 end
