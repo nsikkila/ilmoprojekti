@@ -29,7 +29,7 @@
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
                 <% unless signup.nil? %>
-                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="toggle(<%= enrollment.id %>, <%= project.id %>)" <%= 'style=background-color:green;' if signup.status %>>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="toggle(<%= enrollment.id %>, <%= project.id %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
                       <%= signup.priority %>
                     </td>
                 <% else %>
@@ -92,11 +92,7 @@
                     document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
                     document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
-                    if (msg.newStatus == "true") {
-                        $("#"+enrollment_id +"-"+project_id).css( "background-color", "green");
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).css( "background-color", "white");
-                    }
+                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted");
                 });
     };
 
