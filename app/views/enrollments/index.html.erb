@@ -3,21 +3,48 @@
 
     <table class="enrollmenttable" style="width:100%;">
       <thead>
-      <th>
-        Opiskelija
-      </th>
-      <% @projects.each do |project| %>
-          <th>
-            <%= project.name %>
-          </th>
-      <% end %>
-      <th>
-        Opiskelijalla projekteja
-      </th>
-      <th>
-        Magic number
-      </th>
+      <tr>
+        <th>
+          Opiskelija
+        </th>
+        <% @projects.each do |project| %>
+            <th>
+              <%= project.name %>
+            </th>
+        <% end %>
+        <th>
+          Opiskelijalla projekteja
+        </th>
+        <th>
+          Magic number
+        </th>
+      </tr>
       </thead>
+
+      <tfoot class="tableSummary">
+      <tr>
+        <td>Opiskelijoita</td>
+        <% @projects.each do |project| %>
+
+            <td id="<%= project.id %>-ptotal">
+              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
+            </td>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Täyttöaste</td>
+        <% @projects.each do |project| %>
+
+            <td id="<%= project.id %>-pfill">
+              <%= project.amount_of_accepted_students - project.maxstudents %>
+            </td>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      </tfoot>
 
       <tbody>
       <% @enrollments.each do |enrollment| %>
@@ -36,10 +63,10 @@
                     <td></td>
                 <% end %>
             <% end %>
-            <td id="<%= enrollment.id %>-etotal">
+            <td id="<%= enrollment.id %>-etotal" class="tableSummary">
               <%= enrollment.accepted_amount %>
             </td>
-            <td id="<%= enrollment.id %>-escore">
+            <td id="<%= enrollment.id %>-escore" class="tableSummary">
               <%= enrollment.compute_magic_number %>
             </td>
           </tr>
@@ -47,26 +74,7 @@
       </tr>
       </tbody>
 
-      <tfoot>
-      <tr>
-        <td>Opiskelijoita</td>
-        <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-ptotal">
-              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
-            </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td>Täyttöaste</td>
-        <% @projects.each do |project| %>
-
-            <td id="<%= project.id %>-pfill">
-              <%= project.amount_of_accepted_students - project.maxstudents %>
-            </td>
-        <% end %>
-      </tr>
-      </tfoot>
 
     </table>
 
