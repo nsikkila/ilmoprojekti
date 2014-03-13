@@ -51,10 +51,9 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if @enrollment.signups.first.project.signup_end < Date.today
-    #  format.html { render json: 'new', notice: 'Ilmoa ei ole enää mahdollista muokata'}
-      redirect_to :root, notice: 'Ilmoa ei ole enää mahdollista muokata'
-    end
+   if Enrollment.confirm_expire_date(@enrollment)
+     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+   end
   end
 
   def toggle
