@@ -49,6 +49,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
 end
 
+gem 'byebug', group: [:development, :test]
+
 gem 'coveralls', require: false
 group :test do
   gem 'factory_girl_rails'

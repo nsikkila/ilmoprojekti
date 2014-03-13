@@ -51,6 +51,7 @@ FactoryGirl.define do
     maxstudents 15
     user_id 1
     projectbundle_id 1
+    signup_end Date.tomorrow
   end
 end
 

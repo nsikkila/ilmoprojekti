@@ -2,7 +2,7 @@ class UniqueSignupValidator < ActiveModel::Validator
 
   def validate(record)
     arr = Array.new
-    record.signups.each do | signup |
+    record.signups.each do |signup|
       if not signup.project_id.nil?
         if arr.include?(signup.project_id)
           record.errors[:project] << 'can only have one priority'
@@ -16,7 +16,8 @@ end
 
 class Enrollment < ActiveRecord::Base
 
-  has_many :signups, order:'id ASC'
+  has_many :projects, through: :signups
+  has_many :signups, order: 'id ASC'
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator
@@ -41,7 +42,7 @@ class Enrollment < ActiveRecord::Base
 
   def compute_magic_number
     number = 0
-    signups.each do | signup |
+    signups.each do |signup|
       if signup.status
         number = number + signup.priority
       end
@@ -51,6 +52,18 @@ class Enrollment < ActiveRecord::Base
 
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+  end
+
+  def self.confirm_expire_date(enrollment)
+    enrollment.signups.each do |sign|
+   #   raise sign.project.inspect
+      if not sign.project.nil?
+        if sign.project.signup_end < Date.today
+          return true
+        end
+      end
+    end
+    false
   end
 
 end

@@ -35,7 +35,6 @@ class EnrollmentsController < ApplicationController
 
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
-
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
       redirect_to :root
     else
@@ -52,6 +51,9 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
+   if Enrollment.confirm_expire_date(@enrollment)
+     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+   end
   end
 
   def toggle
@@ -110,10 +112,13 @@ class EnrollmentsController < ApplicationController
   def set_projectbundle_and_projects
     @projectbundle = Projectbundle.first
     @projects = @projectbundle.projects
+
   end
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
+
+
 
 end
