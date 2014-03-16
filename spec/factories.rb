@@ -32,6 +32,8 @@ FactoryGirl.define do
   name "Testibundle"
   description "This is a test bundle created by factorygirl"
   active true
+  signup_start Date.current
+  signup_end Date.tomorrow
   end
 end
 

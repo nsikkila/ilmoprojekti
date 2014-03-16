@@ -14,3 +14,4 @@ mockproject3=Project.create name:"Kotitalousprojekti", description:"Tässä ryhm
 mockproject4=Project.create name:"Kampaamoprojekti", description:"Tässä ryhmässä kammataan", signup_start:Date.current, signup_end:Date.tomorrow, maxstudents:5, user_id:normUser.id, projectbundle_id:1, website: "http://www.hs.fi"
 mockproject4=Project.create name:"Traktoriprojekti", description:"Tässä ryhmässä rakennetaan traktori", signup_start:Date.current, signup_end:Date.tomorrow, maxstudents:10, user_id:normUser.id, projectbundle_id:1, website: "http://www.joindota.com"
 mockproject4=Project.create name:"Lumenluontiprojekti", description:"Tässä ryhmässä kolataan", signup_start:Date.current, signup_end:Date.tomorrow, maxstudents:15, user_id:normUser.id, projectbundle_id:1, website: "http://www.radiohelsinki.fi"
+
