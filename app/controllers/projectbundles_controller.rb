@@ -72,6 +72,6 @@ class ProjectbundlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def projectbundle_params
-      params.require(:projectbundle).permit(:name, :description, :active)
+      params.require(:projectbundle).permit(:name, :description, :active, :signup_start, :signup_end)
     end
 end

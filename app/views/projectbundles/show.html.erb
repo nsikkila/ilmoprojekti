@@ -15,5 +15,15 @@
   <%= @projectbundle.active %>
 </p>
 
+<p>
+  <strong>Ilmottautumisen alkamispäivä:</strong>
+  <%= @projectbundle.signup_start %>
+</p>
+
+<p>
+  <strong>Ilmottautumisen päättymispäivä:</strong>
+  <%= @projectbundle.signup_end %>
+</p>
+
 <%= link_to 'Muokkaa', edit_projectbundle_path(@projectbundle) %> |
 <%= link_to 'Takaisin', projectbundles_path %>
