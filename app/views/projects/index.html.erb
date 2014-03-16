@@ -18,8 +18,6 @@
             <% pb.projects.each do |project| %>
               <tr>
                 <td><%= link_to project.name, project %></td>
-                <td><%= project.signup_start %></td>
-                <td><%= project.signup_end %></td>
                 <td><%= link_to 'Muokkaa', edit_project_path(project) %></td>
                 <td><%= link_to 'Poista', project, method: :delete, data: { confirm: 'Haluatko varmasti poistaa projektin?' } %></td>
               </tr>

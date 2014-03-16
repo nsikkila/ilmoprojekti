@@ -49,21 +49,21 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('enrollment_firstname', with:"Testi")
-      fill_in('enrollment_lastname', with:"Testinen")
-      fill_in('enrollment_studentnumber', with:"1234567")
-      fill_in('enrollment_email', with:"testi@testi.fi")
+      fill_in('enrollment_firstname', with: "Testi")
+      fill_in('enrollment_lastname', with: "Testinen")
+      fill_in('enrollment_studentnumber', with: "1234567")
+      fill_in('enrollment_email', with: "testi@testi.fi")
 
-      select('1', from:'enrollment[signups_attributes][0][project_id]')
-      select('2', from:'enrollment[signups_attributes][1][project_id]')
-      select('3', from:'enrollment[signups_attributes][2][project_id]')
-      select('4', from:'enrollment[signups_attributes][3][project_id]')
-      select('5', from:'enrollment[signups_attributes][4][project_id]')
-      select('6', from:'enrollment[signups_attributes][5][project_id]')
+      select('1', from: 'enrollment[signups_attributes][0][project_id]')
+      select('2', from: 'enrollment[signups_attributes][1][project_id]')
+      select('3', from: 'enrollment[signups_attributes][2][project_id]')
+      select('4', from: 'enrollment[signups_attributes][3][project_id]')
+      select('5', from: 'enrollment[signups_attributes][4][project_id]')
+      select('6', from: 'enrollment[signups_attributes][5][project_id]')
 
       expect {
         click_button('Tallenna ilmoittautuminen')
-      }.to change{Signup.count}.by(6)
+      }.to change { Signup.count }.by(6)
 
       expect(page).to have_content 'Nimi: Testi Testinen'
     end
@@ -79,17 +79,17 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('enrollment_firstname', with:"-1")
-      fill_in('enrollment_lastname', with:"-1")
-      fill_in('enrollment_studentnumber', with:"-1")
-      fill_in('enrollment_email', with:"-1")
+      fill_in('enrollment_firstname', with: "-1")
+      fill_in('enrollment_lastname', with: "-1")
+      fill_in('enrollment_studentnumber', with: "-1")
+      fill_in('enrollment_email', with: "-1")
 
-      select('1', from:'enrollment[signups_attributes][0][project_id]')
-      select('2', from:'enrollment[signups_attributes][1][project_id]')
-      select('3', from:'enrollment[signups_attributes][2][project_id]')
-      select('4', from:'enrollment[signups_attributes][3][project_id]')
-      select('5', from:'enrollment[signups_attributes][4][project_id]')
-      select('6', from:'enrollment[signups_attributes][5][project_id]')
+      select('1', from: 'enrollment[signups_attributes][0][project_id]')
+      select('2', from: 'enrollment[signups_attributes][1][project_id]')
+      select('3', from: 'enrollment[signups_attributes][2][project_id]')
+      select('4', from: 'enrollment[signups_attributes][3][project_id]')
+      select('5', from: 'enrollment[signups_attributes][4][project_id]')
+      select('6', from: 'enrollment[signups_attributes][5][project_id]')
 
       click_button('Tallenna ilmoittautuminen')
 
@@ -109,25 +109,50 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('enrollment_firstname', with:"Testi")
-      fill_in('enrollment_lastname', with:"Testinen")
-      fill_in('enrollment_studentnumber', with:"1234567")
-      fill_in('enrollment_email', with:"testi@testi.fi")
+      fill_in('enrollment_firstname', with: "Testi")
+      fill_in('enrollment_lastname', with: "Testinen")
+      fill_in('enrollment_studentnumber', with: "1234567")
+      fill_in('enrollment_email', with: "testi@testi.fi")
 
-      select('1', from:'enrollment[signups_attributes][0][project_id]')
-      select('2', from:'enrollment[signups_attributes][1][project_id]')
-      select('3', from:'enrollment[signups_attributes][2][project_id]')
-      select('4', from:'enrollment[signups_attributes][3][project_id]')
-      select('5', from:'enrollment[signups_attributes][4][project_id]')
-      select('6', from:'enrollment[signups_attributes][5][project_id]')
+      select('1', from: 'enrollment[signups_attributes][0][project_id]')
+      select('2', from: 'enrollment[signups_attributes][1][project_id]')
+      select('3', from: 'enrollment[signups_attributes][2][project_id]')
+      select('4', from: 'enrollment[signups_attributes][3][project_id]')
+      select('5', from: 'enrollment[signups_attributes][4][project_id]')
+      select('6', from: 'enrollment[signups_attributes][5][project_id]')
 
-      #enroll= Enrollment.find_by_studentnumber:'1234567'
-      #hash= Enrollment.create_hash(enroll)
-      #expect(page).to have_content 'http://ilmoprojekti.herokuapp.com/enrollments/edit/' + user.id + '/' + hash 
+      click_button('Tallenna ilmoittautuminen')
+
+      enroll= Enrollment.find_by studentnumber: '1234567'
+      hash= Enrollment.create_hash(enroll)
+      expect(page).to have_content hash
+
+      visit root_path
+
+      fill_in('enrollment_firstname', with: "Kalle")
+      fill_in('enrollment_lastname', with: "Kokeilu")
+      fill_in('enrollment_studentnumber', with: "1234568")
+      fill_in('enrollment_email', with: "kok@kok.fi")
+
+      select('1', from: 'enrollment[signups_attributes][0][project_id]')
+      select('2', from: 'enrollment[signups_attributes][1][project_id]')
+      select('3', from: 'enrollment[signups_attributes][2][project_id]')
+      select('4', from: 'enrollment[signups_attributes][3][project_id]')
+      select('5', from: 'enrollment[signups_attributes][4][project_id]')
+      select('6', from: 'enrollment[signups_attributes][5][project_id]')
+
+      click_button('Tallenna ilmoittautuminen')
+
+      enroll= Enrollment.find_by studentnumber: '1234568'
+      hash1= Enrollment.create_hash(enroll)
+      expect(page).to have_content hash1
+
+      expect(hash.equal? hash1).to be_false
+
     end
 
-    it "redirets to confirmation page containing information about signups" do
-       FactoryGirl.create :projectbundle
+    it "redirects to confirmation page containing information about signups" do
+      FactoryGirl.create :projectbundle
 
       generate_six_unique_projects_with_user(1)
       @projects = Project.all
@@ -136,17 +161,17 @@ describe "Enrollments page" do
 
       visit root_path
 
-      fill_in('enrollment_firstname', with:"Testi")
-      fill_in('enrollment_lastname', with:"Testinen")
-      fill_in('enrollment_studentnumber', with:"1234567")
-      fill_in('enrollment_email', with:"testi@testi.fi")
+      fill_in('enrollment_firstname', with: "Testi")
+      fill_in('enrollment_lastname', with: "Testinen")
+      fill_in('enrollment_studentnumber', with: "1234567")
+      fill_in('enrollment_email', with: "testi@testi.fi")
 
-      select('1', from:'enrollment[signups_attributes][0][project_id]')
-      select('2', from:'enrollment[signups_attributes][1][project_id]')
-      select('3', from:'enrollment[signups_attributes][2][project_id]')
-      select('4', from:'enrollment[signups_attributes][3][project_id]')
-      select('5', from:'enrollment[signups_attributes][4][project_id]')
-      select('6', from:'enrollment[signups_attributes][5][project_id]')
+      select('1', from: 'enrollment[signups_attributes][0][project_id]')
+      select('2', from: 'enrollment[signups_attributes][1][project_id]')
+      select('3', from: 'enrollment[signups_attributes][2][project_id]')
+      select('4', from: 'enrollment[signups_attributes][3][project_id]')
+      select('5', from: 'enrollment[signups_attributes][4][project_id]')
+      select('6', from: 'enrollment[signups_attributes][5][project_id]')
 
       click_button('Tallenna ilmoittautuminen')
       expect(page).to have_content('Henkilötiedot')
@@ -160,36 +185,35 @@ describe "Enrollments page" do
 
     end
 
- 
 
   end
 
   describe "Enrollment edit" do
 
-   # before :each do
+    # before :each do
     # FactoryGirl.create(:projectbundle)
     #  generate_six_unique_projects_with_user(1)
-   #end
+    #end
     it "does NOT display the edit page if the correct hash is not present" do
-        enrollment = create_enrollment_with_signups()
+      enrollment = create_enrollment_with_signups()
 
-        #visit enrollment_path(enrollment)
-        visit "enrollments/#{enrollment.id}/feikkihash"
+      #visit enrollment_path(enrollment)
+      visit "enrollments/#{enrollment.id}/feikkihash"
 
 
-        expect(page).to have_content("Testibundle")
+      expect(page).to have_content("Testibundle")
 
-        expect(page).to have_content("Etunimi")
-        expect(page).to have_content("Sukunimi")
-        expect(page).to have_content("Opiskelijanumero")
-        expect(page).to have_content("Sähköpostiosoite")
+      expect(page).to have_content("Etunimi")
+      expect(page).to have_content("Sukunimi")
+      expect(page).to have_content("Opiskelijanumero")
+      expect(page).to have_content("Sähköpostiosoite")
 
-        expect(page).to have_content("1 This is a")
-        expect(page).to have_content("2 This is a")
-        expect(page).to have_content("3 This is a")
-        expect(page).to have_content("4 This is a")
-        expect(page).to have_content("5 This is a")
-        expect(page).to have_content("6 This is a")
+      expect(page).to have_content("1 This is a")
+      expect(page).to have_content("2 This is a")
+      expect(page).to have_content("3 This is a")
+      expect(page).to have_content("4 This is a")
+      expect(page).to have_content("5 This is a")
+      expect(page).to have_content("6 This is a")
     end
 
     it "displays the edit page when the correct hash IS present" do
@@ -204,16 +228,16 @@ describe "Enrollments page" do
     end
 
     it "allows the editing of enrollment and saves changes" do
-      enrollment = create_enrollment_with_signups()
+      enrollment = create_enrollment_with_signups
 
       hash = Enrollment.create_hash(enrollment)
 
       visit "enrollments/#{enrollment.id}/#{hash}"
 
-      fill_in('enrollment_firstname', with:"edit")
-      fill_in('enrollment_lastname', with:"edit")
-      fill_in('enrollment_studentnumber', with:"7654321")
-      fill_in('enrollment_email', with:"edit@testi.fi")
+      fill_in('enrollment_firstname', with: "edit")
+      fill_in('enrollment_lastname', with: "edit")
+      fill_in('enrollment_studentnumber', with: "7654321")
+      fill_in('enrollment_email', with: "edit@testi.fi")
 
       click_button('Tallenna ilmoittautuminen')
 
@@ -223,5 +247,17 @@ describe "Enrollments page" do
       #save_and_open_page
 
     end
+
+=begin
+    it "doesnt allow editing if signup_end has passed" do
+      enrollment = create_enrollments_with_signups_for_old_projects
+      hash = Enrollment.create_hash(enrollment)
+
+      visit "enrollments/#{enrollment.id}/#{hash}"
+
+      save_and_open_page
+      expect(page).to have_content("Ilmottautumisen muokkaus ei ole enää mahdollista")
+    end
+=end
   end
 end

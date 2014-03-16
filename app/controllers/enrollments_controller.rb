@@ -18,8 +18,11 @@ class EnrollmentsController < ApplicationController
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
+  #  if Enrollment.confirm_expire_date(@enrollment)
+   #   redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+  #  end
     @enrollment.signups.each do |signup|
-      signup.status = false
+    signup.status = false
     end
     respond_to do |format|
       if @enrollment.save
@@ -51,9 +54,9 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-   #if Enrollment.confirm_expire_date(@enrollment)
-   #  redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
-   #end
+    if Enrollment.confirm_expire_date(@enrollment)
+     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+    end
   end
 
   def toggle

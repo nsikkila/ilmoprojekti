@@ -53,7 +53,17 @@ FactoryGirl.define do
     maxstudents 15
     user_id 1
     projectbundle_id 1
-    signup_end Date.tomorrow
+  end
+end
+
+
+FactoryGirl.define do
+  factory :projectbundle1, class:Projectbundle do
+    name "Menneet"
+    description "This is old projectbundle"
+    active false
+    signup_start Date.today - 7
+    signup_end Date.yesterday
   end
 end
 

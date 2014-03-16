@@ -42,12 +42,14 @@ class Enrollment < ActiveRecord::Base
 
   def compute_magic_number
     number = 0
+    amount = 0
     signups.each do |signup|
       if signup.status
         number = number + signup.priority
+        amount = amount + 1
       end
     end
-    number
+    number/amount
   end
 
   def self.create_hash(enrollment)
@@ -55,13 +57,9 @@ class Enrollment < ActiveRecord::Base
   end
 
   def self.confirm_expire_date(enrollment)
-    enrollment.signups.each do |sign|
-   #   raise sign.project.inspect
-      if not sign.project.nil?
-        if sign.project.signup_end < Date.today
-          return true
-        end
-      end
+    en = enrollment.projects.first
+    if en.projectbundle.signup_end < Date.today
+      return true
     end
     false
   end
