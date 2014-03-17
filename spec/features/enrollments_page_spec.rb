@@ -248,7 +248,6 @@ describe "Enrollments page" do
 
     end
 
-=begin
     it "doesnt allow editing if signup_end has passed" do
       enrollment = create_enrollments_with_signups_for_old_projects
       hash = Enrollment.create_hash(enrollment)
@@ -258,6 +257,5 @@ describe "Enrollments page" do
       save_and_open_page
       expect(page).to have_content("Ilmottautumisen muokkaus ei ole enää mahdollista")
     end
-=end
   end
 end

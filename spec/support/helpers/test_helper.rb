@@ -53,4 +53,21 @@ module TestHelper
     return @enrollment
   end
 
+  def create_enrollments_with_signups_for_old_projects
+    #FactoryGirl.create(:signup)
+   # FactoryGirl.create(:user)
+    @projectbundle = FactoryGirl.create(:projectbundle1)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+
+    @enrollment.save
+    return @enrollment
+  end
+
   end
