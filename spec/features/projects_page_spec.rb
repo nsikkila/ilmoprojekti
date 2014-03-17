@@ -24,7 +24,7 @@ describe "Projects page" do
     it "Cannot be accessed if not logged in" do
         create_objects_for_frontpage
         visit new_project_path
-        expect(page).to_not have_content("Luo projekti")
+        expect(page).to_not have_content("Luo uusi projekti")
         expect(page).to have_content("Etunimi")
         expect(page).to have_content("Sukunimi")
         expect(page).to have_content("Opiskelijanumero")
