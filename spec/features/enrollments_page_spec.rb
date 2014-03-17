@@ -227,7 +227,7 @@ describe "Enrollments page" do
 
     end
 
-    it "allows the editing of enrollment and saves changes" do
+    it "allows the editing of enrollment and saves changes if deadline not passed" do
       enrollment = create_enrollment_with_signups
 
       hash = Enrollment.create_hash(enrollment)
@@ -248,7 +248,7 @@ describe "Enrollments page" do
 
     end
 
-    it "doesnt allow editing if signup_end has passed" do
+    it "doesnt allow editing if deadline has passed" do
       enrollment = create_enrollments_with_signups_for_old_projects
       hash = Enrollment.create_hash(enrollment)
 

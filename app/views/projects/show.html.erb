@@ -31,6 +31,9 @@
     <th>
       <a ng-click="click('priority')">Prioriteetti</a>
     </th>
+    <th>
+      Ilmottautumisen status
+    </th>
   </tr>
   <% @project.signups.each do |signup| %>
       <tr>
@@ -40,11 +43,19 @@
         <td>
           <%= signup.priority %>
         </td>
+        <td>
+          <% if signup.status %>
+              Hyväksytty
+          <% else %>
+              Odottaa vielä hyväksymistä tai ei hyväksytty
+          <% end %>
+        </td>
       </tr>
   <% end %>
 </table>
-<br />
-<%= link_to 'Muokkaa', edit_project_path(@project) %> |
+<br/>
+<%= link_to 'Näytä hyväksyttyjen opiskelijoiden sähköpostiosoitteet', emails_path(@project.id) %>
+<%= link_to 'Muokkaa', edit_project_path(@project) %>
 <%= link_to 'Takaisin', projects_path %>
 
 <% content_for :header do %>

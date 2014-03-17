@@ -49,7 +49,10 @@ class Enrollment < ActiveRecord::Base
         amount = amount + 1
       end
     end
-    number/amount
+    if amount == 0
+      return 0
+    end
+    (number.to_f/amount).round
   end
 
   def self.create_hash(enrollment)

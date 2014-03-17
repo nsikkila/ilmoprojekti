@@ -93,6 +93,11 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  def show_emails
+    @proj = Project.find(params[:format])
+    render :emails
+  end
+
   private
 
   def set_signups_to_enrollment(number_of_signups)
@@ -121,7 +126,5 @@ class EnrollmentsController < ApplicationController
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
   end
-
-
 
 end
