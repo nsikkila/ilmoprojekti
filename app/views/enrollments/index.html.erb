@@ -8,8 +8,8 @@
           Opiskelija
         </th>
         <% @projects.each do |project| %>
-            <th>
-              <%= project.name %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
         <th>
@@ -51,7 +51,8 @@
 
           <tr>
             <td>
-              <%= enrollment.name %>
+              <%= enrollment.name %><br/>
+              <%= enrollment.studentnumber %>
             </td>
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
@@ -111,6 +112,10 @@
 
     $(document).ready(function() {
         setInterval("location.reload(true)", 5000);
+    });
+
+    $(function() {
+        $( document ).tooltip();
     });
 
 </script>

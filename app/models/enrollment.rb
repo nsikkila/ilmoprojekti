@@ -27,7 +27,7 @@ class Enrollment < ActiveRecord::Base
   validates :email, presence: {on: :create}, format: {with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, message: "Sähköpostiosoitteen täytyy olla muotoa esi@merk.ki"}
 
   def name
-    "#{firstname} #{lastname} "
+    "#{lastname} #{firstname}"
   end
 
   def accepted_amount
