@@ -8,8 +8,8 @@
           Opiskelija
         </th>
         <% @projects.each do |project| %>
-            <th>
-              <%= project.name %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
         <th>
@@ -51,12 +51,13 @@
 
           <tr>
             <td>
-              <%= enrollment.name %>
+              <%= enrollment.name %><br/>
+              <%= enrollment.studentnumber %>
             </td>
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
                 <% unless signup.nil? %>
-                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="toggle(<%= enrollment.id %>, <%= project.id %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
                       <%= signup.priority %>
                     </td>
                 <% else %>
@@ -73,9 +74,6 @@
       <% end %>
       </tr>
       </tbody>
-
-
-
     </table>
 
 <% else %>
@@ -88,22 +86,36 @@
 <% end %>
 
 <script>
-    function toggle(enrollment_id, project_id) {
+
+
+    $.urlParam = function(name){
+        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
+    function setStatus(enrollment_id, project_id, status) {
         $.ajax({
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: "toggle",
-            data: { enrollment_id: enrollment_id, project_id: project_id }
+            url: "setstatus",
+            data: { enrollment_id: enrollment_id, project_id: project_id, status: status }
         })
                 .done(function( msg ) {
                     document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
                     document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
                     document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
-                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted");
+                    //Toggles accepted
+                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
                 });
     };
 
+    $(document).ready(function() {
+        setInterval("location.reload(true)", 5000);
+    });
 
+    $(function() {
+        $( document ).tooltip();
+    });
 
 </script>
