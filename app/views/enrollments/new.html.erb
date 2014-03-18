@@ -25,7 +25,7 @@
       <% end %>
   <% end %>
 <% content_for :header do %>
-       <%= @projectbundle.name unless @projectbundle.nil? %>
+       <%= "#{@projectbundle.name}, ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}" unless @projectbundle.nil? %>
 <% end %>
 
 <script>

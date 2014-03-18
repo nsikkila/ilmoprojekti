@@ -12,7 +12,9 @@
               </ul>
             </div>
         <% end %>
-        <p>Täytä alla olevat kentät huolellisesti. HUOM! Antamaasi sähköpostiosoitetta käytetään kaikessa projektiin liittyvässä tiedonannossa</p>
+
+        <p>Täytä alla olevat kentät huolellisesti.</p>
+        <p>HUOM! Antamaasi sähköpostiosoitetta käytetään kaikessa projektiin liittyvässä tiedonannossa</p>
         <table class="formtable">
           <tr>
             <td class="label"><%= f.label :firstname, 'Etunimi' %></td>
@@ -31,7 +33,7 @@
             <td class="label"><%= f.label :email, 'Sähköpostiosoite' %></td>
             <td class="field"><%= f.text_field :email %></td>
           </tr>
-        </table>
+        </table>osoite
         <p>Valitse alla olevista vetovalikoista haluamasi kurssit tärkeysjärjestyksessä.</p>
         <p>Lisätietoa projekteista löytyy alempaa.</p>
         <p> HUOM!  Valitse ainakin yksi projekti.</p>
@@ -50,7 +52,8 @@
         <br>
         <br/>
         <div class="actions">
-          <%= f.submit 'Tallenna ilmoittautuminen'%>
+          <%= f.submit 'Tallenna ilmoittautuminen', :onclick => "return confirm('Onko antamasi sähköposti '+
+          document.getElementById('enrollment_email').value + ' varmasti oikea?' )" %>
         </div>
     <% end %>
 
