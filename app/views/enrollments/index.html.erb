@@ -1,5 +1,15 @@
 
 <% unless @enrollments.first.nil? %>
+    <p>
+      <strong>Automaaginen päivitys</strong><br />
+      Päivitysväli:
+      <select id="refreshSelect" onchange="setRefreshTime()">
+        <option value="0">Ei päivitystä</option>
+        <option value="5000">5</option>
+        <option value="10000">10</option>
+        <option value="30000">30</option>
+      </select>
+    </p>
 
     <table class="enrollmenttable" style="width:100%;">
       <thead>
@@ -85,12 +95,18 @@
 <% end %>
 
 <script>
+    var reloadInterval;
+    var timeout;
 
-
-    $.urlParam = function(name){
-        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-        return results[1] || 0;
-    }
+    function setRefreshTime() {
+        reloadInterval = $( '#refreshSelect').val();
+        document.cookie='refreshTime=' + reloadInterval;
+        if (reloadInterval == 0) {
+            clearTimeout(timeout);
+        } else {
+            location.reload(true);
+        }
+    };
 
     function setStatus(enrollment_id, project_id, status) {
         $.ajax({
@@ -108,9 +124,18 @@
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
                 });
     };
-
     $(document).ready(function() {
-        setInterval("location.reload(true)", 5000);
+        if (readCookie("refreshTime") == null) {
+            reloadInterval = 5000;
+        } else {
+            reloadInterval = readCookie("refreshTime");
+        }
+        $('#refreshSelect').val(reloadInterval);
+
+
+        if (reloadInterval > 0) {
+            timeout = setTimeout("location.reload(true)", reloadInterval);
+        }
     });
 
 </script>

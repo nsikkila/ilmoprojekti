@@ -12,7 +12,7 @@
   <script>
       function readCookie(name){
           return(document.cookie.match('(^|; )'+name+'=([^;]*)')||0)[2]
-      }
+      };
   </script>
 </head>
 <body onScroll="document.cookie='ypos=' + window.pageYOffset" onLoad="window.scrollTo(0,readCookie('ypos'))">
