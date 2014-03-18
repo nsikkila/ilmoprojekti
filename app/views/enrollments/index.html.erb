@@ -134,8 +134,24 @@
 
 
         if (reloadInterval > 0) {
-            timeout = setTimeout("location.reload(true)", reloadInterval);
+            timeout = setInterval("refreshCells()", reloadInterval);
         }
     });
+
+    function refreshCells() {
+        $( ".prioritycell" ).each(function() {
+            $.ajax({
+                type: "GET",
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                url: "getstatus"
+                data: { enrollment_id: $(this).enrollment_id}
+            })
+                    .done(function(msg) {
+                        if (msg.status) {
+
+                        }
+                    });
+        });
+    }
 
 </script>
