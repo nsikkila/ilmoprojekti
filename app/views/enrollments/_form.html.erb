@@ -12,6 +12,7 @@
               </ul>
             </div>
         <% end %>
+        <p>Täytä alla olevat kentät huolellisesti. HUOM! Antamaasi sähköpostiosoitetta käytetään kaikessa projektiin liittyvässä tiedonannossa</p>
         <table class="formtable">
           <tr>
             <td class="label"><%= f.label :firstname, 'Etunimi' %></td>
@@ -25,12 +26,15 @@
             <td class="label"><%= f.label :studentnumber, 'Opiskelijanumero' %></td>
             <td class="field"><%= f.text_field :studentnumber %></td>
           </tr>
+
           <tr>
             <td class="label"><%= f.label :email, 'Sähköpostiosoite' %></td>
             <td class="field"><%= f.text_field :email %></td>
           </tr>
         </table>
-
+        <p>Valitse alla olevista vetovalikoista haluamasi kurssit tärkeysjärjestyksessä.</p>
+        <p>Lisätietoa projekteista löytyy alempaa.</p>
+        <p> HUOM!  Valitse ainakin yksi projekti.</p>
         <table class="formtable">
           <%= f.fields_for :signups do |sf| %>
               <tr>
