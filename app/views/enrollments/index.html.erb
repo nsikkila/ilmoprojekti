@@ -73,9 +73,6 @@
       <% end %>
       </tr>
       </tbody>
-
-
-
     </table>
 
 <% else %>
@@ -88,6 +85,13 @@
 <% end %>
 
 <script>
+
+
+    $.urlParam = function(name){
+        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
     function setStatus(enrollment_id, project_id, status) {
         $.ajax({
             type: "POST",
@@ -100,10 +104,13 @@
                     document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
                     document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+                    //Toggles accepted
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
                 });
     };
 
-
+    $(document).ready(function() {
+        setInterval("location.reload(true)", 5000);
+    });
 
 </script>
