@@ -69,17 +69,14 @@ class EnrollmentsController < ApplicationController
     end
   end
 
-  def toggle
+  def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
     signup = enrollment.signups.find_by_project_id(params[:project_id])
     project = signup.project
-    if signup.status
-      signup.status = false
-      signup.save
-    else
-      signup.status = true
-      signup.save
-    end
+
+    new_status = params[:status]
+    signup.status = new_status
+    signup.save
 
     render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
   end
