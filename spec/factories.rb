@@ -58,10 +58,10 @@ end
 
 
 FactoryGirl.define do
-  factory :projectbundle1, class:Projectbundle do
+  factory :projectbundle_closed, class:Projectbundle do
     name "Menneet"
-    description "This is old projectbundle"
-    active false
+    description "This is an old projectbundle"
+    active true
     signup_start Date.today - 7
     signup_end Date.yesterday
   end

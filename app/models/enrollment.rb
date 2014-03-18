@@ -55,16 +55,14 @@ class Enrollment < ActiveRecord::Base
     (number.to_f/amount).round
   end
 
+  def return_projectbundle
+    #byebug
+    self.projects.first.projectbundle
+  end
+
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
 
-  def self.confirm_expire_date(enrollment)
-    en = enrollment.projects.first
-    if en.projectbundle.signup_end < Date.today
-      return true
-    end
-    false
-  end
 
 end

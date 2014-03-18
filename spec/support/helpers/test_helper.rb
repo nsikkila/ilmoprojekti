@@ -56,7 +56,7 @@ module TestHelper
   def create_enrollments_with_signups_for_old_projects
     #FactoryGirl.create(:signup)
    # FactoryGirl.create(:user)
-    @projectbundle = FactoryGirl.create(:projectbundle1)
+    @projectbundle = FactoryGirl.create(:projectbundle_closed)
     @projects = generate_six_unique_projects(@projectbundle.id)
     @enrollment = FactoryGirl.build(:enrollment)
 
