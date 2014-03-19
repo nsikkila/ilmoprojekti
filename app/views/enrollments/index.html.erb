@@ -10,6 +10,7 @@
         <option value="30000">30</option>
       </select>
     </p>
+    <a onclick="refreshCells()">Päivitä solut</a>
 
     <table class="enrollmenttable" style="width:100%;">
       <thead>
@@ -96,21 +97,13 @@
 <% end %>
 
 <script>
-    var reloadInterval;
-    var timeout;
 
-    function setRefreshTime() {
-        reloadInterval = $( '#refreshSelect').val();
-        document.cookie='refreshTime=' + reloadInterval;
-        if (reloadInterval == 0) {
-            clearTimeout(timeout);
-        } else {
-            location.reload(true);
-        }
-    };
+    var intervalID;
 
     function setStatus(enrollment_id, project_id, status) {
+        clearInterval(intervalID);
         $.ajax({
+            async: false,
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             url: "setstatus",
@@ -123,34 +116,42 @@
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
                     //Toggles accepted
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
+                    intervalID = setInterval(refreshCells, 5000);
                 });
     };
-    $(document).ready(function() {
-        if (readCookie("refreshTime") == null) {
-            reloadInterval = 5000;
-        } else {
-            reloadInterval = readCookie("refreshTime");
-        }
-        $('#refreshSelect').val(reloadInterval);
 
-    $(function() {
-        $( document ).tooltip();
-    });
 
     function refreshCells() {
-        $( ".prioritycell" ).each(function() {
+        $( ".prioritycell" ).each(function(index, element) {
+            element_id = $(this).attr("id").split("-");
+            enrollment_id = element_id[0];
+            project_id = element_id[1];
+            console.log("solu: " + element_id);
             $.ajax({
+                async: false,
                 type: "GET",
                 beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-                url: "getstatus"
-                data: { enrollment_id: $(this).enrollment_id}
+                url: "getstatus/"+enrollment_id+"/"+project_id
             })
                     .done(function(msg) {
-                        if (msg.status) {
-
+                      if (msg.currentStatus == "true") {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                        } else {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
                         }
                     });
         });
     }
+
+    $(document).ready(function() {
+
+        intervalID = setInterval(refreshCells, 5000);
+
+        $(function() {
+            $( document ).tooltip();
+        });
+
+    });
+
 
 </script>
