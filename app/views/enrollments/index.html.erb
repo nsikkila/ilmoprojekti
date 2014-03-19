@@ -1,16 +1,5 @@
 
 <% unless @enrollments.first.nil? %>
-    <p>
-      <strong>Automaaginen päivitys</strong><br />
-      Päivitysväli:
-      <select id="refreshSelect" onchange="setRefreshTime()">
-        <option value="0">Ei päivitystä</option>
-        <option value="5000">5</option>
-        <option value="10000">10</option>
-        <option value="30000">30</option>
-      </select>
-    </p>
-    <a onclick="refreshCells()">Päivitä solut</a>
 
     <table class="enrollmenttable" style="width:100%;">
       <thead>
@@ -99,11 +88,11 @@
 <script>
 
     var intervalID;
+    var intervalTime = 5000; // milliseconds
 
     function setStatus(enrollment_id, project_id, status) {
         clearInterval(intervalID);
         $.ajax({
-            async: false,
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             url: "setstatus",
@@ -116,10 +105,9 @@
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
                     //Toggles accepted
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
-                    intervalID = setInterval(refreshCells, 5000);
+                    intervalID = setInterval(refreshCells, intervalTime);
                 });
     };
-
 
     function refreshCells() {
         $( ".prioritycell" ).each(function(index, element) {
@@ -134,7 +122,7 @@
                 url: "getstatus/"+enrollment_id+"/"+project_id
             })
                     .done(function(msg) {
-                      if (msg.currentStatus == "true") {
+                        if (msg.currentStatus == "true") {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
                         } else {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
@@ -144,8 +132,7 @@
     }
 
     $(document).ready(function() {
-
-        intervalID = setInterval(refreshCells, 5000);
+        intervalID = setInterval(refreshCells, intervalTime);
 
         $(function() {
             $( document ).tooltip();
