@@ -155,9 +155,6 @@ describe "Projects page" do
   end
 
   describe "Project page" do
-    before :each do
-
-    end
 
     it "shows list of students who have signed up for the project" do
       @enrollment = create_enrollment_with_signups
@@ -173,11 +170,6 @@ describe "Projects page" do
       usr=FactoryGirl.create :user, username:"koklaus"
       signin(username:usr.username, password:usr.password)
       @enrollment = create_another_enrollment_with_signups
-    #  @enrollment.signups.each do |signs|
-    #    signs.status==false
-   #     @enrollment.save
-  #    end
-   #   @enrollment.signups.first.status = false
       visit project_path(1)
 
       expect(page).to have_content("Jaska Jokunen")
@@ -186,7 +178,6 @@ describe "Projects page" do
 
       visit project_path(1)
 
-    #  save_and_open_page
       expect(page).to have_content("Jaska Jokunen")
       expect(page).to have_content("Hyväksytty")
     end
@@ -197,7 +188,6 @@ describe "Projects page" do
       @enrollment = create_enrollment_with_signups
 
       visit project_path(1)
-   #   save_and_open_page
       expect(page).to have_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
       click_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
 
@@ -206,8 +196,6 @@ describe "Projects page" do
       expect(page).to have_content("test@email.com")
     end
   end
-
-
 
 end
 
