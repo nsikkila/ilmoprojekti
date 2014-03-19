@@ -27,7 +27,7 @@ class Enrollment < ActiveRecord::Base
   validates :email, presence: {on: :create}, format: {with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, message: "Sähköpostiosoitteen täytyy olla muotoa esi@merk.ki"}
 
   def name
-    "#{firstname} #{lastname} "
+    "#{lastname} #{firstname}"
   end
 
   def accepted_amount
@@ -55,16 +55,14 @@ class Enrollment < ActiveRecord::Base
     (number.to_f/amount).round
   end
 
+  def return_projectbundle
+    #byebug
+    self.projects.first.projectbundle
+  end
+
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
 
-  def self.confirm_expire_date(enrollment)
-    en = enrollment.projects.first
-    if en.projectbundle.signup_end < Date.today
-      return true
-    end
-    false
-  end
 
 end

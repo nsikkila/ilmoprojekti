@@ -9,7 +9,7 @@
         <div id="<%= p.id %>" >
           <p>
             <%= p.description %><br/>
-            Projektin kotisivu: <%= link_to p.website, p.website %><br/>
+            Projektin kotisivu: <%= link_to p.website, p.website, :target => '_blank' %><br/>
             Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
             Vastuuhenkilö: <%= p.user.to_s %>
           </p>
@@ -25,7 +25,7 @@
       <% end %>
   <% end %>
 <% content_for :header do %>
-       <%= @projectbundle.name unless @projectbundle.nil? %>
+       <%= "#{@projectbundle.name}, ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}" unless @projectbundle.nil? %>
 <% end %>
 
 <script>

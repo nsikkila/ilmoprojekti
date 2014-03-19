@@ -254,7 +254,6 @@ describe "Enrollments page" do
 
       visit "enrollments/#{enrollment.id}/#{hash}"
 
-      save_and_open_page
       expect(page).to have_content("Ilmottautumisen muokkaus ei ole enää mahdollista")
     end
   end

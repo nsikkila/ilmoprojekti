@@ -5,9 +5,17 @@ class EnrollmentsController < ApplicationController
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root
+    else
+      @projectbundle = Projectbundle.find_by_active(true)
+
+
+      if not @projectbundle.is_signup_active
+        set_projectbundle_and_projects
+        @enrollments = Enrollment.all
+      else
+        redirect_to :root
+      end
     end
-    set_projectbundle_and_projects
-    @enrollments = Enrollment.all
   end
 
   def new
@@ -18,20 +26,22 @@ class EnrollmentsController < ApplicationController
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
-  #  if Enrollment.confirm_expire_date(@enrollment)
-   #   redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
-  #  end
-    @enrollment.signups.each do |signup|
-    signup.status = false
-    end
-    respond_to do |format|
-      if @enrollment.save
-        @digest = Enrollment.create_hash(@enrollment)
-        EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
-        format.html { render action: 'show' }
-      else
-        set_projectbundle_and_projects
-        format.html { render action: 'new' }
+    @activebundle = Projectbundle.find_by_active(true)
+    if not @activebundle.is_signup_active
+      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+    else
+      @enrollment.signups.each do |signup|
+      signup.status = false
+      end
+      respond_to do |format|
+        if @enrollment.save
+          @digest = Enrollment.create_hash(@enrollment)
+          EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
+          format.html { render action: 'show' }
+        else
+          set_projectbundle_and_projects
+          format.html { render action: 'new' }
+        end
       end
     end
   end
@@ -54,7 +64,7 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if Enrollment.confirm_expire_date(@enrollment)
+    if not @enrollment.return_projectbundle.is_signup_active
      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
     end
   end
@@ -115,9 +125,8 @@ class EnrollmentsController < ApplicationController
   end
 
   def set_projectbundle_and_projects
-    @projectbundle = Projectbundle.first
+    @projectbundle = Projectbundle.find_by_active(true)
     @projects = @projectbundle.projects
-
   end
 
   def enrollment_params
