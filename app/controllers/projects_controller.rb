@@ -16,9 +16,13 @@ class ProjectsController < ApplicationController
   def show
     proj = Project.find(params[:id])
     enroll = proj.enrollments
-    @emails = []
+    @emails = ""
     enroll.each do |enr|
-      @emails << enr.email
+      enr.signups.each do |signs|
+        if signs.status and signs.project_id == proj.id
+          @emails = @emails + enr.email + ","
+        end
+      end
     end
     @emails
 
@@ -26,8 +30,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects/new
   def new
-      @project = Project.new
-      @bundle = Projectbundle.all
+    @project = Project.new
+    @bundle = Projectbundle.all
   end
 
   # GET /projects/1/edit
@@ -40,55 +44,55 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.json
   def create
-      @project = Project.new(project_params)
-      @project.user = current_user
+    @project = Project.new(project_params)
+    @project.user = current_user
 
-      respond_to do |format|
-        if @project.save
-          format.html { redirect_to @project, notice: 'Project was successfully created.' }
-          format.json { render action: 'show', status: :created, location: @project }
-        else
-          @bundle = Projectbundle.all
-          format.html { render action: 'new' }
-          format.json { render json: @project.errors, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if @project.save
+        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @project }
+      else
+        @bundle = Projectbundle.all
+        format.html { render action: 'new' }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-      @bundle = Projectbundle.all
-      respond_to do |format|
-        if @project.update(project_params)
-          format.html { redirect_to @project, notice: 'Project was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: 'edit' }
-          format.json { render json: @project.errors, status: :unprocessable_entity }
-        end
+    @bundle = Projectbundle.all
+    respond_to do |format|
+      if @project.update(project_params)
+        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-      @project.destroy
-      respond_to do |format|
-        format.html { redirect_to projects_url }
-        format.json { head :no_content }
-      end
+    @project.destroy
+    respond_to do |format|
+      format.html { redirect_to projects_url }
+      format.json { head :no_content }
+    end
   end
 
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def project_params
-      params.require(:project).permit(:name, :description, :projectbundle_id, :website, :maxstudents)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def project_params
+    params.require(:project).permit(:name, :description, :projectbundle_id, :website, :maxstudents)
+  end
 end

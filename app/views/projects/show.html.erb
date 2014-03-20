@@ -54,9 +54,9 @@
   <% end %>
 </table>
 <br/>
- <%= link_to 'Hyväksyttyjen opiskelijoiden sähköpostiosoitteet', emails_path(@project.id) %><br><br>
-<a href="mailto:?bcc="<%= @emails %>>Poimi osoitteet</a>
-<%= link_to 'Muokkaa', edit_project_path(@project) %>
+ <%= link_to 'Hyväksyttyjen opiskelijoiden sähköpostiosoitteet', emails_path(@project.id) %><br>
+<a href="mailto:?bcc=<%= @emails %>">Lähetä sähköposti hyväksytyille</a><br><br>
+<%= link_to 'Muokkaa projektia', edit_project_path(@project) %>
 <%= link_to 'Takaisin', projects_path %>
 
 <% content_for :header do %>

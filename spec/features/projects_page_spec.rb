@@ -191,7 +191,7 @@ describe "Projects page" do
       expect(page).to have_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
       click_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
 
-      save_and_open_page
+   #   save_and_open_page
 
       expect(page).to have_content("test@email.com")
     end

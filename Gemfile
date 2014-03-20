@@ -57,8 +57,9 @@ group :test do
   gem 'capybara'
   gem "launchy", "~> 2.4.2"
   gem 'simplecov', :require => false
-
+  gem 'email_spec'
 end
+
 
 # Use unicorn as the app server
 # gem 'unicorn'
