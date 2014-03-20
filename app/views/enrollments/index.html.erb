@@ -56,7 +56,7 @@
 
           <tr>
             <td>
-              <%= enrollment.name %>
+              <%= enrollment.name %>[<%= link_to 'x', enrollments_path+"/"+enrollment.id.to_s+"/delete", method: :delete %>]
             </td>
             <td>
               <%= enrollment.studentnumber %>

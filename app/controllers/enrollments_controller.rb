@@ -2,6 +2,10 @@ class EnrollmentsController < ApplicationController
   require 'digest/sha1'
   require 'enrollment.rb'
 
+  before_action only: [:destroy] do
+    is_at_least(:teacher)
+  end
+
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root, notice: "Sivu on vain opettajille."
@@ -43,6 +47,16 @@ class EnrollmentsController < ApplicationController
           format.html { render action: 'new' }
         end
       end
+    end
+  end
+
+  def destroy
+    enrollment = Enrollment.find_by_id(params[:enrollment_id])
+    if not enrollment.nil?
+      Enrollment.destroy(enrollment)
+      redirect_to enrollments_path
+    else
+      redirect_to enrollments_path
     end
   end
 

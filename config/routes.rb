@@ -15,6 +15,7 @@ Ilmoprojekti::Application.routes.draw do
 
   get 'all', to: 'enrollments#index'
   get 'enrollments/:enrollment_id/:hash', to: 'enrollments#edithash'
+  delete 'enrollments/:enrollment_id/delete', to: 'enrollments#destroy'
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
   post 'setstatus', to: 'enrollments#setstatus'
