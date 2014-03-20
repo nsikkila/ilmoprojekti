@@ -69,6 +69,16 @@ h1, h2 {
 
 }
 
+.forced {
+    background-color: orange;
+}
+
+.note {
+    background-color: violet;
+}
+
+
+
 .prioritycell.accepted {
     background-color: lightgreen;
 }
