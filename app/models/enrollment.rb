@@ -25,7 +25,7 @@ end
 class Enrollment < ActiveRecord::Base
 
   has_many :projects, through: :signups
-  has_many :signups, order: 'id ASC'
+  has_many :signups, order: 'id ASC', dependent: :destroy
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator

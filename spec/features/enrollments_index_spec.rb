@@ -4,7 +4,7 @@ include TestHelper
 describe "Enrollment table view" do
   before :each do
     @user = FactoryGirl.create(:teacher)
-    FactoryGirl.create(:projectbundle_closed, signup_end:Date.yesterday)
+    @projectbundle = FactoryGirl.create(:projectbundle_closed, signup_end:Date.yesterday)
     generate_six_unique_projects(1)
   end
 
@@ -21,6 +21,48 @@ describe "Enrollment table view" do
     expect(page).to have_content 'Ilmoittautumisnäkymä'
   end
 
+  it "allows the deletion of an enrollment" do
+    signin(username:@user.username, password:@user.password)
+
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+    @enrollment.save
+
+    visit enrollments_path
+
+    expect {
+      click_link('x')
+    }.to change { Enrollment.count }.by(-1)
+
+  end
+
+  it "delete button deletes the Signups in addition to Enrollment" do
+    signin(username:@user.username, password:@user.password)
+
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+    @enrollment.save
+
+    visit enrollments_path
+
+    expect {
+      click_link('x')
+    }.to change { Signup.count }.by(-6)
+
+  end
+
   describe "when enrollments have not been made" do
 
     it "shows a message instead of the table" do
@@ -31,6 +73,7 @@ describe "Enrollment table view" do
       expect(page).to have_content 'Ei ilmoittautumisia.'
     end
   end
+
 
 end
 
