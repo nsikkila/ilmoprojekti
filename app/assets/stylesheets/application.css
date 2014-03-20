@@ -69,6 +69,10 @@ h1, h2 {
 
 }
 
+.prioritycell.accepted {
+    background-color: lightgreen;
+}
+
 .forced {
     background-color: orange;
 }
@@ -77,11 +81,6 @@ h1, h2 {
     background-color: violet;
 }
 
-
-
-.prioritycell.accepted {
-    background-color: lightgreen;
-}
 
 li {
     list-style: none;
