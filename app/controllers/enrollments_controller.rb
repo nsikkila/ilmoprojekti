@@ -2,6 +2,8 @@ class EnrollmentsController < ApplicationController
   require 'digest/sha1'
   require 'enrollment.rb'
 
+
+
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root, notice: "Sivu on vain opettajille."
