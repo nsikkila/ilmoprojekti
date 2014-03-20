@@ -61,7 +61,7 @@
                       <%= signup.priority %>
                     </td>
                 <% else %>
-                    <td>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setForced(<%= enrollment.id %>, <%= project.id %>, true)" class="emptycell">
 
                     </td>
                 <% end %>
@@ -94,6 +94,41 @@
     var wsem;
     var timeoutID;
     var timeoutTime = 5000; // milliseconds
+
+    function setForced(enrollment_id, project_id, forced) {
+        clearTimeout(timeoutID);
+        wsem = wsem - 1;
+        while (wsem < 0) {
+        }
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "setforced",
+            data: {enrollment_id: enrollment_id, project_id: project_id, forced: forced }
+        })
+                .done(function (msg) {
+                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
+                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
+                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
+                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+
+                    if (msg.newForced == "true") {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", false)");
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("forced",true);
+
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", true)");
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                    }
+                });
+
+        wsem = wsem + 1;
+
+        timeoutID = setTimeout(refreshCells, timeoutTime);
+
+
+    }
 
     function setStatus(enrollment_id, project_id, status) {
         clearTimeout(timeoutID);

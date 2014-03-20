@@ -71,6 +71,23 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  def setforced
+    enrollment = Enrollment.find params[:enrollment_id]
+    new_forced = params[:forced]
+
+    unless enrollment.projects.first.projectbundle.is_signup_active
+      if (new_forced)
+        signup = Signup.new(enrollment_id:params[:enrollment_id], project_id:params[:project_id], priority:0, forced:true)
+        signup.save
+      else
+        signup = enrollment.signups.find_by_project_id(params[:project_id])
+        signup.forced = false
+        signup.save
+      end
+      render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newForced\":\"#{signup.forced}\"}"
+    end
+  end
+
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
     unless enrollment.projects.first.projectbundle.is_signup_active
