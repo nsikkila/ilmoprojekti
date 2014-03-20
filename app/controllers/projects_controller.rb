@@ -14,6 +14,14 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
+    proj = Project.find(params[:id])
+    enroll = proj.enrollments
+    @emails = []
+    enroll.each do |enr|
+      @emails << enr.email
+    end
+    @emails
+
   end
 
   # GET /projects/new

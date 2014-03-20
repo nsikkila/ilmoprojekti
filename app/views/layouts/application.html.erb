@@ -10,13 +10,8 @@
   <script src="//code.jquery.com/jquery-1.9.1.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script type="text/javascript" src="/assets/jquery.tablesorter.min.js"></script>
-  <script>
-      function readCookie(name){
-          return(document.cookie.match('(^|; )'+name+'=([^;]*)')||0)[2]
-      }
-  </script>
 </head>
-<body onScroll="document.cookie='ypos=' + window.pageYOffset" onLoad="window.scrollTo(0,readCookie('ypos'))">
+<body>
 
 <div id="navi">
   <%= link_to 'Etusivu', root_path %>

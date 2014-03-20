@@ -17,7 +17,6 @@ describe "Enrollment table view" do
   it "can be accessed if logged in and signup_end has passed" do
     signin(username:@user.username, password:@user.password)
 
-    #byebug
     visit enrollments_path
     expect(page).to have_content 'Ilmoittautumisnäkymä'
   end
