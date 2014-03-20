@@ -60,7 +60,7 @@ h1, h2 {
     background-color: #dcdcdc;
 }
 
-.enrollmenttable td {
+#enrollmenttable td {
     text-align: center;
     border: 1px solid black;
 }

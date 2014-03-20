@@ -1,7 +1,7 @@
 
 <% unless @enrollments.first.nil? %>
 
-    <table class="enrollmenttable" style="width:100%;">
+    <table class="tablesorter" id="enrollmenttable" style="width:100%;">
       <thead>
       <tr>
         <th>
@@ -87,13 +87,11 @@
 
 <script>
 
-
-    $.urlParam = function(name){
-        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-        return results[1] || 0;
-    }
+    var intervalID;
+    var intervalTime = 5000; // milliseconds
 
     function setStatus(enrollment_id, project_id, status) {
+        clearInterval(intervalID);
         $.ajax({
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -107,15 +105,54 @@
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
                     //Toggles accepted
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
+                    intervalID = setInterval(refreshCells, intervalTime);
                 });
     };
 
-    $(document).ready(function() {
-        setInterval("location.reload(true)", 5000);
-    });
+    function refreshCells() {
+        $( ".prioritycell" ).each(function(index, element) {
+            element_id = $(this).attr("id").split("-");
+            enrollment_id = element_id[0];
+            project_id = element_id[1];
+            console.log("solu: " + element_id);
+            $.ajax({
+                async: false,
+                type: "GET",
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                url: "getstatus/"+enrollment_id+"/"+project_id
+            })
+                    .done(function(msg) {
+                        if (msg.currentStatus == "true") {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                        } else {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                        }
+                    });
+        });
+    }
 
-    $(function() {
-        $( document ).tooltip();
+    $(document).ready(function() {
+        intervalID = setInterval(refreshCells, intervalTime);
+
+        $(function() {
+            $( document ).tooltip();
+        });
+
     });
+        
+    $(document).ready(function()
+            {
+                $.tablesorter.formatInt = function (s) {
+                    var i = parseInt(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $.tablesorter.formatFloat = function (s) {
+                    var i = parseFloat(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $("#enrollmenttable").tablesorter();
+            }
+    );
+
 
 </script>
