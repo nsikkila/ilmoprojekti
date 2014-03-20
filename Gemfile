@@ -58,6 +58,7 @@ group :test do
   gem "launchy", "~> 2.4.2"
   gem 'simplecov', :require => false
   gem 'email_spec'
+  gem 'selenium-webdriver'
 end
 
 
