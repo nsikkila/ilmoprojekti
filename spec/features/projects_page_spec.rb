@@ -13,6 +13,17 @@ describe "Projects page" do
       expect(page).to have_content("Sukunimi")
       expect(page).to have_content("Opiskelijanumero")
     end
+
+    it "allows the deletion of a project" do
+      sign_in_and_initialize
+      FactoryGirl.create(:project)
+      visit projects_path
+
+      expect {
+        click_link("Poista")
+      }.to change{Project.count}.by(-1)
+    end
+
   end
 
   describe "Create new project form" do
@@ -195,6 +206,7 @@ describe "Projects page" do
 
       expect(page).to have_content("test@email.com")
     end
+
   end
 
 end
