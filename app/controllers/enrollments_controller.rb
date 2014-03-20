@@ -122,7 +122,7 @@ class EnrollmentsController < ApplicationController
   def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
-      @enrollment.signups << Signup.new(priority: priority)
+      @enrollment.signups << Signup.new(priority: priority, forced:false)
       priority = priority + 1
     end
   end
@@ -142,7 +142,7 @@ class EnrollmentsController < ApplicationController
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
   end
 
 end

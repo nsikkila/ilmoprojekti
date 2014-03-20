@@ -47,6 +47,7 @@
 
               <%= sf.hidden_field :id, value:sf.object.id %>
               <%= sf.hidden_field :priority, value:"#{sf.object.priority}" %>
+              <%= sf.hidden_field :forced, value:false %>
 
           <% end %>
         </table>
