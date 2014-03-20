@@ -91,7 +91,6 @@
     var intervalTime = 5000; // milliseconds
 
     function setStatus(enrollment_id, project_id, status) {
-        clearInterval(intervalID);
         $.ajax({
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -103,9 +102,15 @@
                     document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
                     document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
                     document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+                    //Sets onClick
+                    if (msg.newStatus == "true") {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
+                    }
+
                     //Toggles accepted
                     $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
-                    intervalID = setInterval(refreshCells, intervalTime);
                 });
     };
 
@@ -114,7 +119,6 @@
             element_id = $(this).attr("id").split("-");
             enrollment_id = element_id[0];
             project_id = element_id[1];
-            console.log("solu: " + element_id);
             $.ajax({
                 async: false,
                 type: "GET",
@@ -124,8 +128,12 @@
                     .done(function(msg) {
                         if (msg.currentStatus == "true") {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
+
                         } else {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
+
                         }
                     });
         });
