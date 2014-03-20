@@ -47,6 +47,15 @@ FactoryGirl.define do
 end
 
 FactoryGirl.define do
+  factory :enrollment1, class:Enrollment do
+    firstname "Jaska"
+    lastname "Jokunen"
+    studentnumber "1234561"
+    email "test@email.com"
+  end
+end
+
+FactoryGirl.define do
   factory :project do
     name "Testproject"
     description "This is a test project created by factorygirl"
