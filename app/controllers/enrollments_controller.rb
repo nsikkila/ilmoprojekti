@@ -33,7 +33,7 @@ class EnrollmentsController < ApplicationController
       redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
-      signup.status = false
+        signup.status = false
       end
       respond_to do |format|
         if @enrollment.save
@@ -67,20 +67,22 @@ class EnrollmentsController < ApplicationController
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
     if not @enrollment.return_projectbundle.is_signup_active
-     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
     end
   end
 
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
-    signup = enrollment.signups.find_by_project_id(params[:project_id])
-    project = signup.project
+    unless enrollment.projects.first.projectbundle.is_signup_active
+      signup = enrollment.signups.find_by_project_id(params[:project_id])
+      project = signup.project
 
-    new_status = params[:status]
-    signup.status = new_status
-    signup.save
+      new_status = params[:status]
+      signup.status = new_status
+      signup.save
 
-    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+      render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+    end
   end
 
   def getstatus
