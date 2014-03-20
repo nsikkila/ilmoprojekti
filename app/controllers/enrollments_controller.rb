@@ -4,7 +4,7 @@ class EnrollmentsController < ApplicationController
 
   def index
     if current_user.nil? or not is_at_least(:teacher)
-      redirect_to :root
+      redirect_to :root, notice: "Sivu on vain opettajille."
     else
       @projectbundle = Projectbundle.find_by_active(true)
 
@@ -13,7 +13,7 @@ class EnrollmentsController < ApplicationController
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
       else
-        redirect_to :root
+        redirect_to :root, notice: "Ei voimassaolevaa projektiryhmää."
       end
     end
   end
@@ -79,6 +79,14 @@ class EnrollmentsController < ApplicationController
     signup.save
 
     render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+  end
+
+  def getstatus
+    enrollment = Enrollment.find(params[:enrollment_id])
+    signup = enrollment.signups.find_by_project_id(params[:project_id])
+    status = signup.status
+
+    render :json => "{\"currentStatus\":\"#{status}\"}"
   end
 
   def update
