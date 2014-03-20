@@ -2,17 +2,25 @@ class UniqueSignupValidator < ActiveModel::Validator
 
   def validate(record)
     arr = Array.new
+    at_least_one = false
     record.signups.each do |signup|
       if not signup.project_id.nil?
+        at_least_one = true
         if arr.include?(signup.project_id)
-          record.errors[:project] << 'can only have one priority'
+          record.errors[:project] << 'Voit valita kunkin projektin vain kerran.'
         else
           arr << signup.project_id
         end
       end
     end
+
+    if not at_least_one
+      record.errors << 'Valitse vähintää yksi projekti.'
+    end
+
   end
 end
+
 
 class Enrollment < ActiveRecord::Base
 
