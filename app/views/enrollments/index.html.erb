@@ -57,11 +57,13 @@
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
                 <% unless signup.nil? %>
-                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>">
                       <%= signup.priority %>
                     </td>
                 <% else %>
-                    <td></td>
+                    <td>
+
+                    </td>
                 <% end %>
             <% end %>
             <td id="<%= enrollment.id %>-etotal" class="tableSummary">
@@ -97,7 +99,6 @@
         clearTimeout(timeoutID);
         wsem = wsem - 1;
         while (wsem < 0) {
-            console.log("c");
         }
 
         $.ajax({
@@ -119,7 +120,11 @@
                     }
 
                     //Toggles accepted
-                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",msg.newStatus);
+                    if (msg.newStatus == "true") {
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                    }
                 });
         wsem = wsem + 1;
 
@@ -131,7 +136,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("a");
         }
         semaphore = semaphore + 1;
 
@@ -140,7 +144,6 @@
             wsem = wsem - 1;
 
             while (wsem < 0) {
-                console.log("b");
             }
         }
 
@@ -172,7 +175,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("d");
         }
         readerCount = readerCount - 1;
         if (readerCount == 0) {
@@ -183,6 +185,11 @@
 
         setTimeout(refreshCells, timeoutTime);
     }
+
+    $('.prioritycell').bind('contextmenu', function() {
+        $(this).toggleClass('note');
+        //event.preventDefault();
+    })
 
     $(document).ready(function() {
         semaphore = 1;
@@ -195,7 +202,7 @@
         });
 
     });
-        
+
     $(document).ready(function()
             {
                 $.tablesorter.formatInt = function (s) {
