@@ -1,7 +1,7 @@
 
 <% unless @enrollments.first.nil? %>
 
-    <table class="enrollmenttable" style="width:100%;">
+    <table class="tablesorter" id="enrollmenttable" style="width:100%;">
       <thead>
       <tr>
         <th>
@@ -195,6 +195,20 @@
         });
 
     });
+        
+    $(document).ready(function()
+            {
+                $.tablesorter.formatInt = function (s) {
+                    var i = parseInt(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $.tablesorter.formatFloat = function (s) {
+                    var i = parseFloat(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $("#enrollmenttable").tablesorter();
+            }
+    );
 
 
 </script>

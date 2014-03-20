@@ -1,7 +1,8 @@
 class EnrollmentMail < ActionMailer::Base
   default from: "donotreply@ilmoprojekti.com"
 
-  def confirmation_email(user, hash)
+  def confirmation_email(user, hash, projectbundle)
+    @projectbundle = projectbundle
   	@enrollment=user
   	@digest=hash
   	@url="http://ilmoprojekti.herokuapp.com/enrollments/edit/"+@enrollment.id.to_s+"/"+@digest

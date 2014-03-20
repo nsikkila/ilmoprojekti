@@ -38,7 +38,7 @@ class EnrollmentsController < ApplicationController
       respond_to do |format|
         if @enrollment.save
           @digest = Enrollment.create_hash(@enrollment)
-          EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
+          EnrollmentMail.confirmation_email(@enrollment, @digest, @activebundle).deliver
           format.html { render action: 'show' }
         else
           set_projectbundle_and_projects
