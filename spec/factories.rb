@@ -1,20 +1,29 @@
 FactoryGirl.define do
-	factory :user do
-		username "Maija"
-		password "Test123"
-		password_confirmation "Test123"
+  factory :user do
+    username "Maija"
+    password "Test123"
+    password_confirmation "Test123"
     accesslevel 0
-	end
+  end
+end
+
+FactoryGirl.define do
+  factory :admin, class: User do
+    username "Admin"
+    password "Admin1"
+    password_confirmation "Admin1"
+    accesslevel 1
+  end
 end
 
 FactoryGirl.define do
   factory :teacher, class: User do
-    username "testi"
-    firstname "testi"
-    lastname "testinen"
+    username "ope"
+    firstname "Opettaja"
+    lastname "Opettavainen"
     password "Opettaja1"
     password_confirmation "Opettaja1"
-    accesslevel 1
+    accesslevel 0
   end
 end
 
@@ -29,11 +38,11 @@ end
 
 FactoryGirl.define do
   factory :projectbundle do
-  name "Testibundle"
-  description "This is a test bundle created by factorygirl"
-  active true
-  signup_start Date.current
-  signup_end Date.tomorrow
+    name "Testibundle"
+    description "This is a test bundle created by factorygirl"
+    active true
+    signup_start Date.current
+    signup_end Date.tomorrow
   end
 end
 

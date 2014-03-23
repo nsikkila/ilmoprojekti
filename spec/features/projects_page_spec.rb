@@ -160,7 +160,7 @@ describe "Projects page" do
       expect(page).to have_content("Testiprojekti1")
       expect(page).to have_content("Description for testproject")
       expect(page).to have_content("http://www.hs.fi")
-      expect(page).to have_content("Vastuuhenkilö: testi")
+      expect(page).to have_content("Vastuuhenkilö: Opettaja")
     end
 
   end

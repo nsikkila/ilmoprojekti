@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action only: [:new, :create, :destroy] do
+  before_action only: [:new, :create, :destroy, :index] do
     is_at_least(:admin)
   end
-  before_action only: [:show] do
+  before_action only: [:show, :edit, :update] do
      current_user.id == params[:id].to_i or is_at_least(:admin)
   end
 
