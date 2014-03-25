@@ -3,6 +3,9 @@ class ProjectbundlesController < ApplicationController
   before_action only: [:edit, :new, :create, :update, :destroy] do
     is_at_least(:teacher)
   end
+  before_action only: [:verify] do
+    is_at_least(:admin)
+  end
 
   # GET /projectbundles
   # GET /projectbundles.json
@@ -62,6 +65,22 @@ class ProjectbundlesController < ApplicationController
         format.html { redirect_to projectbundles_url }
         format.json { head :no_content }
       end
+  end
+
+  #Verifioi koko projectbundlen hyväksytyksi -> ryhmäjako lukkiutuu
+  def verify
+    @projectbundle = Projectbundle.find_by_active(true)
+
+    if(@projectbundle.signup_end < Date.today)
+      @projectbundle.verified = true
+      @projectbundle.save
+      redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
+    else
+      redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
+    end
+
+    #tähän kutsu metodiin joka lähettää mailit
+
   end
 
   private

@@ -13,6 +13,7 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
+  get 'projectbundles/:projectbundle_id/verify', to: 'projectbundles#verify'
   get 'all', to: 'enrollments#index'
   get 'enrollments/:enrollment_id/:hash', to: 'enrollments#edithash'
   delete 'enrollments/:enrollment_id/delete', to: 'enrollments#destroy'

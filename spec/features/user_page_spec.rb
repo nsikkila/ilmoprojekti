@@ -54,16 +54,35 @@ describe "User page" do
 
     end
 
+    it "cannot edit his details with faulty information" do
+      user = FactoryGirl.create(:teacher)
+      signin(username:user.username, password:user.password)
+      visit edit_user_path(user)
+
+      expect(page).to have_content "Käyttäjän muokkaus"
+
+      fill_in('user_firstname', with: "Teemu")
+      fill_in('user_lastname', with: "Testinen")
+      fill_in('user_password', with: "a")
+      fill_in('user_password_confirmation', with: "b")
+
+      click_button('Tallenna käyttäjä')
+
+      expect(page).to have_content "Password confirmation doesn't match Password"
+
+
+    end
+
   end
 
-  describe "admin can" do
+  describe "admin" do
 
     before :each do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
     end
 
-    it "create a user" do
+    it "can create a user" do
       visit new_user_path
 
       fill_in('user_firstname', with: "Teemu")
@@ -77,7 +96,7 @@ describe "User page" do
       }.to change { User.count }.by(1)
     end
 
-    it "delete a user" do
+    it "can delete a user" do
       FactoryGirl.create(:user)
       visit users_path
 
@@ -85,6 +104,20 @@ describe "User page" do
         find(:xpath, "(//a[text()='Poista'])[2]").click
       }.to change { User.count }.by(-1)
 
+    end
+
+    it "cannot create a user with faulty information" do
+      visit new_user_path
+
+      fill_in('user_firstname', with: "Teemu")
+      fill_in('user_lastname', with: "Testinen")
+      fill_in('user_username', with: "asd")
+      fill_in('user_password', with: "a")
+      fill_in('user_password_confirmation', with: "b")
+
+      expect {
+        click_button('Tallenna käyttäjä')
+      }.to change { User.count }.by(0)
     end
 
   end
