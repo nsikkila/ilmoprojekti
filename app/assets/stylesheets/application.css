@@ -85,6 +85,15 @@ h1, h2 {
     background-color: lightgreen;
 }
 
+.forced {
+    background-color: orange;
+}
+
+.note {
+    background-color: violet;
+}
+
+
 li {
     list-style: none;
 }

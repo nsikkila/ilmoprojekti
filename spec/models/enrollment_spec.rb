@@ -19,6 +19,7 @@ describe Enrollment do
   end
 
   it "is saved with proper fields" do
+    enrollment.signups << FactoryGirl.create(:signup)
     enrollment.save
     #Enrollment is valid
     expect(enrollment.valid?).to be (true)

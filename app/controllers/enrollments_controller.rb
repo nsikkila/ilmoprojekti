@@ -35,7 +35,7 @@ class EnrollmentsController < ApplicationController
       redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
-      signup.status = false
+        signup.status = false
       end
       respond_to do |format|
         if @enrollment.save
@@ -79,20 +79,39 @@ class EnrollmentsController < ApplicationController
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
     if not @enrollment.return_projectbundle.is_signup_active
-     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+    end
+  end
+
+  def setforced
+    enrollment = Enrollment.find params[:enrollment_id]
+    new_forced = params[:forced]
+
+    unless enrollment.projects.first.projectbundle.is_signup_active
+      if (new_forced)
+        signup = Signup.new(enrollment_id:params[:enrollment_id], project_id:params[:project_id], priority:0, forced:true)
+        signup.save
+      else
+        signup = enrollment.signups.find_by_project_id(params[:project_id])
+        signup.forced = false
+        signup.save
+      end
+      render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newForced\":\"#{signup.forced}\"}"
     end
   end
 
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
-    signup = enrollment.signups.find_by_project_id(params[:project_id])
-    project = signup.project
+    unless enrollment.projects.first.projectbundle.is_signup_active
+      signup = enrollment.signups.find_by_project_id(params[:project_id])
+      project = signup.project
 
-    new_status = params[:status]
-    signup.status = new_status
-    signup.save
+      new_status = params[:status]
+      signup.status = new_status
+      signup.save
 
-    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+      render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+    end
   end
 
   def getstatus
@@ -132,7 +151,7 @@ class EnrollmentsController < ApplicationController
   def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
-      @enrollment.signups << Signup.new(priority: priority)
+      @enrollment.signups << Signup.new(priority: priority, forced:false)
       priority = priority + 1
     end
   end
@@ -152,7 +171,7 @@ class EnrollmentsController < ApplicationController
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
   end
 
 end
