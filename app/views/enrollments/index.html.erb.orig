@@ -1,0 +1,271 @@
+
+<% unless @enrollments.first.nil? %>
+
+    <table class="tablesorter" id="enrollmenttable" style="width:100%;">
+      <thead>
+      <tr>
+        <th>
+          Opiskelija
+        </th>
+        <th>
+          Opnro
+        </th>
+        <% @projects.each do |project| %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
+            </th>
+        <% end %>
+        <th>
+          Opiskelijalla projekteja
+        </th>
+        <th>
+          Magic number
+        </th>
+      </tr>
+      </thead>
+
+      <tfoot class="tableSummary">
+      <tr>
+        <td>Opiskelijoita</td>
+        <td></td>
+        <% @projects.each do |project| %>
+
+            <td id="<%= project.id %>-ptotal">
+              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
+            </td>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Täyttöaste</td>
+        <td></td>
+        <% @projects.each do |project| %>
+
+            <td id="<%= project.id %>-pfill">
+              <%= project.amount_of_accepted_students - project.maxstudents %>
+            </td>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      </tfoot>
+
+      <tbody>
+      <% @enrollments.each do |enrollment| %>
+
+          <tr>
+            <td>
+              <%= enrollment.name %>[<%= link_to 'x', enrollments_path+"/"+enrollment.id.to_s+"/delete", method: :delete %>]
+            </td>
+            <td>
+              <%= enrollment.studentnumber %>
+            </td>
+            <% @projects.each do |project| %>
+                <% signup = enrollment.signups.find_by(project_id:project.id) %>
+                <% unless signup.nil? %>
+<<<<<<< HEAD
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>">
+                      <%= signup.priority %>
+                    </td>
+                <% else %>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setForced(<%= enrollment.id %>, <%= project.id %>, true)" class="emptycell">
+
+                    </td>
+=======
+                    <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
+                      <%= signup.priority %>
+                    </td>
+                <% else %>
+                    <td title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>"></td>
+>>>>>>> upstream/devel
+                <% end %>
+            <% end %>
+            <td id="<%= enrollment.id %>-etotal" class="tableSummary">
+              <%= enrollment.accepted_amount %>
+            </td>
+            <td id="<%= enrollment.id %>-escore" class="tableSummary">
+              <%= enrollment.compute_magic_number %>
+            </td>
+          </tr>
+      <% end %>
+      </tr>
+      </tbody>
+    </table>
+
+<% else %>
+    <h2>Ei ilmoittautumisia.</h2>
+<% end %>
+
+
+<% content_for :header do %>
+    Ilmoittautumisnäkymä
+<% end %>
+
+<script>
+    var writerCount;
+    var readerCount;
+    var semaphore;
+    var wsem;
+    var timeoutID;
+    var timeoutTime = 5000; // milliseconds
+
+    function setForced(enrollment_id, project_id, forced) {
+        clearTimeout(timeoutID);
+        wsem = wsem - 1;
+        while (wsem < 0) {
+        }
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "setforced",
+            data: {enrollment_id: enrollment_id, project_id: project_id, forced: forced }
+        })
+                .done(function (msg) {
+                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
+                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
+                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
+                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+
+                    if (msg.newForced == "true") {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", false)");
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("forced",true);
+
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", true)");
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                    }
+                });
+
+        wsem = wsem + 1;
+
+        timeoutID = setTimeout(refreshCells, timeoutTime);
+
+
+    }
+
+    function setStatus(enrollment_id, project_id, status) {
+        clearTimeout(timeoutID);
+        wsem = wsem - 1;
+        while (wsem < 0) {
+        }
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "setstatus",
+            data: { enrollment_id: enrollment_id, project_id: project_id, status: status }
+        })
+                .done(function( msg ) {
+                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
+                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
+                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
+                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+                    //Sets onClick
+                    if (msg.newStatus == "true") {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
+                    }
+
+                    //Toggles accepted
+                    if (msg.newStatus == "true") {
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                    } else {
+                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                    }
+                });
+        wsem = wsem + 1;
+
+        timeoutID = setTimeout(refreshCells, timeoutTime);
+    };
+
+    function refreshCells() {
+        clearTimeout(timeoutID);
+
+        semaphore = semaphore - 1;
+        while (semaphore < 0) {
+        }
+        semaphore = semaphore + 1;
+
+        readerCount = readerCount + 1;
+        if (readerCount == 1) {
+            wsem = wsem - 1;
+
+            while (wsem < 0) {
+            }
+        }
+
+        semaphore = semaphore + 1;
+
+        $( ".prioritycell" ).each(function(index, element) {
+            element_id = $(this).attr("id").split("-");
+            enrollment_id = element_id[0];
+            project_id = element_id[1];
+            $.ajax({
+                async: false,
+                type: "GET",
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                url: "getstatus/"+enrollment_id+"/"+project_id
+            })
+                    .done(function(msg) {
+                        if (msg.currentStatus == "true") {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
+
+                        } else {
+                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
+
+                        }
+                    });
+        });
+
+
+        semaphore = semaphore - 1;
+        while (semaphore < 0) {
+        }
+        readerCount = readerCount - 1;
+        if (readerCount == 0) {
+            wsem = wsem + 1;
+        }
+        semaphore = semaphore + 1;
+
+
+        setTimeout(refreshCells, timeoutTime);
+    }
+
+    $('.prioritycell').bind('contextmenu', function() {
+        $(this).toggleClass('note');
+        //event.preventDefault();
+    })
+
+    $(document).ready(function() {
+        semaphore = 1;
+        wsem = 1;
+        readerCount = 0;
+        timeoutID = setTimeout(refreshCells, timeoutTime);
+
+        $(function() {
+            $( document ).tooltip();
+        });
+
+    });
+
+    $(document).ready(function()
+            {
+                $.tablesorter.formatInt = function (s) {
+                    var i = parseInt(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $.tablesorter.formatFloat = function (s) {
+                    var i = parseFloat(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $("#enrollmenttable").tablesorter();
+            }
+    );
+
+
+</script>
