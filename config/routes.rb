@@ -20,6 +20,7 @@ Ilmoprojekti::Application.routes.draw do
   delete 'signout', to: 'sessions#destroy'
   post 'setstatus', to: 'enrollments#setstatus'
   get 'getstatus/:enrollment_id/:project_id', to: 'enrollments#getstatus'
+  post 'setforced', to: 'enrollments#setforced'
 
   root 'enrollments#new'
 

@@ -56,7 +56,7 @@
 
           <tr>
             <td>
-              <%= enrollment.name %>[<%= link_to 'x', enrollments_path+"/"+enrollment.id.to_s+"/delete", method: :delete, data: { confirm: 'Haluatko varmasti poistaa ilmoittautumisen?' } %>]
+              <%= enrollment.name %>[<%= link_to 'x', enrollments_path+"/"+enrollment.id.to_s+"/delete", method: :delete %>]
             </td>
             <td>
               <%= enrollment.studentnumber %>
@@ -64,11 +64,21 @@
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
                 <% unless signup.nil? %>
+<<<<<<< HEAD
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>">
+                      <%= signup.priority %>
+                    </td>
+                <% else %>
+                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="setForced(<%= enrollment.id %>, <%= project.id %>, true)" class="emptycell">
+
+                    </td>
+=======
                     <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
                       <%= signup.priority %>
                     </td>
                 <% else %>
                     <td title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>"></td>
+>>>>>>> upstream/devel
                 <% end %>
             <% end %>
             <td id="<%= enrollment.id %>-etotal" class="tableSummary">
@@ -139,7 +149,6 @@
         clearTimeout(timeoutID);
         wsem = wsem - 1;
         while (wsem < 0) {
-            console.log("c");
         }
 
         $.ajax({
@@ -177,7 +186,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("a");
         }
         semaphore = semaphore + 1;
 
@@ -186,7 +194,6 @@
             wsem = wsem - 1;
 
             while (wsem < 0) {
-                console.log("b");
             }
         }
 
@@ -218,7 +225,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("d");
         }
         readerCount = readerCount - 1;
         if (readerCount == 0) {
@@ -246,7 +252,7 @@
         });
 
     });
-        
+
     $(document).ready(function()
             {
                 $.tablesorter.formatInt = function (s) {

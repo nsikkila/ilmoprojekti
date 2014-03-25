@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325112012) do
+ActiveRecord::Schema.define(version: 20140320155317) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20140325112012) do
     t.datetime "updated_at"
     t.integer  "priority"
     t.boolean  "status"
+    t.boolean  "forced"
   end
 
   create_table "users", force: true do |t|
