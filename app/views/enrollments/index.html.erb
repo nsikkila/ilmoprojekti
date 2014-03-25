@@ -139,7 +139,6 @@
         clearTimeout(timeoutID);
         wsem = wsem - 1;
         while (wsem < 0) {
-            console.log("c");
         }
 
         $.ajax({
@@ -177,7 +176,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("a");
         }
         semaphore = semaphore + 1;
 
@@ -186,7 +184,6 @@
             wsem = wsem - 1;
 
             while (wsem < 0) {
-                console.log("b");
             }
         }
 
@@ -218,7 +215,6 @@
 
         semaphore = semaphore - 1;
         while (semaphore < 0) {
-            console.log("d");
         }
         readerCount = readerCount - 1;
         if (readerCount == 0) {
