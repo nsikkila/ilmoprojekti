@@ -81,6 +81,10 @@ h1, h2 {
 
 }
 
+.prioritycell.forced {
+    background-color: orangered;
+}
+
 .prioritycell.accepted {
     background-color: lightgreen;
 }

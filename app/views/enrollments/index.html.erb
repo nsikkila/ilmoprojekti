@@ -63,13 +63,10 @@
             </td>
             <% @projects.each do |project| %>
                 <% signup = enrollment.signups.find_by(project_id:project.id) %>
-                <% unless signup.nil? %>
-                    <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="setStatus(<%= enrollment.id %>, <%= project.id %>, <%= !signup.status %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
-                      <%= signup.priority %>
-                    </td>
-                <% else %>
-                    <td title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>"></td>
-                <% end %>
+                <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="changeStatus($(this))" class="prioritycell">
+                  <%= signup.priority unless signup.nil? %>
+                </td>
+
             <% end %>
             <td id="<%= enrollment.id %>-etotal" class="tableSummary">
               <%= enrollment.accepted_amount %>
@@ -93,18 +90,10 @@
 <% end %>
 
 <script>
-    var writerCount;
-    var readerCount;
-    var semaphore;
-    var wsem;
-    var timeoutID;
-    var timeoutTime = 5000; // milliseconds
 
-    function setForced(enrollment_id, project_id, forced) {
-        clearTimeout(timeoutID);
-        wsem = wsem - 1;
-        while (wsem < 0) {
-        }
+    function setForced(element) {
+
+        console.log(element);
 
         $.ajax({
             type: "POST",
@@ -128,71 +117,132 @@
                     }
                 });
 
-        wsem = wsem + 1;
-
-        timeoutID = setTimeout(refreshCells, timeoutTime);
-
-
     }
 
-    function setStatus(enrollment_id, project_id, status) {
-        clearTimeout(timeoutID);
-        wsem = wsem - 1;
-        while (wsem < 0) {
+    function changeStatus(element) {
+        var elementClass = element.attr('class');
+
+
+        if (elementClass.indexOf('forceable') >= 0) {
+            if (elementClass.indexOf('forced') >= 0) {
+                setForcedStatus(element, false);
+            } else {
+                setForcedStatus(element, true);
+            }
+        } else {
+            if (elementClass.indexOf('accepted') >= 0) {
+                setStatus(element, false);
+            } else {
+                setStatus(element, true);
+            }
         }
+    }
+
+    function setForcedStatus(element, newForced) {
+
+        var elementIdArray = element.attr('id').split("-");
+        var enrollment_id = elementIdArray[0];
+        var project_id = elementIdArray[1];
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "setforced",
+            data: {enrollment_id: enrollment_id, project_id: project_id, forced: newForced }
+        })
+                .done(function(msg) {
+                    refreshAll();
+                });
+    }
+
+    function setStatus(element, newStatus) {
+
+        var elementIdArray = element.attr('id').split("-");
+        var enrollment_id = elementIdArray[0];
+        var project_id = elementIdArray[1];
 
         $.ajax({
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             url: "setstatus",
-            data: { enrollment_id: enrollment_id, project_id: project_id, status: status }
+            data: {enrollment_id: enrollment_id, project_id: project_id, status: newStatus }
         })
-                .done(function( msg ) {
-                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
-                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
-                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
-                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
-                    //Sets onClick
-                    if (msg.newStatus == "true") {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
-                    }
-
-                    //Toggles accepted
-                    if (msg.newStatus == "true") {
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
-                    }
+                .done(function(msg) {
+                    refreshAll();
                 });
-        wsem = wsem + 1;
 
-        timeoutID = setTimeout(refreshCells, timeoutTime);
+    }
+
+    function refreshAll() {
+        console.log("refreshaamassa");
+        refreshPriorityCells();
+    }
+
+    function refreshPriorityCells() {
+        $( ".prioritycell" ).each(function(index, element) {
+            element_id = $(this).attr("id").split("-");
+            enrollment_id = element_id[0];
+            project_id = element_id[1];
+
+            $.ajax({
+                async: false,
+                type: "GET",
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                url: "getstatus/"+enrollment_id+"/"+project_id
+            })
+                    .done(function(msg) {
+                        console.log(msg.currentStatus);
+                        if (msg.currentStatus == 'none') {
+                            $(element).toggleClass('forceable', true);
+                        } else if (msg.curretStatus == 'forced') {
+                            $(element).toggleClass('forced', true);
+                        } else if (msg.currentStatus == 'accepted') {
+                            console.log('acceptediin pamahti');
+                            $(element).toggleClass('accepted', true);
+                        } else if (msg.currentStatus == 'notAccepted') {
+                            $(element).toggleClass('accepted', false);
+                        }
+
+                    });
+        });
+
+    }
+
+    function plaa() {
+    $.ajax({
+        type: "POST",
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        url: "setstatus",
+        data: { enrollment_id: enrollment_id, project_id: project_id, status: status }
+    })
+            .done(function( msg ) {
+                document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
+                document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
+                document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
+                document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
+                //Sets onClick
+                if (msg.newStatus == "true") {
+                    $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
+                } else {
+                    $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
+                }
+
+                //Toggles accepted
+                if (msg.newStatus == "true") {
+                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
+                } else {
+                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
+                }
+            });
     };
 
     function refreshCells() {
-        clearTimeout(timeoutID);
-
-        semaphore = semaphore - 1;
-        while (semaphore < 0) {
-        }
-        semaphore = semaphore + 1;
-
-        readerCount = readerCount + 1;
-        if (readerCount == 1) {
-            wsem = wsem - 1;
-
-            while (wsem < 0) {
-            }
-        }
-
-        semaphore = semaphore + 1;
 
         $( ".prioritycell" ).each(function(index, element) {
             element_id = $(this).attr("id").split("-");
             enrollment_id = element_id[0];
             project_id = element_id[1];
+
             $.ajax({
                 async: false,
                 type: "GET",
@@ -203,7 +253,6 @@
                         if (msg.currentStatus == "true") {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
                             $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
-
                         } else {
                             $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
                             $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
@@ -211,19 +260,6 @@
                         }
                     });
         });
-
-
-        semaphore = semaphore - 1;
-        while (semaphore < 0) {
-        }
-        readerCount = readerCount - 1;
-        if (readerCount == 0) {
-            wsem = wsem + 1;
-        }
-        semaphore = semaphore + 1;
-
-
-        setTimeout(refreshCells, timeoutTime);
     }
 
     $('.prioritycell').bind('contextmenu', function() {
@@ -232,17 +268,14 @@
     })
 
     $(document).ready(function() {
-        semaphore = 1;
-        wsem = 1;
-        readerCount = 0;
-        timeoutID = setTimeout(refreshCells, timeoutTime);
+        refreshAll();
 
         $(function() {
             $( document ).tooltip();
         });
 
     });
-        
+
     $(document).ready(function()
             {
                 $.tablesorter.formatInt = function (s) {
