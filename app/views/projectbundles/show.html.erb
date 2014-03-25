@@ -27,3 +27,6 @@
 
 <%= link_to 'Muokkaa', edit_projectbundle_path(@projectbundle) %> |
 <%= link_to 'Takaisin', projectbundles_path %>
+<% content_for :header do %>
+    <%= "Projektiryhmän esikatselu" %>
+<% end %>

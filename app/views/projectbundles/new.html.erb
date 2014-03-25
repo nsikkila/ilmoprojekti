@@ -1,5 +1,7 @@
-<h1>Uusi projektiryhmä</h1>
 
 <%= render 'form' %>
 
 <%= link_to 'Takaisin', projectbundles_path %>
+<% content_for :header do %>
+    <%= "Uusi projektiryhmä" %>
+<% end %>

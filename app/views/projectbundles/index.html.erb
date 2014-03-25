@@ -1,4 +1,3 @@
-<h1>Projektiryhmät</h1>
 
 <table>
   <thead>
@@ -29,3 +28,6 @@
 <br>
 
 <%= link_to 'Uusi projektiryhmä', new_projectbundle_path %>
+<% content_for :header do %>
+    <%= "Olemassa olevat projektiryhmät" %>
+<% end %>

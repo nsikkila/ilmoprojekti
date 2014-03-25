@@ -1,6 +1,8 @@
-<h1>Projektiryhmän muokkaus</h1>
 
 <%= render 'form' %>
 
 <%= link_to 'Näytä', @projectbundle %> |
 <%= link_to 'Takaisin', projectbundles_path %>
+<% content_for :header do %>
+    <%= "Projektiryhmän muokkaus" %>
+<% end %>
