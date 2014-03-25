@@ -1,7 +1,7 @@
 require 'simplecov'
-#require 'coveralls'
+require 'coveralls'
 require 'email_spec'
-#Coveralls.wear!
+Coveralls.wear!
 SimpleCov.start
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
