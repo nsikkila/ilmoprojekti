@@ -22,6 +22,7 @@ describe Signup do
     expect(Signup.count).to eq (1)
   end
 
+
     #describe "with improper fields" do
     #it "is not saved" do
     #  FactoryGirl.build(:signup, project:"asd", priority:"asd", student_id:"asd", status:"asd")
