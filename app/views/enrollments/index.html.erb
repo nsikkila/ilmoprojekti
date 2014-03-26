@@ -167,8 +167,60 @@
     }
 
     function refreshAll() {
-        refreshPriorityCells();
+        refreshPriorityCells2();
+        refreshSummaryCells();
     }
+
+    function refreshSummaryCells() {
+
+    }
+
+
+    function refreshPriorityCells2() {
+
+        $.ajax({
+            async: false,
+            type: "GET",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "getenrollmentstatus/"+enrollment_id
+        })
+                .done(function(msg) {
+                    alert(msg);
+
+                    if ($(element).attr('class').indexOf('note') >= 0) {
+                        $(element).attr('class', 'prioritycell note');
+
+                    } else {
+                        $(element).attr('class', 'prioritycell');
+                    }
+
+                    if (msg.currentStatus == 'none') {
+                        $(element).toggleClass('forceable', true);
+                    } else if (msg.currentStatus == 'forced') {
+                        $(element).toggleClass('forceable', true);
+                        $(element).toggleClass('forced', true);
+                    } else if (msg.currentStatus == 'accepted') {
+                        $(element).toggleClass('accepted', true);
+                    } else if (msg.currentStatus == 'notAccepted') {
+                        $(element).toggleClass('accepted', false);
+                    }
+
+                });
+
+        $( ".prioritycell" ).each(function(index, element) {
+            element_id = $(this).attr("id").split("-");
+            enrollment_id = element_id[0];
+            project_id = element_id[1];
+        });
+
+    }
+
+
+
+
+
+
+
 
     function refreshPriorityCells() {
         $( ".prioritycell" ).each(function(index, element) {
@@ -266,27 +318,24 @@
     })
 
     $(document).ready(function() {
-        refreshAll();
+
+        $.tablesorter.formatInt = function (s) {
+            var i = parseInt(s);
+            return (isNaN(i)) ? null : i;
+        };
+        $.tablesorter.formatFloat = function (s) {
+            var i = parseFloat(s);
+            return (isNaN(i)) ? null : i;
+        };
+        $("#enrollmenttable").tablesorter();
 
         $(function() {
             $( document ).tooltip();
         });
 
+        refreshAll();
+
+
     });
-
-    $(document).ready(function()
-            {
-                $.tablesorter.formatInt = function (s) {
-                    var i = parseInt(s);
-                    return (isNaN(i)) ? null : i;
-                };
-                $.tablesorter.formatFloat = function (s) {
-                    var i = parseFloat(s);
-                    return (isNaN(i)) ? null : i;
-                };
-                $("#enrollmenttable").tablesorter();
-            }
-    );
-
 
 </script>

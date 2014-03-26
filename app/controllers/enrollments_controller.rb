@@ -131,6 +131,33 @@ class EnrollmentsController < ApplicationController
     render :json => "{\"currentStatus\":\"#{status}\"}"
   end
 
+  def getenrollmentstatus
+    enrollment = Enrollment.find(params[:enrollment_id])
+    signups = enrollment.signups
+    projects = Projectbundle.find_by_active(true).projects
+    statushash = {}
+    projects.each do |project|
+      signup = signups.find_by_project_id(project.id)
+      status_text = set_status_text(signup)
+      statushash.store(project.id, status_text)
+    end
+    byebug
+    render :json => JSON.generate(statushash)
+  end
+
+  def set_status_text(signup)
+    if (signup.nil?)
+      status = 'none'
+    elsif (signup.forced)
+      status = 'forced'
+    elsif (signup.status)
+      status = 'accepted'
+    else
+      status = 'notAccepted'
+    end
+    status
+  end
+
   def update
     @enrollment = Enrollment.find(params[:id])
     @params = params[:enrollment][:signups_attribute]
