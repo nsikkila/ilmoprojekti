@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   before_action only: [:edit, :index, :new, :create, :update, :destroy] do
     is_at_least(:teacher)
   end
+  before_action :check_expire
 
   # GET /projects
   # GET /projects.json

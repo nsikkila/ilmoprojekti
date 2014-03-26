@@ -6,6 +6,8 @@ class EnrollmentsController < ApplicationController
     is_at_least(:teacher)
   end
 
+before_action :check_expire
+
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root, notice: "Sivu on vain opettajille."
@@ -13,7 +15,7 @@ class EnrollmentsController < ApplicationController
       @projectbundle = Projectbundle.find_by_active(true)
 
 
-      if not @projectbundle.is_signup_active
+      if @projectbundle.is_signup_active
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
       else
