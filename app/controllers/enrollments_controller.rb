@@ -15,7 +15,7 @@ before_action :check_expire
       @projectbundle = Projectbundle.find_by_active(true)
 
 
-      if not @projectbundle.is_signup_active
+      if @projectbundle.is_signup_active
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
       else
