@@ -6,6 +6,8 @@ class EnrollmentsController < ApplicationController
     is_at_least(:teacher)
   end
 
+before_action :check_expire
+
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root, notice: "Sivu on vain opettajille."

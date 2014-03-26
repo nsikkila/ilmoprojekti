@@ -7,6 +7,8 @@ class ProjectbundlesController < ApplicationController
     is_at_least(:admin)
   end
 
+  before_action :check_expire
+
   # GET /projectbundles
   # GET /projectbundles.json
   def index
