@@ -7,6 +7,8 @@ class Projectbundle < ActiveRecord::Base
     "#{name}"
   end
 
+
+
   def is_signup_active
     if self.signup_end < Date.today
       return false
