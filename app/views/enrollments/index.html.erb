@@ -1,7 +1,38 @@
 
 <% unless @enrollments.first.nil? %>
 
-    <table class="tablesorter" id="enrollmenttable" style="width:100%;">
+    <% if not current_user.nil? and compare_accesslevel(:admin) %>
+        <% if @projectbundle.verified = false %>
+            [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
+        <% else %>
+            <p><b>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille!</b></p>
+        <% end %>
+    <% end %>
+    <table>
+      <tr>
+        <td class="legend">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+        <td>Opiskelija on ilmoittautunut kyseiseen projektiin prioriteetilla X</td>
+      </tr>
+      <tr>
+        <td class="legend">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>Opiskelija ei ole ilmoittautunut kyseiseen projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend accepted"></td>
+        <td>Opiskelija hyväksytty projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend forced"></td>
+        <td>Opiskelija pakotettu projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend note"></td>
+        <td>Työväri (ei varsinaista vaikutusta ryhmäjakoihin)</td>
+      </tr>
+
+    </table>
+
+    <table class="tablesorter" id="enrollmenttable" style="widows: 100%;;">
       <thead>
       <tr>
         <th>
@@ -15,10 +46,10 @@
               <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
-        <th>
+        <th title="Moneenko projektiin opiskelija on hyväksytty">
           Opiskelijalla projekteja
         </th>
-        <th>
+        <th title="Opiskelijan hyväksyttyjen ilmoittautumisten prioriteettien keskiarvo. Tämä arvo tulee pitää mahdollisimman pienenä.">
           Magic number
         </th>
       </tr>
@@ -26,7 +57,18 @@
 
       <tfoot class="tableSummary">
       <tr>
-        <td>Opiskelijoita</td>
+        <td></td>
+        <td></td>
+        <% @projects.each do |project| %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
+            </th>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td title="Kurssille hyväksytyt opiskelijat/Kurssille hyväksyttävien opiskelijoiden määrä">Opiskelijoita</td>
         <td></td>
         <% @projects.each do |project| %>
 
@@ -38,7 +80,7 @@
         <td></td>
       </tr>
       <tr>
-        <td>Täyttöaste</td>
+        <td title="Kertoo paljonko kurssilla on tilaa tai monellako opiskelijalla raja on ylitetty">Täyttöaste</td>
         <td></td>
         <% @projects.each do |project| %>
 
@@ -145,7 +187,7 @@
 
     function refreshAll() {
         refreshPriorityCells();
-        //refreshSummaryCells();
+        refreshSummaryCells();
     }
 
     function refreshPriorityCells() {

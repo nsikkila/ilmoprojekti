@@ -125,10 +125,12 @@ end
 
 def get_summaries
   bundle = Projectbundle.find_by_active(true)
-  enrollment = bundle.enrollments
-  projects = bundle.project
+  enrollments = bundle.enrollments
+  projects = bundle.projects
 
-  render :json => enrollment.to_json(:only => :id, :methods => [:magic_number, :accepted_amount]) +
+  response = { :enrollments => enrollments, :projects => projects }
+
+  render :json => response.to_json
 end
 
 def update
