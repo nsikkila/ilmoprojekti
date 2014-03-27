@@ -19,4 +19,9 @@ class Project < ActiveRecord::Base
     end
     amount
   end
+
+  def to_json
+    options = {only: [:id, :maxstudents], methods: :amount_of_accepted_students}
+    super(options)
+  end
 end
