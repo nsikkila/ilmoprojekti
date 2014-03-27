@@ -32,15 +32,15 @@ class ProjectbundlesController < ApplicationController
   # POST /projectbundles.json
   def create
     @projectbundle = Projectbundle.new(projectbundle_params)
-      respond_to do |format|
-        if @projectbundle.save
-          format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully created.' }
-          format.json { render action: 'show', status: :created, location: @projectbundle }
-        else
-          format.html { render action: 'new' }
-          format.json { render json: @projectbundle.errors, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if @projectbundle.save
+        format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @projectbundle }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @projectbundle.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   # PATCH/PUT /projectbundles/1
@@ -74,12 +74,14 @@ class ProjectbundlesController < ApplicationController
     if (@projectbundle.signup_end < Date.today)
       @projectbundle.verified = true
       @projectbundle.save
+      @enrollments = @projectbundle.enrollments
+      if not @enrollments.nil?
+        EnrollmentMail.result_email_for_all(@enrollments).deliver
+      end
       redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
     else
       redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
     end
-
-    #tähän kutsu metodiin joka lähettää mailit
 
   end
 

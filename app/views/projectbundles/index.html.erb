@@ -1,42 +1,48 @@
-
 <p id="notice"><%= notice %></p>
 
-<p>Projektiryhmiä voi kerrallaan olla aktiivisena yksi kappale. Käytännössä aktiivisuus tarkoittaa sitä, että ohjelmisto käsittelee kyseistä projektiryhmää.</p>
+<p>Projektiryhmiä voi kerrallaan olla aktiivisena yksi kappale. Käytännössä aktiivisuus tarkoittaa sitä, että ohjelmisto
+  käsittelee kyseistä projektiryhmää.</p>
 <p>Projektit, opiskelijoiden ilmoittautumiset ja ryhmäjaot ovat <b>projektiryhmäkohtaisia</b></p>
 
 <table>
   <thead>
-    <tr>
-      <th>Nimi</th>
-      <th>Kuvaus</th>
-      <th>Aktiivinen</th>
-      <th>Julkaistu</th>
-      <th></th>
-      <th></th>
-    </tr>
+  <tr>
+    <th>Nimi</th>
+    <th>Kuvaus</th>
+    <th>Aktiivinen</th>
+    <th>Julkaistu</th>
+    <th></th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @projectbundles.each do |projectbundle| %>
+  <% @projectbundles.each do |projectbundle| %>
       <tr>
         <td><%= projectbundle.name %></td>
         <td><%= projectbundle.description %></td>
-        <% if projectbundle.active? %>
-        <td>Kyllä</td>
+        <% if projectbundle.active? and not projectbundle.active.nil?%>
+            <td>Kyllä</td>
         <% else %>
             <td>Ei</td>
         <% end %>
-        <% if projectbundle.verified = false %>
+        <% if projectbundle.verified == false %>
         <td>Ei</td>
         <% else %>
-        <td>Kyllä</td>
+            <td>Kyllä</td>
         <% end %>
         <td><%= link_to 'Näytä', projectbundle %></td>
         <td><%= link_to 'Muokkaa', edit_projectbundle_path(projectbundle) %></td>
-        <td><%= link_to 'Poista', projectbundle, method: :delete, data: { confirm: 'Haluatko varmasti poistaa projektiryhmän?' } %></td>
+        <td><%= link_to 'Poista', projectbundle, method: :delete, data: {confirm: 'Haluatko varmasti poistaa projektiryhmän?'} %></td>
 
+        <% if not current_user.nil? and compare_accesslevel(:admin) %>
+            <% if projectbundle.verified == false %>
+                <td>[<%= link_to 'Vahvista', projectbundles_path+"/"+projectbundle.id.to_s+"/verify", data: {confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.'} %>
+                  ]
+            <% end %>
+        <% end %>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

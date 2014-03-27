@@ -23,7 +23,7 @@ end
 
 
 class Enrollment < ActiveRecord::Base
-
+  belongs_to :projectbundle
   has_many :projects, through: :signups
   has_many :signups, order: 'id ASC', dependent: :destroy
   accepts_nested_attributes_for :signups
@@ -48,7 +48,7 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
-  def compute_magic_number
+  def magic_number
     number = 0
     amount = 0
     signups.each do |signup|
@@ -60,7 +60,7 @@ class Enrollment < ActiveRecord::Base
     if amount == 0
       return 0
     end
-    (number.to_f/amount).round
+    (number.to_f/amount).round(1)
   end
 
   def return_projectbundle
@@ -70,6 +70,11 @@ class Enrollment < ActiveRecord::Base
 
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
+  end
+
+  def to_json
+    options = {only: [:id], methods: [:accepted_amount, :magic_number]}
+    super(options)
   end
 
 
