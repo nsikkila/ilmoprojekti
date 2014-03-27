@@ -2,7 +2,7 @@
 <% unless @enrollments.first.nil? %>
 
     <% if not current_user.nil? and compare_accesslevel(:admin) %>
-        <% if @projectbundle.verified = false %>
+        <% if @projectbundle.verified == false %>
             [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
         <% else %>
             <p><b>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille!</b></p>
@@ -32,7 +32,7 @@
 
     </table>
 
-    <table class="tablesorter" id="enrollmenttable" style="widows: 100%;;">
+    <table class="tablesorter" id="enrollmenttable">
       <thead>
       <tr>
         <th>
