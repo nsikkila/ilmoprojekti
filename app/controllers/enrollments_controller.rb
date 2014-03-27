@@ -14,12 +14,11 @@ before_action :check_expire
     else
       @projectbundle = Projectbundle.find_by_active(true)
 
-
-      if @projectbundle.is_signup_active
+      if not @projectbundle.is_signup_active
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
       else
-        redirect_to :root, notice: "Ei voimassaolevaa projektiryhmää."
+        redirect_to :root, notice: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
       end
     end
   end
