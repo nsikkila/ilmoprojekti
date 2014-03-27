@@ -23,7 +23,7 @@ end
 
 
 class Enrollment < ActiveRecord::Base
-
+  belongs_to :projectbundle
   has_many :projects, through: :signups
   has_many :signups, order: 'id ASC', dependent: :destroy
   accepts_nested_attributes_for :signups
@@ -60,7 +60,7 @@ class Enrollment < ActiveRecord::Base
     if amount == 0
       return 0
     end
-    (number.to_f/amount).round
+    (number.to_f/amount).round(1)
   end
 
   def return_projectbundle
