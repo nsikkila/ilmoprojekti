@@ -21,13 +21,13 @@
       <tr>
         <td><%= projectbundle.name %></td>
         <td><%= projectbundle.description %></td>
-        <% if projectbundle.active? %>
+        <% if projectbundle.active? and not projectbundle.active.nil?%>
             <td>Kyllä</td>
         <% else %>
             <td>Ei</td>
         <% end %>
         <% if projectbundle.verified == false %>
-            <td>Ei</td>
+        <td>Ei</td>
         <% else %>
             <td>Kyllä</td>
         <% end %>
