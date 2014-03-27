@@ -15,10 +15,10 @@
               <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
-        <th>
+        <th title="Moneenko projektiin opiskelija on hyväksytty">
           Opiskelijalla projekteja
         </th>
-        <th>
+        <th title="Opiskelijan hyväksyttyjen ilmoittautumisten prioriteettien keskiarvo. Tämä arvo tulee pitää mahdollisimman pienenä.">
           Magic number
         </th>
       </tr>
@@ -26,7 +26,18 @@
 
       <tfoot class="tableSummary">
       <tr>
-        <td>Opiskelijoita</td>
+        <td></td>
+        <td></td>
+        <% @projects.each do |project| %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
+            </th>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td title="Kurssille hyväksytyt opiskelijat/Kurssille hyväksyttävien opiskelijoiden määrä">Opiskelijoita</td>
         <td></td>
         <% @projects.each do |project| %>
 
@@ -38,7 +49,7 @@
         <td></td>
       </tr>
       <tr>
-        <td>Täyttöaste</td>
+        <td title="Kertoo paljonko kurssilla on tilaa tai monellako opiskelijalla raja on ylitetty">Täyttöaste</td>
         <td></td>
         <% @projects.each do |project| %>
 
