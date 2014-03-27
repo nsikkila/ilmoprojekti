@@ -48,7 +48,7 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
-  def compute_magic_number
+  def magic_number
     number = 0
     amount = 0
     signups.each do |signup|
