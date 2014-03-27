@@ -74,12 +74,12 @@ class ProjectbundlesController < ApplicationController
     if (@projectbundle.signup_end < Date.today)
       @projectbundle.verified = true
       @projectbundle.save
+      @enrollments = @projectbundle.enrollments
+      EnrollmentMail.result_email_for_all(@enrollments).deliver
       redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
     else
       redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
     end
-
-    #tähän kutsu metodiin joka lähettää mailit
 
   end
 

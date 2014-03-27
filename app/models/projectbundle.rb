@@ -20,6 +20,7 @@ end
 
 class Projectbundle < ActiveRecord::Base
   has_many :projects
+  has_many :enrollments, through: :projects
   validates :name, presence: true
   validates :description, presence: true
   validates_with UniqueSActiveValidator
