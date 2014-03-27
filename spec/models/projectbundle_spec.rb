@@ -15,11 +15,11 @@ describe Projectbundle do
   end
 
   it "is not created if some else bundle already is active" do
-    p = Projectbundle.create(name:"Testbundle", description: "testing", active:true)
+    p = FactoryGirl.create(:projectbundle)
 
     s = Projectbundle.create(name:"FailiingTest", description: "testing failure", active:true)
 
-    expect(s.valid?).to be(false)
+    expect(s.valid?).to be_false
     expect(Projectbundle.count).to eq(1)
   end
 

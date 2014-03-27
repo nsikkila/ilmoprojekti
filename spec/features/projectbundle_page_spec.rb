@@ -1,3 +1,4 @@
+=begin
 require 'spec_helper'
 include TestHelper
 
@@ -13,3 +14,4 @@ describe "Projectpundle page" do
 
   end
 end
+=end
