@@ -133,35 +133,12 @@
 
 <script>
 
-    function setForced(element) {
-        $.ajax({
-            type: "POST",
-            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: "setforced",
-            data: {enrollment_id: enrollment_id, project_id: project_id, forced: forced }
-        })
-                .done(function (msg) {
-                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
-                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
-                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
-                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
 
-                    if (msg.newForced == "true") {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", false)");
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("forced",true);
-
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setForced("+enrollment_id+", "+project_id+", true)");
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
-                    }
-                });
-
-    }
 
     function changeStatus(element) {
         var elementClass = element.attr('class');
 
-        if (elementClass.indexOf('forceable') >= 0) {
+        if (elementClass.indexOf('wanted') == -1) {
             if (elementClass.indexOf('forced') >= 0) {
                 setForcedStatus(element, false);
             } else {
@@ -210,97 +187,55 @@
 
     function refreshAll() {
         refreshPriorityCells();
+        refreshSummaryCells();
     }
 
     function refreshPriorityCells() {
-        $( ".prioritycell" ).each(function(index, element) {
-            element_id = $(this).attr("id").split("-");
-            enrollment_id = element_id[0];
-            project_id = element_id[1];
-
-            $.ajax({
-                async: false,
-                type: "GET",
-                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-                url: "getstatus/"+enrollment_id+"/"+project_id
-            })
-                    .done(function(msg) {
-                        if ($(element).attr('class').indexOf('note') >= 0) {
-                            $(element).attr('class', 'prioritycell note');
-
-                        } else {
-                            $(element).attr('class', 'prioritycell');
-                        }
-
-                        if (msg.currentStatus == 'none') {
-                            $(element).toggleClass('forceable', true);
-                        } else if (msg.currentStatus == 'forced') {
-                            $(element).toggleClass('forceable', true);
-                            $(element).toggleClass('forced', true);
-                        } else if (msg.currentStatus == 'accepted') {
-                            $(element).toggleClass('accepted', true);
-                        } else if (msg.currentStatus == 'notAccepted') {
-                            $(element).toggleClass('accepted', false);
-                        }
-
-                    });
-        });
-
-    }
-
-    function plaa() {
         $.ajax({
-            type: "POST",
+            async: false,
+            type: "GET",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: "setstatus",
-            data: { enrollment_id: enrollment_id, project_id: project_id, status: status }
+            url: "getstatuses/"
         })
-                .done(function( msg ) {
-                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
-                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
-                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
-                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
-                    //Sets onClick
-                    if (msg.newStatus == "true") {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
-                    }
+                .done(function(msg) {
+                    $('.prioritycell').each(function(index, element) {
 
-                    //Toggles accepted
-                    if (msg.newStatus == "true") {
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
-                    } else {
-                        $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
-                    }
-                });
-    };
+                        element = $(this);
 
-    function refreshCells() {
+                        if (element.attr('class').indexOf('note') >= 0) {
+                            element.attr('class', 'prioritycell note');
 
-        $( ".prioritycell" ).each(function(index, element) {
-            element_id = $(this).attr("id").split("-");
-            enrollment_id = element_id[0];
-            project_id = element_id[1];
-
-            $.ajax({
-                async: false,
-                type: "GET",
-                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-                url: "getstatus/"+enrollment_id+"/"+project_id
-            })
-                    .done(function(msg) {
-                        if (msg.currentStatus == "true") {
-                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",true);
-                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", false)");
                         } else {
-                            $("#"+enrollment_id +"-"+project_id).toggleClass("accepted",false);
-                            $("#"+enrollment_id +"-"+project_id).attr("onclick", "setStatus("+enrollment_id+", "+project_id+", true)");
-
+                            element.attr('class', 'prioritycell');
                         }
                     });
-        });
+
+                    $.each(msg, function(index, item) {
+
+                        var selector = item.enrollment_id + "-" + item.project_id;
+
+                        var element = $("#"+selector);
+
+                        if (item.forced) {
+                            element.toggleClass('forced', true);
+                            element.toggleClass('wanted', false);
+                        } else if (item.status) {
+                            element.toggleClass('accepted', true);
+                            element.toggleClass('wanted', true);
+                        } else if (!item.status) {
+                            element.toggleClass('accepted', false);
+                            element.toggleClass('wanted', true);
+                        } else {
+                            element.toggleClass('forced', false);
+                            element.toggleClass('wanted', false);
+                        }
+
+
+                    });
+
+                });
     }
+
 
     $('.prioritycell').bind('contextmenu', function() {
         $(this).toggleClass('note');
