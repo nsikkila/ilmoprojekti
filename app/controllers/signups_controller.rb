@@ -3,6 +3,8 @@ class SignupsController < ApplicationController
   before_action only: [:edit, :create, :update, :destroy] do
     is_at_least(:teacher)
   end
+
+  before_action :check_expire
   
   # GET /signups
   # GET /signups.json

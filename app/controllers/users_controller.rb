@@ -7,6 +7,8 @@ class UsersController < ApplicationController
      current_user.id == params[:id].to_i or is_at_least(:admin)
   end
 
+  before_action :check_expire
+
   # GET /users
   # GET /users.json
   def index
