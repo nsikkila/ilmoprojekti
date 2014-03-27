@@ -18,7 +18,7 @@ before_action :check_expire
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
       else
-        redirect_to :root, notice: "Ei voimassaolevaa projektiryhmää."
+        redirect_to :root, notice: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
       end
     end
   end
