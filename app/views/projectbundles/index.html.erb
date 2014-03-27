@@ -31,11 +31,6 @@
         <td><%= link_to 'Muokkaa', edit_projectbundle_path(projectbundle) %></td>
         <td><%= link_to 'Poista', projectbundle, method: :delete, data: { confirm: 'Haluatko varmasti poistaa projektiryhmän?' } %></td>
 
-        <% if not current_user.nil? and compare_accesslevel(:admin) %>
-            <% if projectbundle.verified = false %>
-            <td>[<%= link_to 'Vahvista', projectbundles_path+"/"+projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
-            <% end %>
-        <% end %>
       </tr>
     <% end %>
   </tbody>
