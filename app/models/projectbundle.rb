@@ -1,7 +1,30 @@
+
+class UniqueSActiveValidator < ActiveModel::Validator
+
+
+  def validate(record)
+    if record.active?
+    projectbundles = Projectbundle.all
+    at_least_one_true = false
+    projectbundles.each do |projectbundle|
+      if projectbundle.active?
+        at_least_one_true = true
+      end
+    end
+    if at_least_one_true
+      record.errors[:projectbundle] <<"Vain yksi projektiryhmä voi olla kerrallaan aktiivinen"
+    end
+end
+end
+end
+
 class Projectbundle < ActiveRecord::Base
   has_many :projects
   validates :name, presence: true
   validates :description, presence: true
+  validates_with UniqueSActiveValidator
+
+
 
   def to_s
     "#{name}"

@@ -21,7 +21,11 @@
       <tr>
         <td><%= projectbundle.name %></td>
         <td><%= projectbundle.description %></td>
-        <td><%= radio_button_tag(:active,"aktiivinen") %></td>
+        <% if projectbundle.active? %>
+        <td>Kyllä</td>
+        <% else %>
+            <td>Ei</td>
+        <% end %>
         <% if projectbundle.verified = false %>
         <td>Ei</td>
         <% else %>

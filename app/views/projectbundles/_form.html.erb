@@ -33,11 +33,9 @@
     <%= f.label :active ,'Aktiivinen'%><br>
     <%= f.check_box :active %>
   </div>
+
   <div class="actions">
     <%= f.submit 'Tallenna projektiryhmä' %>
   </div>
-    <% @projectbundles.each do |projectbundle| %>
-        <%= projectbundle.name %>
-    <%= "kukkuu" %>
-    <%  end %>
+
 <% end %>
