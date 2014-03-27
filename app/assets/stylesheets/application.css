@@ -81,19 +81,31 @@ h1, h2 {
 
 }
 
-.prioritycell.forced {
+.forced {
     background-color: orangered;
 }
 
-.prioritycell.accepted {
+.accepted {
     background-color: lightgreen;
 }
 
-.forced {
-    background-color: orange;
+.note {
+    background-color: violet;
 }
 
-.note {
+.legend {
+   border: 1px solid black;
+}
+
+.legend.forced {
+    background-color: orangered;
+}
+
+.legend.accepted {
+    background-color: lightgreen;
+}
+
+.legend.note {
     background-color: violet;
 }
 
