@@ -14,6 +14,14 @@ describe Projectbundle do
 
   end
 
+  it "is not created if some else bundle already is active" do
+    p = Projectbundle.create(name:"Testbundle", description: "testing", active:true)
+
+    s = Projectbundle.create(name:"FailiingTest", description: "testing failure", active:true)
+
+    expect(s.valid?).to be(false)
+    expect(Projectbundle.count).to eq(1)
+  end
 
 
 
