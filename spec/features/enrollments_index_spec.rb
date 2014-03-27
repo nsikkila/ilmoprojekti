@@ -16,8 +16,17 @@ describe "Enrollment table view" do
     visit enrollments_path
 
     click_link("Vahvista")
-    @projectbundle.verified.should == true
+    #@projectbundle.verified.should == true
 
+    expect(page).to have_content("Projektiryhmä vahvistettu!")
+  end
+
+  it "does not display the verification button if user is not logged in as admin" do
+    signin(username:@user.username, password:@user.password)
+    create_signups_for_projectbundle(@projectbundle)
+    visit enrollments_path
+
+    expect(page).not_to have_content("Vahvista")
   end
 
   it "can not be accessed if not logged in" do
