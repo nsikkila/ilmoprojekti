@@ -93,7 +93,9 @@ describe "Projects page" do
     end
 
     it "can be accessed and succesfully edited with proper values" do
-      sign_in_and_initialize
+      #sign_in_and_initialize
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
       create_objects_for_frontpage
       visit edit_project_path(1)
       fill_in('project_name', with:"Testiprojekti1")
@@ -115,7 +117,11 @@ describe "Projects page" do
     end
 
     it "cannot be edited with improper values" do
-      sign_in_and_initialize
+      #sign_in_and_initialize
+
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+
       create_objects_for_frontpage
       visit edit_project_path(1)
       fill_in('project_name', with:"")
@@ -168,9 +174,9 @@ describe "Projects page" do
   describe "Project page" do
 
     it "shows list of students who have signed up for the project" do
-      @enrollment = create_enrollment_with_signups
-      enroll=create_another_enrollment_with_signups
-
+      #@enrollment = create_enrollment_with_signups
+      #enroll=create_another_enrollment_with_signups
+      create_two_enrollments_with_signups
       visit project_path(1)
 
       expect(page).to have_content("Jaska Jokunen")
