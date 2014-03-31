@@ -98,7 +98,7 @@ def setforced
       signup.destroy
     end
 
-    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newForced\":\"#{new_forced}\"}"
+    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newForced\":\"#{new_forced}\"}"
   end
 end
 
@@ -112,7 +112,7 @@ def setstatus
     signup.status = new_status
     signup.save
 
-    render :json => "\"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\"}"
+    render :json => "\"magicNumber\":\"#{enrollment.magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\"}"
   end
 end
 

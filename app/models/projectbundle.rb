@@ -24,10 +24,8 @@ class Projectbundle < ActiveRecord::Base
   has_many :enrollments, -> { distinct }, through: :projects
   validates :name, presence: true
   validates :description, presence: true
-  #validates_with UniqueSActiveValidator
-  #validates_uniqueness_of :active, conditions: -> { where.not(active: false) }
-  #validates_uniqueness_of :name
   validates_uniqueness_of :active, :if => :active
+
 
 
 

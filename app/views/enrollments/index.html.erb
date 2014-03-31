@@ -151,6 +151,7 @@
                 setStatus(element, true);
             }
         }
+        refreshAll();
     }
 
     function setForcedStatus(element, newForced) {
@@ -165,7 +166,6 @@
             data: {enrollment_id: enrollment_id, project_id: project_id, forced: newForced }
         })
                 .done(function(msg) {
-                    refreshAll();
                 });
     }
 
@@ -180,14 +180,13 @@
             data: {enrollment_id: enrollment_id, project_id: project_id, status: newStatus }
         })
                 .done(function(msg) {
-                    refreshAll();
                 });
 
     }
 
     function refreshAll() {
         refreshPriorityCells();
-        refreshSummaryCells();
+        //refreshSummaryCells();
     }
 
     function refreshPriorityCells() {
@@ -237,7 +236,7 @@
     }
 
 
-    $('.prioritycell').bind('contextmenu', function() {
+    $('.prioritycell').bind('contextmenu', function(event) {
         $(this).toggleClass('note');
         event.preventDefault();
     })
