@@ -72,10 +72,5 @@ class Enrollment < ActiveRecord::Base
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
 
-  def to_json
-    options = {only: [:id], methods: [:accepted_amount, :magic_number]}
-    super(options)
-  end
-
 
 end

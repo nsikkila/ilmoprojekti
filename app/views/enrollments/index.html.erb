@@ -189,14 +189,8 @@
         refreshSummaryCells();
     }
 
-    function refreshEnrollmentSummaries() {
-        $.ajax
-    }
 
     function refreshSummaryCells() {
-        refreshEnrollmentSummaries();
-        refreshProjectSummaries();
-        /*
         $.ajax({
             async: false,
             type: "GET",
@@ -204,25 +198,28 @@
             url: 'getsummaries/'
         })
                 .done(function(msg) {
+                    var enrollments = msg[0];
+                    var projects = msg[1];
+                    var selector;
 
-                    var enrollments = msg.enrollments;
-                    var projects = msg.projects;
+                    $.each(enrollments, function(index, enrollment) {
 
-                    $('.summaryCell').each(function(index, element) {
-                        element = $(this);
+                        selector = '#'+enrollment.id+'-etotal';
+                        $(selector).html(enrollment.accepted_amount);
 
-                        var elementIdArray = element.attr('id').split("-");
-                        var enrollment_or_project = elementIdArray[0];
-                        var summary_id = elementIdArray[1];
-
-                        console.log(elementIdArray);
-
-                        if (summary_id == 'ptotal') {
-
-                        }
-
+                        selector = '#'+enrollment.id+'-escore';
+                        $(selector).html(enrollment.magic_number);
                     });
-                }); */
+
+                    $.each(projects, function(index, project) {
+                        selector = '#'+project.id+'-pfill';
+                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                        selector = '#'+project.id+'-ptotal';
+                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                    })
+
+                });
     }
 
     function refreshPriorityCells() {
@@ -250,7 +247,11 @@
                         var selector = item.enrollment_id + "-" + item.project_id;
 
                         var element = $("#"+selector);
-
+                        /*
+                        if (item.priority > 0) {
+                            element.html(item.priority);
+                        }
+*/
                         if (item.forced) {
                             element.toggleClass('forced', true);
                             element.toggleClass('wanted', false);
