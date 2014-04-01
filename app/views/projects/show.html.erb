@@ -22,6 +22,8 @@
   <%= @project.maxstudents %>
 </p>
 
+<%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => @project.projectpicture.id) %>
+
 <h2>Projektiin halukkuutensa ilmoittaneet: </h2>
 <table>
   <tr>

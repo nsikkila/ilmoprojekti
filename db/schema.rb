@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325112012) do
+ActiveRecord::Schema.define(version: 20140401115608) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 20140325112012) do
     t.boolean  "verified"
   end
 
+  create_table "projectpictures", force: true do |t|
+    t.string   "filename"
+    t.string   "content_type"
+    t.binary   "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "project_id"
+  end
+
   create_table "projects", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -42,6 +51,7 @@ ActiveRecord::Schema.define(version: 20140325112012) do
     t.integer  "user_id"
     t.integer  "projectbundle_id"
     t.string   "website"
+    t.integer  "projectpicture_id"
   end
 
   create_table "signups", force: true do |t|

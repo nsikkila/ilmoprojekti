@@ -5,6 +5,7 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :signups
 
+  get 'projectpictures/show' => 'projectpictures#show'
   resources :projects
 
   resources :users

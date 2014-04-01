@@ -38,6 +38,12 @@
       <%= f.select :projectbundle_id, options_from_collection_for_select(@bundle, :id, :to_s) %>
     </div>
 
+    <div class="field">
+      <%= f.label :projectpicture, 'Projektin kuva'%>
+      <br>
+      <%= f.file_field 'projectpicture' %>
+    </div>
+
     <div class="actions">
       <%= f.submit 'Luo projekti'%>
     </div>
