@@ -133,14 +133,8 @@
 
 <script>
 
-    var UItimeout = 500; //ms
-    var autoTimeout = 5000; //ms
-    var UItimeoutHandle, autoTimeoutHandle;
-
-    function resetRefreshTimeout(time) {
-        clearTimeout(timeoutHandle);
-        timeoutHandle = setTimeout(refreshAll, time);
-    }
+    var UItimeout = 300; //ms
+    var UItimeoutHandle;
 
     function setForcedClass(element) {
         element.toggleClass('forced', true);
@@ -222,8 +216,6 @@
                     })
 
                 });
-
-        autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
     }
 
 
@@ -256,10 +248,9 @@
                 });
 
     }
-    
-    function changeStatus(element) {
-        clearTimeout(autoTimeoutHandle);
 
+    function changeStatus(element) {
+        clearTimeout(UItimeoutHandle);
         var elementClass = element.attr('class');
 
         if (elementClass.indexOf('wanted') == -1) {
