@@ -11,7 +11,7 @@ class ProjectbundlesController < ApplicationController
   # GET /projectbundles
   # GET /projectbundles.json
   def index
-    @projectbundles = Projectbundle.all
+    @projectbundles = Projectbundle.all.order(created_at: :desc)
   end
 
   # GET /projectbundles/1

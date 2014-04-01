@@ -1,3 +1,4 @@
+=begin signup ei yksittäisenä käytössä
 require 'spec_helper'
 
 describe "Signup form" do
@@ -6,3 +7,4 @@ describe "Signup form" do
 
 
 end
+=end

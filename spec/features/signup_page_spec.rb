@@ -1,3 +1,4 @@
+=begin signup ei yksittäisenä käytössä
 require 'spec_helper'
 include TestHelper
 
@@ -30,3 +31,4 @@ describe "Signup page" do
   end
 
 end
+=end

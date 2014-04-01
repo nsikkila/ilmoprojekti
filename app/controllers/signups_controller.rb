@@ -4,6 +4,10 @@ class SignupsController < ApplicationController
     is_at_least(:teacher)
   end
 
+#Signuppeja ei käsitellä yksittäisinä. Ainoastaan pakotuksen yhteydessä luodaan ja poistetaan yksittäisiä signuppeja
+#ja sekin hoidetaan suoraan olioita käpistelemällä.
+
+=begin
   before_action :check_expire
   
   # GET /signups
@@ -74,4 +78,6 @@ class SignupsController < ApplicationController
     def signup_params
       params.require(:signup).permit(:student_id, :project_id)
     end
+
+=end
 end
