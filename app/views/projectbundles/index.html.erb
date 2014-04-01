@@ -4,6 +4,8 @@
   käsittelee kyseistä projektiryhmää.</p>
 <p>Projektit, opiskelijoiden ilmoittautumiset ja ryhmäjaot ovat <b>projektiryhmäkohtaisia</b></p>
 
+<%= link_to 'Uusi projektiryhmä', new_projectbundle_path %>
+
 <table>
   <thead>
   <tr>
@@ -48,7 +50,6 @@
 
 <br>
 
-<%= link_to 'Uusi projektiryhmä', new_projectbundle_path %>
 <% content_for :header do %>
     <%= "Olemassa olevat projektiryhmät" %>
 <% end %>
