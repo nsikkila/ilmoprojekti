@@ -72,7 +72,7 @@
         <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-ptotal">
+            <td class="summaryCell" id="<%= project.id %>-ptotal">
               <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
             </td>
         <% end %>
@@ -84,7 +84,7 @@
         <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-pfill">
+            <td class="summaryCell" id="<%= project.id %>-pfill">
               <%= project.amount_of_accepted_students - project.maxstudents %>
             </td>
         <% end %>
@@ -110,10 +110,10 @@
                 </td>
 
             <% end %>
-            <td id="<%= enrollment.id %>-etotal" class="tableSummary">
+            <td id="<%= enrollment.id %>-etotal" class="summaryCell tableSummary">
               <%= enrollment.accepted_amount %>
             </td>
-            <td id="<%= enrollment.id %>-escore" class="tableSummary">
+            <td id="<%= enrollment.id %>-escore" class="summaryCell tableSummary">
               <%= enrollment.magic_number %>
             </td>
           </tr>
@@ -186,7 +186,43 @@
 
     function refreshAll() {
         refreshPriorityCells();
-        //refreshSummaryCells();
+        refreshSummaryCells();
+    }
+
+    function refreshEnrollmentSummaries() {
+        $.ajax
+    }
+
+    function refreshSummaryCells() {
+        refreshEnrollmentSummaries();
+        refreshProjectSummaries();
+        /*
+        $.ajax({
+            async: false,
+            type: "GET",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: 'getsummaries/'
+        })
+                .done(function(msg) {
+
+                    var enrollments = msg.enrollments;
+                    var projects = msg.projects;
+
+                    $('.summaryCell').each(function(index, element) {
+                        element = $(this);
+
+                        var elementIdArray = element.attr('id').split("-");
+                        var enrollment_or_project = elementIdArray[0];
+                        var summary_id = elementIdArray[1];
+
+                        console.log(elementIdArray);
+
+                        if (summary_id == 'ptotal') {
+
+                        }
+
+                    });
+                }); */
     }
 
     function refreshPriorityCells() {
