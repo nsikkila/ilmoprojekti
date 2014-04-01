@@ -23,6 +23,7 @@ Ilmoprojekti::Application.routes.draw do
   get 'getstatus/:enrollment_id/:project_id', to: 'enrollments#getstatus'
   post 'setforced', to: 'enrollments#setforced'
   get 'getstatuses', to: 'enrollments#get_statuses'
+  get 'getsummaries', to: 'enrollments#get_summaries'
 
   root 'enrollments#new'
 

@@ -72,7 +72,7 @@
         <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-ptotal">
+            <td class="summaryCell" id="<%= project.id %>-ptotal">
               <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
             </td>
         <% end %>
@@ -84,7 +84,7 @@
         <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-pfill">
+            <td class="summaryCell" id="<%= project.id %>-pfill">
               <%= project.amount_of_accepted_students - project.maxstudents %>
             </td>
         <% end %>
@@ -110,10 +110,10 @@
                 </td>
 
             <% end %>
-            <td id="<%= enrollment.id %>-etotal" class="tableSummary">
+            <td id="<%= enrollment.id %>-etotal" class="summaryCell tableSummary">
               <%= enrollment.accepted_amount %>
             </td>
-            <td id="<%= enrollment.id %>-escore" class="tableSummary">
+            <td id="<%= enrollment.id %>-escore" class="summaryCell tableSummary">
               <%= enrollment.magic_number %>
             </td>
           </tr>
@@ -186,7 +186,40 @@
 
     function refreshAll() {
         refreshPriorityCells();
-        //refreshSummaryCells();
+        refreshSummaryCells();
+    }
+
+
+    function refreshSummaryCells() {
+        $.ajax({
+            async: false,
+            type: "GET",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: 'getsummaries/'
+        })
+                .done(function(msg) {
+                    var enrollments = msg[0];
+                    var projects = msg[1];
+                    var selector;
+
+                    $.each(enrollments, function(index, enrollment) {
+
+                        selector = '#'+enrollment.id+'-etotal';
+                        $(selector).html(enrollment.accepted_amount);
+
+                        selector = '#'+enrollment.id+'-escore';
+                        $(selector).html(enrollment.magic_number);
+                    });
+
+                    $.each(projects, function(index, project) {
+                        selector = '#'+project.id+'-pfill';
+                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                        selector = '#'+project.id+'-ptotal';
+                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                    })
+
+                });
     }
 
     function refreshPriorityCells() {
@@ -214,7 +247,11 @@
                         var selector = item.enrollment_id + "-" + item.project_id;
 
                         var element = $("#"+selector);
-
+                        /*
+                        if (item.priority > 0) {
+                            element.html(item.priority);
+                        }
+*/
                         if (item.forced) {
                             element.toggleClass('forced', true);
                             element.toggleClass('wanted', false);

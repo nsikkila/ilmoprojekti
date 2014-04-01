@@ -120,7 +120,7 @@ def get_statuses
   bundle = Projectbundle.find_by_active(true)
   signups = bundle.signups
 
-  render :json => signups.to_json( only: [:enrollment_id, :project_id, :status, :forced])
+  render :json => signups.to_json( only: [:enrollment_id, :project_id, :status, :forced, :priority])
 end
 
 def get_summaries
@@ -128,9 +128,11 @@ def get_summaries
   enrollments = bundle.enrollments
   projects = bundle.projects
 
-  response = { :enrollments => enrollments, :projects => projects }
+  enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
+  projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
+  response = [enrollments_json, projects_json]
 
-  render :json => response.to_json
+  render :json => response
 end
 
 def update
