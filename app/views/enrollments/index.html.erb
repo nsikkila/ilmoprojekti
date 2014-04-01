@@ -104,9 +104,9 @@
               <%= enrollment.studentnumber %>
             </td>
             <% @projects.each do |project| %>
-                <% signup = enrollment.signups.find_by(project_id:project.id) %>
+
                 <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="changeStatus($(this))" class="prioritycell">
-                  <%= signup.priority unless signup.nil? or signup.priority == 0 %>
+
                 </td>
 
             <% end %>
@@ -133,8 +133,34 @@
 
 <script>
 
+    var wSem, rSem = 1;
+
+    function wSemWait() {
+        wSem = wSem - 1;
+        while (wSem < 0) {
+
+        }
+        return true;
+    }
+
+    function wSemSignal() {
+        wSem = wSem + 1;
+    }
+    function rSemWait() {
+        rSem = rSem - 1;
+        while (rSem < 0) {
+
+        }
+        return true;
+    }
+
+    function rSemSignal() {
+        rSem = rSem + 1;
+    }
+
+    var autoTimeout = 5000; //ms
     var UItimeout = 300; //ms
-    var UItimeoutHandle;
+    var UItimeoutHandle, autoTimeoutHandle;
 
     function setForcedClass(element) {
         element.toggleClass('forced', true);
@@ -160,6 +186,10 @@
     }
 
     function refreshAll() {
+        clearTimeout(autoTimeoutHandle);
+        console.log('refresh');
+        wSemWait();
+        rSemWait();
         $.ajax({
             type: "GET",
             cache: false,
@@ -214,8 +244,12 @@
                         selector = '#'+project.id+'-ptotal';
                         $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
                     })
-
+                    rSemSignal();
+                    wSemSignal();
+                    autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                 });
+
+
     }
 
 
@@ -250,7 +284,8 @@
     }
 
     function changeStatus(element) {
-        clearTimeout(UItimeoutHandle);
+        clearTimeout(autoTimeoutHandle);
+        wSemWait();
         var elementClass = element.attr('class');
 
         if (elementClass.indexOf('wanted') == -1) {
@@ -270,7 +305,8 @@
                 setStatus(element, true);
             }
         }
-        setTimeout(refreshAll, UItimeout);
+        wSemSignal();
+        refreshAll();
     }
 
     $('.prioritycell').bind('contextmenu', function(event) {

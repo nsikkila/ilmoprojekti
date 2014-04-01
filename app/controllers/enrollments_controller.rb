@@ -16,7 +16,7 @@ class EnrollmentsController < ApplicationController
 
       if not @projectbundle.is_signup_active
         set_projectbundle_and_projects
-        @enrollments = Enrollment.all
+        @enrollments = Enrollment.includes(:signups).all
       else
         redirect_to :root, notice: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
       end
@@ -126,7 +126,8 @@ class EnrollmentsController < ApplicationController
   end
 
   def huippu
-    bundle = Projectbundle.find_by_active(true)
+    bundle = Projectbundle.includes(:projects, :signups, :enrollments).find_by_active(true)
+
     signups = bundle.signups
     enrollments = bundle.enrollments
     projects = bundle.projects

@@ -49,9 +49,18 @@ class Enrollment < ActiveRecord::Base
   end
 
   def magic_number
+    self.signups.where(status:true).average('priority')
+  end
+
+  def return_projectbundle
+    #byebug
+    self.projects.first.projectbundle
+  end
+
+  def self.compute_magic_number(signs)
     number = 0
     amount = 0
-    signups.each do |signup|
+    signs.each do |signup|
       if signup.status
         number = number + signup.priority
         amount = amount + 1
@@ -61,11 +70,6 @@ class Enrollment < ActiveRecord::Base
       return 0
     end
     (number.to_f/amount).round(1)
-  end
-
-  def return_projectbundle
-    #byebug
-    self.projects.first.projectbundle
   end
 
   def self.create_hash(enrollment)
