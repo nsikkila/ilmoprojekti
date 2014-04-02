@@ -32,6 +32,7 @@ class ProjectbundlesController < ApplicationController
   # POST /projectbundles.json
   def create
     @projectbundle = Projectbundle.new(projectbundle_params)
+    @projectbundle.verified = false
     respond_to do |format|
       if @projectbundle.save
         format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully created.' }
@@ -72,7 +73,7 @@ class ProjectbundlesController < ApplicationController
     @projectbundle = Projectbundle.find_by_active(true)
 
     if (@projectbundle.signup_end < Date.today)
-      @projectbundle.verified = false
+      @projectbundle.verified = true
       @projectbundle.save
       @enrollments = @projectbundle.enrollments
       if not @enrollments.nil?
