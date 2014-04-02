@@ -146,19 +146,18 @@ span.tooltip:after {
 }
 
 #navi {
+    max-width: 100%;
     font-size: 15px;
-    border-style: solid;
-    border: 3px;
-    border-color: white;
+    color: white;
     background-color: rgb(47, 99, 148);
     display: inline;
     padding-top: 3px;
     padding-left: 2px;
-    margin-bottom: 10px;
 
 }
 
 #navi a {
+    align: inline-block;
     color: #ffffff;
 }
 
@@ -166,6 +165,6 @@ span.tooltip:after {
     color: black;
 }
 #navi a:hover {
-    background-color: #4080bf;
+    color:#2F6394;
 
 }

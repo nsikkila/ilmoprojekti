@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to @project, notice: 'Projekti onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @project }
       else
         @bundle = Projectbundle.all
@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
     @bundle = Projectbundle.all
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
