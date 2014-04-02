@@ -72,7 +72,7 @@ class ProjectbundlesController < ApplicationController
     @projectbundle = Projectbundle.find_by_active(true)
 
     if (@projectbundle.signup_end < Date.today)
-      @projectbundle.verified = true
+      @projectbundle.verified = false
       @projectbundle.save
       @enrollments = @projectbundle.enrollments
       if not @enrollments.nil?
