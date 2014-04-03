@@ -54,20 +54,24 @@ class ProjectsController < ApplicationController
     #@projectpicture = @project.projectpicture
 
     respond_to do |format|
-      if @project.save
-        @projectpicture = Projectpicture.new
+      if @project.valid?
+        if not params[:project][:projectpicture].nil?
+          @projectpicture = Projectpicture.new
 
-        @projectpicture.uploaded_file = params[:project][:projectpicture]
+          @projectpicture.uploaded_file = params[:project][:projectpicture]
 
-        if @projectpicture.save
-          puts("##########")
-          puts(@project.id)
-          puts(@projectpicture.id)
-          @project.projectpicture = @projectpicture
-          @projectpicture.project = @project
-        else
-          redirect_to :root
+          if @projectpicture.save
+            @project.projectpicture = @projectpicture
+            @projectpicture.project = @project
+            @projectpicture.save
+          else
+            @bundle = Projectbundle.all
+            render :new, :notice => "Kuvan tallentaminen ei onnistunut."
+            return
+          end
         end
+
+        @project.save
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render action: 'show', status: :created, location: @project }
       else
@@ -84,6 +88,31 @@ class ProjectsController < ApplicationController
     @bundle = Projectbundle.all
     respond_to do |format|
       if @project.update(project_params)
+
+        @projectpicture = Projectpicture.find_by_project_id(@project.id)
+
+        if not params[:project][:projectpicture].nil?
+
+          #Jos updatessa tulee uusi kuva, poistetaan vanha
+          if not @projectpicture.nil?
+            @projectpicture.destroy
+          end
+
+          @projectpicture = Projectpicture.new
+          @projectpicture.uploaded_file = params[:project][:projectpicture]
+
+          if @projectpicture.save
+            @project.projectpicture = @projectpicture
+            @projectpicture.project = @project
+            @project.save
+            @projectpicture.save
+          else
+            @bundle = Projectbundle.all
+            format.html { render action: 'edit' }
+            return
+          end
+
+        end
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else

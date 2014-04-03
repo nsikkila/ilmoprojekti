@@ -1,6 +1,9 @@
 class Projectpicture < ActiveRecord::Base
   belongs_to :project
 
+  #validates :filename, format: {with: /A\.(png|jpg|jpeg|gif)\z/i, message: "placeholder väärä formaatti" }
+  validates_format_of :content_type, :with => /\Aimage/, :message  => "voit ladata vain kuvia"
+
   def uploaded_file=(incoming_file)
     self.filename = incoming_file.original_filename
     self.content_type = incoming_file.content_type
