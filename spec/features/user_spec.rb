@@ -50,7 +50,7 @@ describe "User" do
 		it "can not access user creation" do
 			visit new_user_path
 
-			expect(current_path).to eq('/')
+			expect(current_path).to eq('/signin')
 		end
 
 		it "can sign out" do

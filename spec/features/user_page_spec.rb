@@ -8,7 +8,7 @@ describe "User page" do
 
     visit users_path
 
-    expect(page).not_to have_content "Käyttäjät"
+    expect(page).to have_content('Sinun täytyy kirjautua sisään')
     expect(page).not_to have_content "Maija"
 
   end
@@ -19,7 +19,7 @@ describe "User page" do
     signin(username:user.username, password:user.password)
 
     visit users_path
-    expect(page).not_to have_content "Käyttäjät"
+    expect(page).to have_content "Vain järjestelmävalvojalla"
 
   end
 
