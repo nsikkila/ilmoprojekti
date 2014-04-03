@@ -73,7 +73,6 @@
         <% @projects.each do |project| %>
 
             <td class="summaryCell" id="<%= project.id %>-ptotal">
-              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
             </td>
         <% end %>
         <td></td>
@@ -85,7 +84,6 @@
         <% @projects.each do |project| %>
 
             <td class="summaryCell" id="<%= project.id %>-pfill">
-              <%= project.amount_of_accepted_students - project.maxstudents %>
             </td>
         <% end %>
         <td></td>
@@ -104,17 +102,14 @@
               <%= enrollment.studentnumber %>
             </td>
             <% @projects.each do |project| %>
-                <% signup = enrollment.signups.find_by(project_id:project.id) %>
+
                 <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="changeStatus($(this))" class="prioritycell">
-                  <%= signup.priority unless signup.nil? or signup.priority == 0 %>
                 </td>
 
             <% end %>
             <td id="<%= enrollment.id %>-etotal" class="summaryCell tableSummary">
-              <%= enrollment.accepted_amount %>
             </td>
             <td id="<%= enrollment.id %>-escore" class="summaryCell tableSummary">
-              <%= enrollment.magic_number %>
             </td>
           </tr>
       <% end %>
@@ -137,26 +132,96 @@
 
 <script>
 
+    var autoTimeout = 5000; //ms
+    var UItimeout = 300; //ms
+    var UItimeoutHandle, autoTimeoutHandle;
 
-
-    function changeStatus(element) {
-        var elementClass = element.attr('class');
-
-        if (elementClass.indexOf('wanted') == -1) {
-            if (elementClass.indexOf('forced') >= 0) {
-                setForcedStatus(element, false);
-            } else {
-                setForcedStatus(element, true);
-            }
-        } else {
-            if (elementClass.indexOf('accepted') >= 0) {
-                setStatus(element, false);
-            } else {
-                setStatus(element, true);
-            }
-        }
-        refreshAll();
+    function setForcedClass(element) {
+        element.toggleClass('forced', true);
+        element.toggleClass('wanted', false);
     }
+    function setAcceptedClass(element) {
+        element.toggleClass('accepted', true);
+        element.toggleClass('wanted', true);
+    }
+    function unSetForcedClass(element) {
+        element.toggleClass('forced', false);
+        element.toggleClass('wanted', false);
+    }
+    function unSetAcceptedClass(element) {
+        element.toggleClass('accepted', false);
+        element.toggleClass('wanted', true);
+    }
+
+    function resetForcedStatuses() {
+        $('.prioritycell.forced').each(function() {
+            unSetForcedClass($(this));
+        });
+    }
+
+    function refreshAll() {
+        clearTimeout(autoTimeoutHandle);
+        console.log('refresh');
+        $.ajax({
+            type: "GET",
+            cache: false,
+            async: false,
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "tabledata"
+        })
+                .done(function(msg) {
+                    var selector, element;
+                    var enrollments = msg[0];
+                    var projects = msg[1];
+                    var signups = msg[2];
+
+                    resetForcedStatuses();
+
+                    $.each(signups, function(index, signup) {
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+
+                        element = $(selector);
+
+                        if (signup.priority > 0) {
+                            element.html(signup.priority);
+                        }
+
+                        if (signup.forced) { //Signup is forced
+                            setForcedClass(element);
+                        } else if (signup.status) { //Not forced but status is true => accepted
+                            setAcceptedClass(element);
+                        } else if (!signup.status) { //Status is false but signup exists => not accepted
+                            unSetAcceptedClass(element);
+                        } else {
+                            alert('Error: status is unknown');
+                        }
+                    });
+
+
+                    $.each(enrollments, function(index, enrollment) {
+
+                        selector = '#'+enrollment.id+'-etotal';
+                        $(selector).html(enrollment.accepted_amount);
+
+                        selector = '#'+enrollment.id+'-escore';
+                        $(selector).html(enrollment.magic_number);
+                    });
+
+                    $.each(projects, function(index, project) {
+                        selector = '#'+project.id+'-pfill';
+                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                        selector = '#'+project.id+'-ptotal';
+                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                    })
+                    autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
+                });
+
+
+    }
+
 
     function setForcedStatus(element, newForced) {
 
@@ -188,94 +253,29 @@
 
     }
 
-    function refreshAll() {
-        refreshPriorityCells();
-        refreshSummaryCells();
+    function changeStatus(element) {
+        clearTimeout(autoTimeoutHandle);
+        var elementClass = element.attr('class');
+
+        if (elementClass.indexOf('wanted') == -1) {
+            if (elementClass.indexOf('forced') >= 0) {
+                unSetForcedClass(element);
+                setForcedStatus(element, false);
+            } else {
+                setForcedClass(element);
+                setForcedStatus(element, true);
+            }
+        } else {
+            if (elementClass.indexOf('accepted') >= 0) {
+                unSetAcceptedClass(element);
+                setStatus(element, false);
+            } else {
+                setAcceptedClass(element);
+                setStatus(element, true);
+            }
+        }
+        refreshAll();
     }
-
-
-    function refreshSummaryCells() {
-        $.ajax({
-            async: false,
-            type: "GET",
-            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: 'getsummaries/'
-        })
-                .done(function(msg) {
-                    var enrollments = msg[0];
-                    var projects = msg[1];
-                    var selector;
-
-                    $.each(enrollments, function(index, enrollment) {
-
-                        selector = '#'+enrollment.id+'-etotal';
-                        $(selector).html(enrollment.accepted_amount);
-
-                        selector = '#'+enrollment.id+'-escore';
-                        $(selector).html(enrollment.magic_number);
-                    });
-
-                    $.each(projects, function(index, project) {
-                        selector = '#'+project.id+'-pfill';
-                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
-
-                        selector = '#'+project.id+'-ptotal';
-                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
-                    })
-
-                });
-    }
-
-    function refreshPriorityCells() {
-        $.ajax({
-            async: false,
-            type: "GET",
-            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: "getstatuses/"
-        })
-                .done(function(msg) {
-                    $('.prioritycell').each(function(index, element) {
-
-                        element = $(this);
-
-                        if (element.attr('class').indexOf('note') >= 0) {
-                            element.attr('class', 'prioritycell note');
-
-                        } else {
-                            element.attr('class', 'prioritycell');
-                        }
-                    });
-
-                    $.each(msg, function(index, item) {
-
-                        var selector = item.enrollment_id + "-" + item.project_id;
-
-                        var element = $("#"+selector);
-                        /*
-                        if (item.priority > 0) {
-                            element.html(item.priority);
-                        }
-*/
-                        if (item.forced) {
-                            element.toggleClass('forced', true);
-                            element.toggleClass('wanted', false);
-                        } else if (item.status) {
-                            element.toggleClass('accepted', true);
-                            element.toggleClass('wanted', true);
-                        } else if (!item.status) {
-                            element.toggleClass('accepted', false);
-                            element.toggleClass('wanted', true);
-                        } else {
-                            element.toggleClass('forced', false);
-                            element.toggleClass('wanted', false);
-                        }
-
-
-                    });
-
-                });
-    }
-
 
     $('.prioritycell').bind('contextmenu', function(event) {
         $(this).toggleClass('note');
@@ -284,9 +284,8 @@
 
     $(document).ready(function() {
         refreshAll();
-
         $(function() {
-            $( document ).tooltip();
+            $( document ).tooltip({show:{delay:1000}});
         });
 
     });

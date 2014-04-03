@@ -24,6 +24,7 @@ Ilmoprojekti::Application.routes.draw do
   post 'setforced', to: 'enrollments#setforced'
   get 'getstatuses', to: 'enrollments#get_statuses'
   get 'getsummaries', to: 'enrollments#get_summaries'
+  get 'tabledata', to: 'enrollments#huippu'
 
   root 'enrollments#new'
 

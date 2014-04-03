@@ -10,8 +10,7 @@ describe "User" do
 		it "can sign in with right credentials" do
 			sign_in
 
-			expect(page).to have_content 'Tervetuloa takaisin!'
-			expect(page).to have_content 'Maija'
+			expect(page).to have_content 'MAIJA KIRJAUTUNEENA SISÄÄN'
 		end
 
 		it "can not sign in with incorrect password" do
@@ -55,10 +54,10 @@ describe "User" do
 		end
 
 		it "can sign out" do
-			click_link "Kirjaudu ulos"
+			click_link "KIRJAUDU ULOS"
 
 			expect(current_path).to eq root_path
-			expect(page).to have_content "Kirjaudu sisään"
+			expect(page).to have_content "KIRJAUDU SISÄÄN"
 		end
 
 	end

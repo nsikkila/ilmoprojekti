@@ -8,6 +8,7 @@ class EnrollmentsController < ApplicationController
 
   before_action :check_expire
 
+
   def index
     if current_user.nil? or not is_at_least(:teacher)
       redirect_to :root, alert: "Sivu on vain opettajille."
@@ -23,7 +24,6 @@ class EnrollmentsController < ApplicationController
           redirect_to :root, alert: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
         end
       end
-
     end
   end
 
@@ -92,6 +92,7 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+
   def setforced
     enrollment = Enrollment.find params[:enrollment_id]
     project = Project.find params[:project_id]
@@ -120,7 +121,7 @@ class EnrollmentsController < ApplicationController
       signup.status = new_status
       signup.save
 
-      render :json => "\"magicNumber\":\"#{enrollment.magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\"}"
+      render nothing: true
     end
   end
 
@@ -131,16 +132,19 @@ class EnrollmentsController < ApplicationController
     render :json => signups.to_json(only: [:enrollment_id, :project_id, :status, :forced, :priority])
   end
 
-  def get_summaries
-    bundle = Projectbundle.find_by_active(true)
+  def huippu
+    bundle = Projectbundle.includes(:projects, :signups, :enrollments).find_by_active(true)
+
+    signups = bundle.signups
     enrollments = bundle.enrollments
     projects = bundle.projects
-
     enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
     projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
-    response = [enrollments_json, projects_json]
+    signups_json = signups.as_json(only: [:enrollment_id, :project_id, :status, :forced, :priority])
 
+    response = [enrollments_json, projects_json, signups_json]
     render :json => response
+
   end
 
   def update
@@ -172,7 +176,9 @@ class EnrollmentsController < ApplicationController
   def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
+
       @enrollment.signups << Signup.new(priority: priority, forced: false)
+
       priority = priority + 1
     end
   end
@@ -194,7 +200,3 @@ class EnrollmentsController < ApplicationController
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
   end
-
-
-
-end
