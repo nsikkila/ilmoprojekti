@@ -79,7 +79,7 @@ class ProjectbundlesController < ApplicationController
       if not @enrollments.nil?
         EnrollmentMail.result_email_for_all(@enrollments).deliver
       end
-      redirect_to projectbundles_path, noticeS: 'Projektiryhmä vahvistettu!'
+      redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
     else
       redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
     end

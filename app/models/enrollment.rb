@@ -21,11 +21,10 @@ class UniqueSignupValidator < ActiveModel::Validator
   end
 end
 
-
 class Enrollment < ActiveRecord::Base
   belongs_to :projectbundle
   has_many :projects, through: :signups
-  has_many :signups, order: 'id ASC', dependent: :destroy
+  has_many :signups, -> { order(:id => :asc) }, dependent: :destroy
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator
@@ -48,6 +47,15 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
+  def magic_number2
+    numba = self.signups.where(status:true).average('priority')
+    if numba.nil?
+      return 0
+    else
+      return numba.round(1)
+    end
+  end
+
   def magic_number
     number = 0
     amount = 0
@@ -57,20 +65,17 @@ class Enrollment < ActiveRecord::Base
         amount = amount + 1
       end
     end
-    if amount == 0
-      return 0
-    end
+    #if amount == 0
+     # return 0
+    #end
     (number.to_f/amount).round(1)
   end
 
   def return_projectbundle
-    #byebug
     self.projects.first.projectbundle
   end
 
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
-
-
 end

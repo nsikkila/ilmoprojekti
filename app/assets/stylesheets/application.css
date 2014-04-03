@@ -66,9 +66,9 @@ h1, h2 {
     -webkit-border-radius: 15px;
 }
 
-.enrollmenttable {
-    border: 1px solid black;
+#enrollmenttable {
     border-collapse: collapse;
+    border: 1px solid black;
 }
 
 .tableSummary {
@@ -76,12 +76,14 @@ h1, h2 {
 }
 
 #enrollmenttable td {
+    padding: 0px 3px 0px 2px;
     text-align: center;
     border: 1px solid black;
+    border-collapse: collapse;
 }
 
 .prioritycell {
-
+    border-collapse: collapse;
 }
 
 .forced {
