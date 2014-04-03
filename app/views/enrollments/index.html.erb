@@ -1,11 +1,14 @@
 
 <% unless @enrollments.first.nil? %>
-
+    <input id="admin" type="text" value="<%=@user_is_admin %>" hidden="hidden" />
     <% if not current_user.nil? and compare_accesslevel(:admin) %>
         <% if @projectbundle.verified == false %>
+            <% if @projectbundle.signup_is_active == true %>
+                <p id="signupActiveMessage">Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
+            <% end %>
             [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
         <% else %>
-            <p><b>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille!</b></p>
+            <p id="verifiedMessage"><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
         <% end %>
     <% end %>
     <table>
@@ -135,6 +138,7 @@
     var autoTimeout = 5000; //ms
     var UItimeout = 300; //ms
     var UItimeoutHandle, autoTimeoutHandle;
+    var modifyingAllowed, verified, admin = false;
 
     function setForcedClass(element) {
         element.toggleClass('forced', true);
@@ -161,7 +165,6 @@
 
     function refreshAll() {
         clearTimeout(autoTimeoutHandle);
-        console.log('refresh');
         $.ajax({
             type: "GET",
             cache: false,
@@ -170,53 +173,55 @@
             url: "tabledata"
         })
                 .done(function(msg) {
-                    var selector, element;
-                    var enrollments = msg[0];
-                    var projects = msg[1];
-                    var signups = msg[2];
+                        var selector, element;
+                        var enrollments = msg[0];
+                        var projects = msg[1];
+                        var signups = msg[2];
 
-                    resetForcedStatuses();
+                        resetForcedStatuses();
 
-                    $.each(signups, function(index, signup) {
-                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                        $.each(signups, function(index, signup) {
+                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                        element = $(selector);
+                            element = $(selector);
 
-                        if (signup.priority > 0) {
-                            element.html(signup.priority);
+                            if (signup.priority > 0) {
+                                element.html(signup.priority);
+                            }
+
+                            if (signup.forced) { //Signup is forced
+                                setForcedClass(element);
+                            } else if (signup.status) { //Not forced but status is true => accepted
+                                setAcceptedClass(element);
+                            } else if (!signup.status) { //Status is false but signup exists => not accepted
+                                unSetAcceptedClass(element);
+                            } else {
+                                alert('Error: status is unknown');
+                            }
+                        });
+
+
+                        $.each(enrollments, function(index, enrollment) {
+
+                            selector = '#'+enrollment.id+'-etotal';
+                            $(selector).html(enrollment.accepted_amount);
+
+                            selector = '#'+enrollment.id+'-escore';
+                            $(selector).html(enrollment.magic_number);
+                        });
+
+                        $.each(projects, function(index, project) {
+                            selector = '#'+project.id+'-pfill';
+                            $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                            selector = '#'+project.id+'-ptotal';
+                            $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                        })
+                        if (modifyingAllowed) {
+                            autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                         }
-
-                        if (signup.forced) { //Signup is forced
-                            setForcedClass(element);
-                        } else if (signup.status) { //Not forced but status is true => accepted
-                            setAcceptedClass(element);
-                        } else if (!signup.status) { //Status is false but signup exists => not accepted
-                            unSetAcceptedClass(element);
-                        } else {
-                            alert('Error: status is unknown');
-                        }
-                    });
-
-
-                    $.each(enrollments, function(index, enrollment) {
-
-                        selector = '#'+enrollment.id+'-etotal';
-                        $(selector).html(enrollment.accepted_amount);
-
-                        selector = '#'+enrollment.id+'-escore';
-                        $(selector).html(enrollment.magic_number);
-                    });
-
-                    $.each(projects, function(index, project) {
-                        selector = '#'+project.id+'-pfill';
-                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
-
-                        selector = '#'+project.id+'-ptotal';
-                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
-                    })
-                    autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                 });
 
 
@@ -250,31 +255,40 @@
         })
                 .done(function(msg) {
                 });
-
     }
 
     function changeStatus(element) {
-        clearTimeout(autoTimeoutHandle);
-        var elementClass = element.attr('class');
+        if (modifyingAllowed || (admin && verified)) {
+            clearTimeout(autoTimeoutHandle);
+            var elementClass = element.attr('class');
 
-        if (elementClass.indexOf('wanted') == -1) {
-            if (elementClass.indexOf('forced') >= 0) {
-                unSetForcedClass(element);
-                setForcedStatus(element, false);
+
+
+            if (elementClass.indexOf('wanted') == -1) {
+                if (elementClass.indexOf('forced') >= 0) {
+                    unSetForcedClass(element);
+                    setForcedStatus(element, false);
+                } else {
+                    setForcedClass(element);
+                    setForcedStatus(element, true);
+                }
             } else {
-                setForcedClass(element);
-                setForcedStatus(element, true);
+                if (elementClass.indexOf('accepted') >= 0) {
+                    unSetAcceptedClass(element);
+                    setStatus(element, false);
+                } else {
+                    setAcceptedClass(element);
+                    setStatus(element, true);
+                }
             }
+            refreshAll();
         } else {
-            if (elementClass.indexOf('accepted') >= 0) {
-                unSetAcceptedClass(element);
-                setStatus(element, false);
+            if (verified) {
+                alert('Ainoastaan admin voi tehdä muutoksia vahvistettuihin ilmottautumisiin.');
             } else {
-                setAcceptedClass(element);
-                setStatus(element, true);
+                alert('Ilmottautuminen on vielä käynnissä.');
             }
         }
-        refreshAll();
     }
 
     $('.prioritycell').bind('contextmenu', function(event) {
@@ -282,8 +296,32 @@
         event.preventDefault();
     })
 
+    function setModifiable() {
+        if ($("#admin").val == 'true') {
+            admin = true;
+        } else {
+            admin = false;
+        }
+
+        if ($("#signupActiveMessage").length > 0) {
+            modifyingAllowed = false;
+        } else {
+            modifyingAllowed = true;
+        }
+
+        if ($("#verifiedMessage").length > 0) {
+            modifyingAllowed = false;
+            verified = true;
+        } else {
+            verified = false;
+        }
+
+    }
+
     $(document).ready(function() {
         refreshAll();
+        setModifiable();
+
         $(function() {
             $( document ).tooltip({show:{delay:1000}});
         });

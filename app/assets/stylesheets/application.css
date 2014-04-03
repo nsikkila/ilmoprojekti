@@ -76,7 +76,6 @@ h1, h2 {
 }
 
 #enrollmenttable td {
-    padding: 0px 3px 0px 2px;
     text-align: center;
     border: 1px solid black;
     border-collapse: collapse;

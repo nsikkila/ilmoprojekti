@@ -3,26 +3,23 @@ class EnrollmentsController < ApplicationController
   require 'enrollment.rb'
 
   before_action only: [:destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
 
   before_action :check_expire
 
-
   def index
-    if current_user.nil? or not is_at_least(:teacher)
-      redirect_to :root, alert: "Sivu on vain opettajille."
+    if current_user.nil? or not compare_accesslevel(:teacher)
+      redirect_to :root, notice: "Sivu on vain opettajille."
     else
       @projectbundle = Projectbundle.find_by_active(true)
+
       if @projectbundle.nil?
-        redirect_to :root, alert: "Ei aktiivisia projektiryhmiä"
+        redirect_to :root, notice: "Ei aktiivisia projektiryhmiä"
       else
-        if not @projectbundle.is_signup_active
-          set_projectbundle_and_projects
-          @enrollments = Enrollment.all
-        else
-          redirect_to :root, alert: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
-        end
+        set_projectbundle_and_projects
+        @enrollments = Enrollment.all
+        @user_is_admin = compare_accesslevel(:admin)
       end
     end
   end
@@ -40,8 +37,8 @@ class EnrollmentsController < ApplicationController
   def create
     @enrollment = Enrollment.new(enrollment_params)
     @activebundle = Projectbundle.find_by_active(true)
-    if not @activebundle.is_signup_active
-      redirect_to :back, alert: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+    if not @activebundle.signup_is_active
+      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
         signup.status = false
@@ -87,18 +84,17 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if not @enrollment.return_projectbundle.is_signup_active
-      redirect_to :root, alert: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+    if not @enrollment.return_projectbundle.signup_is_active
+      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
     end
   end
-
 
   def setforced
     enrollment = Enrollment.find params[:enrollment_id]
     project = Project.find params[:project_id]
     new_forced = params[:forced]
 
-    unless enrollment.projects.first.projectbundle.is_signup_active
+    unless enrollment.projectbundle.signup_is_active
       if (new_forced == 'true')
         signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 0, status: true, forced: true)
         signup.save
@@ -107,13 +103,14 @@ class EnrollmentsController < ApplicationController
         signup.destroy
       end
 
-      render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newForced\":\"#{new_forced}\"}"
+      render nothing: true
+
     end
   end
 
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
-    unless enrollment.projects.first.projectbundle.is_signup_active
+    unless enrollment.projects.first.projectbundle.signup_is_active
       signup = enrollment.signups.find_by_project_id(params[:project_id])
       project = signup.project
 
@@ -125,26 +122,17 @@ class EnrollmentsController < ApplicationController
     end
   end
 
-  def get_statuses
-    bundle = Projectbundle.find_by_active(true)
-    signups = bundle.signups
-
-    render :json => signups.to_json(only: [:enrollment_id, :project_id, :status, :forced, :priority])
-  end
-
   def huippu
-    bundle = Projectbundle.includes(:projects, :signups, :enrollments).find_by_active(true)
-
-    signups = bundle.signups
+    bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
     enrollments = bundle.enrollments
+    signups = bundle.signups
     projects = bundle.projects
     enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
     projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
-    signups_json = signups.as_json(only: [:enrollment_id, :project_id, :status, :forced, :priority])
+    signups_json = signups.as_json( only: [:enrollment_id, :project_id, :status, :forced, :priority])
 
     response = [enrollments_json, projects_json, signups_json]
     render :json => response
-
   end
 
   def update
@@ -199,4 +187,6 @@ class EnrollmentsController < ApplicationController
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
+
   end
+end

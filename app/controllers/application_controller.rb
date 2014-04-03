@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :check_expire
   helper_method :current_user
-  helper_method :is_at_least
+  helper_method :to_root_if_not_at_least
   helper_method :compare_accesslevel
 
   def current_user
@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
 
-  def is_at_least(level)
+  def to_root_if_not_at_least(level)
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
       if list[level] > current_user.accesslevel #ohjataan käyttäjä roottiin jos ei tarpeeksi iso accesslevel
@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
       list[accesslevel] <= current_user.accesslevel
+    else
+      false
     end
   end
 
