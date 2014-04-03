@@ -128,31 +128,6 @@
 
 <script>
 
-    var wSem, rSem = 1;
-
-    function wSemWait() {
-        wSem = wSem - 1;
-        while (wSem < 0) {
-
-        }
-        return true;
-    }
-
-    function wSemSignal() {
-        wSem = wSem + 1;
-    }
-    function rSemWait() {
-        rSem = rSem - 1;
-        while (rSem < 0) {
-
-        }
-        return true;
-    }
-
-    function rSemSignal() {
-        rSem = rSem + 1;
-    }
-
     var autoTimeout = 5000; //ms
     var UItimeout = 300; //ms
     var UItimeoutHandle, autoTimeoutHandle;
@@ -183,8 +158,6 @@
     function refreshAll() {
         clearTimeout(autoTimeoutHandle);
         console.log('refresh');
-        wSemWait();
-        rSemWait();
         $.ajax({
             type: "GET",
             cache: false,
@@ -239,8 +212,6 @@
                         selector = '#'+project.id+'-ptotal';
                         $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
                     })
-                    rSemSignal();
-                    wSemSignal();
                     autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                 });
 
@@ -280,7 +251,6 @@
 
     function changeStatus(element) {
         clearTimeout(autoTimeoutHandle);
-        wSemWait();
         var elementClass = element.attr('class');
 
         if (elementClass.indexOf('wanted') == -1) {
@@ -300,7 +270,6 @@
                 setStatus(element, true);
             }
         }
-        wSemSignal();
         refreshAll();
     }
 
@@ -312,7 +281,7 @@
     $(document).ready(function() {
         refreshAll();
         $(function() {
-            $( document ).tooltip();
+            $( document ).tooltip({show:{delay:1000}});
         });
 
     });
