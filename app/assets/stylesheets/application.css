@@ -15,6 +15,9 @@
  /* Kenties koko ohjelmaan yleistettävää ccs:ää
  */
 
+body {
+    background-color: #336699;
+}
 h1, h2 {
     padding: 10px;
 }
@@ -140,4 +143,28 @@ span.tooltip:after {
     border-color: #FFFFFF transparent transparent transparent;
     top: 44px;
     left: 50px;
+}
+
+#navi {
+    max-width: 100%;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(47, 99, 148);
+    display: inline;
+    padding-top: 3px;
+    padding-left: 2px;
+
+}
+
+#navi a {
+    align: inline-block;
+    color: #ffffff;
+}
+
+#navi a:visited {
+    color: black;
+}
+#navi a:hover {
+    color:#2F6394;
+
 }

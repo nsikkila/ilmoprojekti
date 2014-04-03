@@ -32,9 +32,10 @@ class ProjectbundlesController < ApplicationController
   # POST /projectbundles.json
   def create
     @projectbundle = Projectbundle.new(projectbundle_params)
+    @projectbundle.verified = false
     respond_to do |format|
       if @projectbundle.save
-        format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully created.' }
+        format.html { redirect_to @projectbundle, notice: 'Projektiryhmä onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @projectbundle }
       else
         format.html { render action: 'new' }
@@ -48,7 +49,7 @@ class ProjectbundlesController < ApplicationController
   def update
     respond_to do |format|
       if @projectbundle.update(projectbundle_params)
-        format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully updated.' }
+        format.html { redirect_to @projectbundle, notice: 'Projektiryhmä päivitetty onnistuneesti.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

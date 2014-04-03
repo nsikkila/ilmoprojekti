@@ -1,36 +1,47 @@
-<p id="notice"><%= notice %></p>
-<h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}kello 23.59"%></h3>
-  <%= render 'form' %>
-  <br/>
-  <br/>
-  <div class="projectInfo" style="max-width: 600px;">
-    <% @projects.each do |p| %>
-        <h3><%= p.name %></h3>
-        <div id="<%= p.id %>" >
-          <p>
-            <%= p.description %><br/>
-            Projektin kotisivu: <%= link_to p.website, p.website, :target => '_blank' %><br/>
-            Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
-            Vastuuhenkilö: <%= p.user.to_s %>
-          </p>
-        </div>
-    <% end %>
-  </div>
+<% if not @projectbundle.nil? %>
+    <p id="notice"><%= notice %></p>
+    <h3><%= "Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}kello 23.59" %></h3>
+    <%= render 'form' %>
+    <br/>
+    <br/>
+    <div class="projectInfo" style="max-width: 600px;">
+      <% @projects.each do |p| %>
+          <h3><%= p.name %></h3>
 
-  <br/>
-
-  <% if not @student.nil? %>
-      <% if @student.errors.any? %>
-          <%= @student.errors.inspect %>
+          <div id="<%= p.id %>">
+            <p>
+              <%= p.description %><br/>
+              Projektin kotisivu: <%= link_to p.website, p.website, :target => '_blank' %><br/>
+              Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
+              Vastuuhenkilö: <%= p.user.to_s %>
+            </p>
+          </div>
       <% end %>
-  <% end %>
-<% content_for :header do %>
-       <%= "#{@projectbundle.name}" unless @projectbundle.nil? %>
+    </div>
+
+    <br/>
+
+    <% if not @student.nil? %>
+        <% if @student.errors.any? %>
+            <%= @student.errors.inspect %>
+        <% end %>
+    <% end %>
+    <script>
+        $(function () {
+            $(".projectInfo").accordion();
+        });
+    </script>
+<% else %>
+    <p id="notice"><%= notice %></p>
+    Ei aktiivisia projektiryhmiä.
+   <% if not current_user %>
+        Jos olet opettaja tai ylläpitäjä, ole hyvä ja kirjaudu sisään <%= link_to 'tästä', signin_path %>
+    <%end%>
 <% end %>
-
-<script>
-    $(function() {
-        $( ".projectInfo" ).accordion();
-    });
-</script>
-
+<% content_for :header do %>
+    <% if @projectbundle.nil? %>
+        Etusivu
+    <% else %>
+        <%= "#{@projectbundle.name}" %>
+    <% end %>
+<% end %>

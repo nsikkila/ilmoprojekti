@@ -21,11 +21,10 @@ class UniqueSignupValidator < ActiveModel::Validator
   end
 end
 
-
 class Enrollment < ActiveRecord::Base
   belongs_to :projectbundle
   has_many :projects, through: :signups
-  has_many :signups, order: 'id ASC', dependent: :destroy
+  has_many :signups, -> { order(:id => :asc) }, dependent: :destroy
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator
@@ -75,6 +74,4 @@ class Enrollment < ActiveRecord::Base
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
-
-
 end
