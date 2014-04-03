@@ -47,28 +47,32 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
+  def magic_number2
+    numba = self.signups.where(status:true).average('priority')
+    if numba.nil?
+      return 0
+    else
+      return numba.round(1)
+    end
+  end
+
   def magic_number
-    self.signups.where(status:true).average('priority')
-  end
-
-  def return_projectbundle
-    #byebug
-    self.projects.first.projectbundle
-  end
-
-  def self.compute_magic_number(signs)
     number = 0
     amount = 0
-    signs.each do |signup|
+    signups.each do |signup|
       if signup.status
         number = number + signup.priority
         amount = amount + 1
       end
     end
-    if amount == 0
-      return 0
-    end
+    #if amount == 0
+     # return 0
+    #end
     (number.to_f/amount).round(1)
+  end
+
+  def return_projectbundle
+    self.projects.first.projectbundle
   end
 
   def self.create_hash(enrollment)

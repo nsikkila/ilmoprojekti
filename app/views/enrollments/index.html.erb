@@ -73,7 +73,6 @@
         <% @projects.each do |project| %>
 
             <td class="summaryCell" id="<%= project.id %>-ptotal">
-              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
             </td>
         <% end %>
         <td></td>
@@ -85,7 +84,6 @@
         <% @projects.each do |project| %>
 
             <td class="summaryCell" id="<%= project.id %>-pfill">
-              <%= project.amount_of_accepted_students - project.maxstudents %>
             </td>
         <% end %>
         <td></td>
@@ -106,15 +104,12 @@
             <% @projects.each do |project| %>
 
                 <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="changeStatus($(this))" class="prioritycell">
-
                 </td>
 
             <% end %>
             <td id="<%= enrollment.id %>-etotal" class="summaryCell tableSummary">
-              <%= enrollment.accepted_amount %>
             </td>
             <td id="<%= enrollment.id %>-escore" class="summaryCell tableSummary">
-              <%= enrollment.magic_number %>
             </td>
           </tr>
       <% end %>
