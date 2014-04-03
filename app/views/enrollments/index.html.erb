@@ -122,6 +122,10 @@
       </tbody>
     </table>
 
+    <p>Lataa tämä taulukko csv-muodossa:<br>
+     <%= link_to 'Lataa', projectbundles_path(format: "xls")%>
+    </p>
+
 <% else %>
     <h2>Ei ilmoittautumisia.</h2>
 <% end %>

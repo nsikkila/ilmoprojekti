@@ -10,17 +10,17 @@ class EnrollmentsController < ApplicationController
 
   def index
     if current_user.nil? or not is_at_least(:teacher)
-      redirect_to :root, notice: "Sivu on vain opettajille."
+      redirect_to :root, alert: "Sivu on vain opettajille."
     else
       @projectbundle = Projectbundle.find_by_active(true)
       if @projectbundle.nil?
-        redirect_to :root, notice: "Ei aktiivisia projektiryhmiä"
+        redirect_to :root, alert: "Ei aktiivisia projektiryhmiä"
       else
         if not @projectbundle.is_signup_active
           set_projectbundle_and_projects
           @enrollments = Enrollment.all
         else
-          redirect_to :root, notice: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
+          redirect_to :root, alert: "Et voi jakaa opiskelijoita ryhmiin, koska ilmottautuminen on vielä käynnissä."
         end
       end
 
@@ -41,7 +41,7 @@ class EnrollmentsController < ApplicationController
     @enrollment = Enrollment.new(enrollment_params)
     @activebundle = Projectbundle.find_by_active(true)
     if not @activebundle.is_signup_active
-      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+      redirect_to :back, alert: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
         signup.status = false
@@ -88,7 +88,7 @@ class EnrollmentsController < ApplicationController
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
     if not @enrollment.return_projectbundle.is_signup_active
-      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+      redirect_to :root, alert: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
     end
   end
 
@@ -194,5 +194,7 @@ class EnrollmentsController < ApplicationController
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
   end
+
+
 
 end
