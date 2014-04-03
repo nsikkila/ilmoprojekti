@@ -134,9 +134,7 @@
     var autoTimeout = 5000; //ms
     var UItimeout = 300; //ms
     var UItimeoutHandle, autoTimeoutHandle;
-    var modifyingAllowed = true;
-    var verified = false;
-    var admin = false;
+    var modifyingAllowed, verified, admin = false;
 
     function setForcedClass(element) {
         element.toggleClass('forced', true);
@@ -171,55 +169,55 @@
             url: "tabledata"
         })
                 .done(function(msg) {
-                    var selector, element;
-                    var enrollments = msg[0];
-                    var projects = msg[1];
-                    var signups = msg[2];
+                        var selector, element;
+                        var enrollments = msg[0];
+                        var projects = msg[1];
+                        var signups = msg[2];
 
-                    resetForcedStatuses();
+                        resetForcedStatuses();
 
-                    $.each(signups, function(index, signup) {
-                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                        $.each(signups, function(index, signup) {
+                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                        element = $(selector);
+                            element = $(selector);
 
-                        if (signup.priority > 0) {
-                            element.html(signup.priority);
+                            if (signup.priority > 0) {
+                                element.html(signup.priority);
+                            }
+
+                            if (signup.forced) { //Signup is forced
+                                setForcedClass(element);
+                            } else if (signup.status) { //Not forced but status is true => accepted
+                                setAcceptedClass(element);
+                            } else if (!signup.status) { //Status is false but signup exists => not accepted
+                                unSetAcceptedClass(element);
+                            } else {
+                                alert('Error: status is unknown');
+                            }
+                        });
+
+
+                        $.each(enrollments, function(index, enrollment) {
+
+                            selector = '#'+enrollment.id+'-etotal';
+                            $(selector).html(enrollment.accepted_amount);
+
+                            selector = '#'+enrollment.id+'-escore';
+                            $(selector).html(enrollment.magic_number);
+                        });
+
+                        $.each(projects, function(index, project) {
+                            selector = '#'+project.id+'-pfill';
+                            $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                            selector = '#'+project.id+'-ptotal';
+                            $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                        })
+                        if (modifyingAllowed) {
+                            autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                         }
-
-                        if (signup.forced) { //Signup is forced
-                            setForcedClass(element);
-                        } else if (signup.status) { //Not forced but status is true => accepted
-                            setAcceptedClass(element);
-                        } else if (!signup.status) { //Status is false but signup exists => not accepted
-                            unSetAcceptedClass(element);
-                        } else {
-                            alert('Error: status is unknown');
-                        }
-                    });
-
-
-                    $.each(enrollments, function(index, enrollment) {
-
-                        selector = '#'+enrollment.id+'-etotal';
-                        $(selector).html(enrollment.accepted_amount);
-
-                        selector = '#'+enrollment.id+'-escore';
-                        $(selector).html(enrollment.magic_number);
-                    });
-
-                    $.each(projects, function(index, project) {
-                        selector = '#'+project.id+'-pfill';
-                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
-
-                        selector = '#'+project.id+'-ptotal';
-                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
-                    })
-                    if (modifyingAllowed) {
-                        autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
-                    }
                 });
 
 
@@ -253,13 +251,14 @@
         })
                 .done(function(msg) {
                 });
-
     }
 
     function changeStatus(element) {
         if (modifyingAllowed || (admin && verified)) {
             clearTimeout(autoTimeoutHandle);
             var elementClass = element.attr('class');
+
+
 
             if (elementClass.indexOf('wanted') == -1) {
                 if (elementClass.indexOf('forced') >= 0) {
@@ -309,6 +308,8 @@
         if ($("#verifiedMessage").length > 0) {
             modifyingAllowed = false;
             verified = true;
+        } else {
+            verified = false;
         }
 
     }

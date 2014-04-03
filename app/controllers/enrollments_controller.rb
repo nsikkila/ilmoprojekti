@@ -9,7 +9,7 @@ class EnrollmentsController < ApplicationController
   before_action :check_expire
 
   def index
-    if current_user.nil? or not to_root_if_not_at_least(:teacher)
+    if current_user.nil? or not compare_accesslevel(:teacher)
       redirect_to :root, notice: "Sivu on vain opettajille."
     else
       @projectbundle = Projectbundle.find_by_active(true)
@@ -19,7 +19,7 @@ class EnrollmentsController < ApplicationController
       else
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
-        @user_is_admin = to_root_if_not_at_least(:admin)
+        @user_is_admin = compare_accesslevel(:admin)
       end
     end
   end
@@ -122,10 +122,10 @@ class EnrollmentsController < ApplicationController
   end
 
   def huippu
-    bundle = Projectbundle.includes(:projects, :signups, :enrollments).find_by_active(true)
+    bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
 
-    signups = bundle.signups
     enrollments = bundle.enrollments
+    signups = bundle.signups
     projects = bundle.projects
     enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
     projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
