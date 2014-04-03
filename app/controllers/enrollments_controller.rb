@@ -37,7 +37,7 @@ class EnrollmentsController < ApplicationController
   def create
     @enrollment = Enrollment.new(enrollment_params)
     @activebundle = Projectbundle.find_by_active(true)
-    if not @activebundle.is_signup_active
+    if not @activebundle.signup_is_active
       redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
@@ -94,7 +94,7 @@ class EnrollmentsController < ApplicationController
     project = Project.find params[:project_id]
     new_forced = params[:forced]
 
-    unless enrollment.projectbundle.is_signup_active
+    unless enrollment.projectbundle.signup_is_active
       if (new_forced == 'true')
         signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 0, status: true, forced: true)
         signup.save

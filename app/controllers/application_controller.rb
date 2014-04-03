@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
 
-  def is_at_least(level)
+  def to_root_if_not_at_least(level)
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
       if list[level] > current_user.accesslevel #ohjataan käyttäjä roottiin jos ei tarpeeksi iso accesslevel
