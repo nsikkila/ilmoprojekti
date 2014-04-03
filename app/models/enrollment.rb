@@ -47,7 +47,7 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
-  def magic_number2
+  def magic_number
     numba = self.signups.where(status:true).average('priority')
     if numba.nil?
       return 0
@@ -56,7 +56,7 @@ class Enrollment < ActiveRecord::Base
     end
   end
 
-  def magic_number
+  def magic_number2
     number = 0
     amount = 0
     signups.each do |signup|

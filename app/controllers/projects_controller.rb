@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :index, :new, :create, :update, :destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
   before_action :check_expire
 

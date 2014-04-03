@@ -21,7 +21,7 @@
       <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
   <% end %> |
 
-  <% if not current_user.nil? and is_at_least(:teacher) %>
+  <% if not current_user.nil? and compare_accesslevel(:teacher) %>
       <%= link_to 'ILMOTTAUTUMISET', enrollments_path %>
   <% end %>
 
