@@ -104,6 +104,7 @@ class EnrollmentsController < ApplicationController
       end
 
       render nothing: true
+
     end
   end
 
@@ -123,7 +124,6 @@ class EnrollmentsController < ApplicationController
 
   def huippu
     bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
-
     enrollments = bundle.enrollments
     signups = bundle.signups
     projects = bundle.projects
@@ -133,7 +133,6 @@ class EnrollmentsController < ApplicationController
 
     response = [enrollments_json, projects_json, signups_json]
     render :json => response
-
   end
 
   def update
@@ -188,6 +187,6 @@ class EnrollmentsController < ApplicationController
 
   def enrollment_params
     params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
-  end
 
+  end
 end

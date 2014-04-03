@@ -167,5 +167,8 @@ span.tooltip:after {
 }
 #navi a:hover {
     color:#2F6394;
+}
 
+.alert {
+    color: red;
 }

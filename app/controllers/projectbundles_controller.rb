@@ -12,6 +12,14 @@ class ProjectbundlesController < ApplicationController
   # GET /projectbundles.json
   def index
     @projectbundles = Projectbundle.all.order(created_at: :desc)
+    @projectbundle = Projectbundle.find_by_active(true)
+    if not @projectbundle.nil?
+      respond_to do |format|
+        format.html
+        format.csv { send_data @projectbundles.to_csv }
+        format.xls
+      end
+    end
   end
 
   # GET /projectbundles/1
@@ -81,7 +89,7 @@ class ProjectbundlesController < ApplicationController
       end
       redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
     else
-      redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
+      redirect_to projectbundles_path, alert: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
     end
 
   end

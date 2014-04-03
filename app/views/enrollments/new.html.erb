@@ -1,5 +1,6 @@
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert%></p>
 <% if not @projectbundle.nil? %>
-    <p id="notice"><%= notice %></p>
     <h3><%= "Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}kello 23.59" %></h3>
     <%= render 'form' %>
     <br/>
@@ -32,7 +33,6 @@
         });
     </script>
 <% else %>
-    <p id="notice"><%= notice %></p>
     Ei aktiivisia projektiryhmiä.
    <% if not current_user %>
         Jos olet opettaja tai ylläpitäjä, ole hyvä ja kirjaudu sisään <%= link_to 'tästä', signin_path %>
