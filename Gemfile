@@ -63,6 +63,9 @@ group :test do
   gem 'selenium-webdriver'
 end
 
+gem 'axlsx'
+gem 'yard'
+
 
 # Use unicorn as the app server
 # gem 'unicorn'
