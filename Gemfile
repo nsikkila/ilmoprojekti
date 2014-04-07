@@ -64,6 +64,7 @@ group :test do
 end
 
 gem 'axlsx'
+gem 'axlsx_rails'
 gem 'yard'
 
 

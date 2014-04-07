@@ -1,4 +1,5 @@
 class Projectbundle < ActiveRecord::Base
+
   has_many :projects
   has_many :signups, through: :projects
   has_many :enrollments, -> { distinct }, through: :projects
@@ -17,7 +18,8 @@ class Projectbundle < ActiveRecord::Base
     true
   end
 
-  def self.to_csv
+
+=begin
     @bundle = Projectbundle.find_by_active(true)
     csv_array = [" ", "Opiskelija", "Opiskelijanumero"]
     @bundle.projects.each do |pro|
@@ -38,5 +40,5 @@ class Projectbundle < ActiveRecord::Base
     end
 
     csv_string
-  end
+=end
 end
