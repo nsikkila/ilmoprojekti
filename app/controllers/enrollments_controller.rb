@@ -90,11 +90,12 @@ class EnrollmentsController < ApplicationController
   end
 
   def setforced
+
     enrollment = Enrollment.find params[:enrollment_id]
     project = Project.find params[:project_id]
     new_forced = params[:forced]
 
-    unless enrollment.projectbundle.signup_is_active
+    unless enrollment.projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))
       if (new_forced == 'true')
         signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 0, status: true, forced: true)
         signup.save
@@ -110,7 +111,8 @@ class EnrollmentsController < ApplicationController
 
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
-    unless enrollment.projects.first.projectbundle.signup_is_active
+    projectbundle = enrollment.projects.first.projectbundle
+    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))
       signup = enrollment.signups.find_by_project_id(params[:project_id])
       project = signup.project
 
