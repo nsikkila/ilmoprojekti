@@ -120,10 +120,10 @@ fi:
       too_short: on liian lyhyt (oltava vähintään %{count} merkkiä)
       wrong_length: on väärän pituinen (täytyy olla täsmälleen %{count} merkkiä)
     template:
-      body: ! 'Seuraavat kentät aiheuttivat ongelmia:'
       header:
-        one: Virhe syötteessä esti mallin %{model} tallentamisen
+        one: 'Virhe syötteessä esti mallin %{model} tallentamisen'
         other: ! '%{count} virhettä esti mallin %{model} tallentamisen'
+      body: ! 'Seuraavat kentät aiheuttivat ongelmia:'
   helpers:
     select:
       prompt: Valitse
