@@ -43,10 +43,31 @@
     <div class="field">
       <%= f.label :projectpicture, 'Projektin kuva'%>
       <br>
-      <%= f.file_field 'projectpicture' %>
+      <%= f.file_field 'projectpicture'%>
     </div>
 
     <div class="actions">
       <%= f.submit 'Luo projekti'%>
     </div>
 <% end %>
+
+<script>
+    var _URL = window.URL || window.webkitURL;
+
+    $("#project_projectpicture").change(function(e) {
+
+        var image, file;
+
+        if ((file = this.files[0])) {
+            image = new Image();
+            image.onload = function() {
+                if(this.width <= 30000 && this.height <= 30000) {
+                    $("input[type='submit']").prop('disabled', false);
+                } else {
+                    $("input[type='submit']").prop('disabled', true);
+                }
+            };
+            image.src = _URL.createObjectURL(file);
+        }
+    })
+</script>

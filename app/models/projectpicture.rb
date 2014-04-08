@@ -3,6 +3,7 @@ class Projectpicture < ActiveRecord::Base
 
   #validates :filename, format: {with: /A\.(png|jpg|jpeg|gif)\z/i, message: "placeholder väärä formaatti" }
   validates_format_of :content_type, :with => /\Aimage/, :message  => "voit ladata vain kuvia"
+  validate :picture_size_validation
 
   def uploaded_file=(incoming_file)
     self.filename = incoming_file.original_filename
@@ -20,5 +21,9 @@ class Projectpicture < ActiveRecord::Base
     just_filename = File.basename(filename)
     #replace all non-alphanumeric, underscore or periods with underscores
     just_filename.gsub(/[^\w\.\-]/, '_')
+  end
+
+  def picture_size_validation
+    self.errors[:projectpicture] << "Kuvan pitää olla kooltaan alle 5MB" if data.size > 1.megabytes
   end
 end

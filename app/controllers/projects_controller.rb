@@ -66,6 +66,7 @@ class ProjectsController < ApplicationController
             @projectpicture.save
           else
             @bundle = Projectbundle.all
+            #@project.errors[''] << "Hahaa, loins!"
             render :new, :notice => "Kuvan tallentaminen ei onnistunut."
             return
           end
@@ -87,7 +88,10 @@ class ProjectsController < ApplicationController
   def update
     @bundle = Projectbundle.all
     respond_to do |format|
-      if @project.update(project_params)
+
+      @project.assign_attributes(project_params)
+
+      if @project.valid?
 
         @projectpicture = Projectpicture.find_by_project_id(@project.id)
 
@@ -108,7 +112,7 @@ class ProjectsController < ApplicationController
             @projectpicture.save
           else
             @bundle = Projectbundle.all
-            format.html { render action: 'edit' }
+            render :edit, :notice => "Nönnönnöö"
             return
           end
 

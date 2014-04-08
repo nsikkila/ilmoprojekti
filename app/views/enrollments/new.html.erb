@@ -9,6 +9,7 @@
         <div id="<%= p.id %>" >
           <p>
             <%= p.description %><br/>
+            <%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => Projectpicture.find_by_project_id(p.id)) %><br/>
             Projektin kotisivu: <%= link_to p.website, p.website, :target => '_blank' %><br/>
             Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
             Vastuuhenkilö: <%= p.user.to_s %>
