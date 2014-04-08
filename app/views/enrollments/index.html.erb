@@ -3,8 +3,9 @@
     <% if @projectbundle.verified == false %>
         <% if @projectbundle.signup_is_active == true %>
             <p>Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
+        <% elsif @user_is_admin %>
+            [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
         <% end %>
-        [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
     <% else %>
         <p><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
     <% end %>
@@ -133,7 +134,7 @@
 <script>
 
     var autoTimeout = 5000; //ms
-    var UItimeout = 300; //ms
+    var UItimeout = 200; //ms
     var UItimeoutHandle, autoTimeoutHandle;
     var modifyingAllowed, verified, admin = false;
 
@@ -164,7 +165,6 @@
         clearTimeout(autoTimeoutHandle);
         $.ajax({
             type: "GET",
-            cache: false,
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             url: "tabledata"
         })
@@ -275,7 +275,7 @@
                     setStatus(element, true);
                 }
             }
-            refreshAll();
+            setTimeout(refreshAll, UItimeout);
         } else {
             if (verified) {
                 alert('Ainoastaan admin voi tehdä muutoksia vahvistettuihin ilmottautumisiin.');
