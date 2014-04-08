@@ -69,9 +69,9 @@ describe "Projects page" do
         click_button('Luo projekti')
       }.to_not change{Project.count}
 
-      expect(page).to have_content("Name is too short")
-      expect(page).to have_content("Description is too short")
-      expect(page).to have_content("Website is not a valid URL")
+      expect(page).to have_content("Nimi on liian lyhyt")
+      expect(page).to have_content("Kuvaus on liian lyhyt")
+      expect(page).to have_content("Kotisivu is not a valid URL")
     end
 
 
@@ -124,9 +124,9 @@ describe "Projects page" do
       fill_in('project_maxstudents', with:"asd")
       click_button('Luo projekti')
 
-      expect(page).to have_content("Name is too short")
-      expect(page).to have_content("Description is too short")
-      expect(page).to have_content("Website is not a valid URL")
+      expect(page).to have_content("Nimi on liian lyhyt")
+      expect(page).to have_content("Kuvaus on liian lyhyt")
+      expect(page).to have_content("Kotisivu is not a valid URL")
 
       visit project_path(1)
 

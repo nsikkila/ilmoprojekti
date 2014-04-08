@@ -219,6 +219,8 @@ fi:
         lastname: "Sukunimi"
         username: "Käyttäjätunnus"
         accesslevel: "Käyttäjätaso"
+        password: "Salasana"
+        password_confirmation: "Salasanan vahvistus"
       enrollment:
         firstname: "Etunimi"
         lastname: "Sukunimi"

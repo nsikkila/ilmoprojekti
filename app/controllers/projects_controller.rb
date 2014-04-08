@@ -108,7 +108,6 @@ class ProjectsController < ApplicationController
           if @projectpicture.save
             @project.projectpicture = @projectpicture
             @projectpicture.project = @project
-            @project.save
             @projectpicture.save
           else
             @bundle = Projectbundle.all
@@ -117,6 +116,7 @@ class ProjectsController < ApplicationController
           end
 
         end
+        @project.save
         format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
         format.json { head :no_content }
       else

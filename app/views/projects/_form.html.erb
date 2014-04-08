@@ -61,7 +61,7 @@
         if ((file = this.files[0])) {
             image = new Image();
             image.onload = function() {
-                if(this.width <= 30000 && this.height <= 30000) {
+                if(this.width <= 300 && this.height <= 300) {
                     $("input[type='submit']").prop('disabled', false);
                 } else {
                     $("input[type='submit']").prop('disabled', true);
