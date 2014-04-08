@@ -1,15 +1,12 @@
 
 <% unless @enrollments.first.nil? %>
-    <input id="admin" type="text" value="<%=@user_is_admin %>" hidden="hidden" />
-    <% if not current_user.nil? and compare_accesslevel(:admin) %>
-        <% if @projectbundle.verified == false %>
-            <% if @projectbundle.signup_is_active == true %>
-                <p id="signupActiveMessage">Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
-            <% end %>
-            [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
-        <% else %>
-            <p id="verifiedMessage"><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
+    <% if @projectbundle.verified == false %>
+        <% if @projectbundle.signup_is_active == true %>
+            <p>Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
         <% end %>
+        [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
+    <% else %>
+        <p><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
     <% end %>
     <table>
       <tr>
@@ -121,7 +118,7 @@
     </table>
 
     <p>Lataa tämä taulukko csv-muodossa:<br>
-     <%= link_to 'Lataa', projectbundles_path(format: "xlsx")%>
+      <%= link_to 'Lataa', projectbundles_path(format: "xlsx")%>
     </p>
 
 <% else %>
@@ -168,60 +165,59 @@
         $.ajax({
             type: "GET",
             cache: false,
-            async: false,
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             url: "tabledata"
         })
                 .done(function(msg) {
-                        var selector, element;
-                        var enrollments = msg[0];
-                        var projects = msg[1];
-                        var signups = msg[2];
+                    var selector, element;
+                    var enrollments = msg[0];
+                    var projects = msg[1];
+                    var signups = msg[2];
 
-                        resetForcedStatuses();
+                    resetForcedStatuses();
 
-                        $.each(signups, function(index, signup) {
-                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                    $.each(signups, function(index, signup) {
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                            selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
-                            element = $(selector);
+                        element = $(selector);
 
-                            if (signup.priority > 0) {
-                                element.html(signup.priority);
-                            }
-
-                            if (signup.forced) { //Signup is forced
-                                setForcedClass(element);
-                            } else if (signup.status) { //Not forced but status is true => accepted
-                                setAcceptedClass(element);
-                            } else if (!signup.status) { //Status is false but signup exists => not accepted
-                                unSetAcceptedClass(element);
-                            } else {
-                                alert('Error: status is unknown');
-                            }
-                        });
-
-
-                        $.each(enrollments, function(index, enrollment) {
-
-                            selector = '#'+enrollment.id+'-etotal';
-                            $(selector).html(enrollment.accepted_amount);
-
-                            selector = '#'+enrollment.id+'-escore';
-                            $(selector).html(enrollment.magic_number);
-                        });
-
-                        $.each(projects, function(index, project) {
-                            selector = '#'+project.id+'-pfill';
-                            $(selector).html(project.amount_of_accepted_students-project.maxstudents);
-
-                            selector = '#'+project.id+'-ptotal';
-                            $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
-                        })
-                        if (modifyingAllowed) {
-                            autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
+                        if (signup.priority > 0) {
+                            element.html(signup.priority);
                         }
+
+                        if (signup.forced) { //Signup is forced
+                            setForcedClass(element);
+                        } else if (signup.status) { //Not forced but status is true => accepted
+                            setAcceptedClass(element);
+                        } else if (!signup.status) { //Status is false but signup exists => not accepted
+                            unSetAcceptedClass(element);
+                        } else {
+                            alert('Error: status is unknown');
+                        }
+                    });
+
+
+                    $.each(enrollments, function(index, enrollment) {
+
+                        selector = '#'+enrollment.id+'-etotal';
+                        $(selector).html(enrollment.accepted_amount);
+
+                        selector = '#'+enrollment.id+'-escore';
+                        $(selector).html(enrollment.magic_number);
+                    });
+
+                    $.each(projects, function(index, project) {
+                        selector = '#'+project.id+'-pfill';
+                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                        selector = '#'+project.id+'-ptotal';
+                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                    })
+                    if (modifyingAllowed) {
+                        autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
+                    }
                 });
 
 
@@ -262,8 +258,6 @@
             clearTimeout(autoTimeoutHandle);
             var elementClass = element.attr('class');
 
-
-
             if (elementClass.indexOf('wanted') == -1) {
                 if (elementClass.indexOf('forced') >= 0) {
                     unSetForcedClass(element);
@@ -297,35 +291,17 @@
     })
 
     function setModifiable() {
-        if ($("#admin").val == 'true') {
-            admin = true;
-        } else {
-            admin = false;
-        }
-
-        if ($("#signupActiveMessage").length > 0) {
-            modifyingAllowed = false;
-        } else {
-            modifyingAllowed = true;
-        }
-
-        if ($("#verifiedMessage").length > 0) {
-            modifyingAllowed = false;
-            verified = true;
-        } else {
-            verified = false;
-        }
-
+        modifyingAllowed = <%= @projectbundle.signup_is_active %>;
+        admin = <%= @user_is_admin %>;
+        verified = <%= @projectbundle.verified %>;
     }
 
     $(document).ready(function() {
         refreshAll();
         setModifiable();
-
         $(function() {
             $( document ).tooltip({show:{delay:1000}});
         });
-
     });
 
     $(document).ready(function()
@@ -341,6 +317,4 @@
                 $("#enrollmenttable").tablesorter();
             }
     );
-
-
 </script>
