@@ -1,4 +1,6 @@
-<p id="notice"><%= notice %></p>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert%></p>
+<% if not @projectbundle.nil? %>
 <h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}kello 23.59"%></h3>
   <%= render 'form' %>
   <br/>
@@ -20,18 +22,27 @@
 
   <br/>
 
-  <% if not @student.nil? %>
-      <% if @student.errors.any? %>
-          <%= @student.errors.inspect %>
-      <% end %>
-  <% end %>
-<% content_for :header do %>
-       <%= "#{@projectbundle.name}" unless @projectbundle.nil? %>
+    <% if not @student.nil? %>
+        <% if @student.errors.any? %>
+            <%= @student.errors.inspect %>
+        <% end %>
+    <% end %>
+
+    <script>
+        $(function () {
+            $(".projectInfo").accordion();
+        });
+    </script>
+<% else %>
+    Ei aktiivisia projektiryhmiä.
+   <% if not current_user %>
+        Jos olet opettaja tai ylläpitäjä, ole hyvä ja kirjaudu sisään <%= link_to 'tästä', signin_path %>
+    <%end%>
 <% end %>
-
-<script>
-    $(function() {
-        $( ".projectInfo" ).accordion();
-    });
-</script>
-
+<% content_for :header do %>
+    <% if @projectbundle.nil? %>
+        Etusivu
+    <% else %>
+        <%= "#{@projectbundle.name}" %>
+    <% end %>
+<% end %>

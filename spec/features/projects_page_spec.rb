@@ -8,10 +8,8 @@ describe "Projects page" do
     it "Cannot be accessed if not logged in" do
       create_objects_for_frontpage
       visit projects_path
-      expect(page).to_not have_content("Luo uusi projekti")
-      expect(page).to have_content("Etunimi")
-      expect(page).to have_content("Sukunimi")
-      expect(page).to have_content("Opiskelijanumero")
+
+      expect(page).to have_content 'Sinun täytyy kirjautua sisään'
     end
 
     it "allows the deletion of a project" do
@@ -35,10 +33,8 @@ describe "Projects page" do
     it "Cannot be accessed if not logged in" do
         create_objects_for_frontpage
         visit new_project_path
-        expect(page).to_not have_content("Luo uusi projekti")
-        expect(page).to have_content("Etunimi")
-        expect(page).to have_content("Sukunimi")
-        expect(page).to have_content("Opiskelijanumero")
+        expect(page).to have_content("Sinun täytyy kirjautua sisään")
+
 
     end
 
@@ -86,10 +82,8 @@ describe "Projects page" do
     it "cannot be accessed if not logged in" do
       create_objects_for_frontpage
       visit edit_project_path(1)
-      expect(page).to_not have_content("Luo uusi projekti")
-      expect(page).to have_content("Etunimi")
-      expect(page).to have_content("Sukunimi")
-      expect(page).to have_content("Opiskelijanumero")
+      expect(page).to have_content("Sinun täytyy kirjautua sisään")
+
     end
 
     it "can be accessed and succesfully edited with proper values" do

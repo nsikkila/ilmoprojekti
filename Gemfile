@@ -44,6 +44,8 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
 
+gem 'rack-mini-profiler'
+
 # Use rsepc for testing in deveopment and test enviroments
 group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
@@ -60,6 +62,10 @@ group :test do
   gem 'email_spec'
   gem 'selenium-webdriver'
 end
+
+gem 'axlsx'
+gem 'axlsx_rails'
+gem 'yard'
 
 
 # Use unicorn as the app server

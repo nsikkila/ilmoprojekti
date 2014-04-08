@@ -1,10 +1,10 @@
 class ProjectbundlesController < ApplicationController
   before_action :set_projectbundle, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :new, :create, :update, :destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
   before_action only: [:verify] do
-    is_at_least(:admin)
+    to_root_if_not_at_least(:admin)
   end
 
   before_action :check_expire
@@ -12,6 +12,13 @@ class ProjectbundlesController < ApplicationController
   # GET /projectbundles.json
   def index
     @projectbundles = Projectbundle.all.order(created_at: :desc)
+    @projectbundle = Projectbundle.find_by_active(true)
+    if not @projectbundle.nil?
+      respond_to do |format|
+        format.html
+        format.xlsx
+      end
+    end
   end
 
   # GET /projectbundles/1
@@ -32,9 +39,10 @@ class ProjectbundlesController < ApplicationController
   # POST /projectbundles.json
   def create
     @projectbundle = Projectbundle.new(projectbundle_params)
+    @projectbundle.verified = false
     respond_to do |format|
       if @projectbundle.save
-        format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully created.' }
+        format.html { redirect_to @projectbundle, notice: 'Projektiryhmä onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @projectbundle }
       else
         format.html { render action: 'new' }
@@ -48,7 +56,7 @@ class ProjectbundlesController < ApplicationController
   def update
     respond_to do |format|
       if @projectbundle.update(projectbundle_params)
-        format.html { redirect_to @projectbundle, notice: 'Projectbundle was successfully updated.' }
+        format.html { redirect_to @projectbundle, notice: 'Projektiryhmä päivitetty onnistuneesti.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -80,7 +88,7 @@ class ProjectbundlesController < ApplicationController
       end
       redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'
     else
-      redirect_to projectbundles_path, notice: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
+      redirect_to projectbundles_path, alert: 'Vahvistaminen peruttu: projektiryhmän ilmoittautuminen ei ole vielä umpeutunut'
     end
 
   end

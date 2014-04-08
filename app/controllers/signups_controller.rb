@@ -6,7 +6,7 @@ class SignupsController < ApplicationController
 
   before_action :set_signup, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :create, :update, :destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
 
 

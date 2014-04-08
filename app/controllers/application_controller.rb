@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :check_expire
   helper_method :current_user
-  helper_method :is_at_least
+  helper_method :to_root_if_not_at_least
   helper_method :compare_accesslevel
 
   def current_user
@@ -13,16 +13,16 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
 
-  def is_at_least(level)
+  def to_root_if_not_at_least(level)
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
       if list[level] > current_user.accesslevel #ohjataan käyttäjä roottiin jos ei tarpeeksi iso accesslevel
-        redirect_to :root
+        redirect_to signin_path, alert: "Vain järjestelmävalvojalla on pääsy sivulle"
       else
         list[level] <= current_user.accesslevel
       end
     else #ohjataan kirjautumaton käyttäjä roottiin
-      redirect_to :root
+      redirect_to signin_path, alert: "Sinun täytyy kirjautua sisään päästäksesi tarkastelemaan sivua"
     end
   end
 
@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
       list[accesslevel] <= current_user.accesslevel
+    else
+      false
     end
   end
 
@@ -38,7 +40,7 @@ class ApplicationController < ActionController::Base
       if session[:timeout] < Time.now
         session[:user_id] = nil
         session[:timeout] = nil
-        redirect_to :root, notice: "Istuntosi on vanhentunut, kirjaudu uudelleen sisään"
+        redirect_to :root, alert: "Istuntosi on vanhentunut, kirjaudu uudelleen sisään"
         #     render 'signout', method :delete
       else
         session[:timeout] = Time.now + 20.minutes

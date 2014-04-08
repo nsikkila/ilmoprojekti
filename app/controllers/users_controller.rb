@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action only: [:new, :create, :destroy, :index] do
-    is_at_least(:admin)
+    to_root_if_not_at_least(:admin)
   end
   before_action only: [:show, :edit, :update] do
-     current_user.id == params[:id].to_i or is_at_least(:admin)
+     current_user.id == params[:id].to_i or to_root_if_not_at_least(:admin)
   end
 
   before_action :check_expire
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to @user, notice: 'Uusi käyttäjä onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'new' }

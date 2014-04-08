@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401115608) do
+ActiveRecord::Schema.define(version: 20140403112924) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(version: 20140401115608) do
     t.boolean  "status"
     t.boolean  "forced"
   end
+
+  add_index "signups", ["enrollment_id"], name: "index_signups_on_enrollment_id"
 
   create_table "users", force: true do |t|
     t.string   "firstname"

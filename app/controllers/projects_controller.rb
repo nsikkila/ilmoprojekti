@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :index, :new, :create, :update, :destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
   before_action :check_expire
 
@@ -73,7 +73,7 @@ class ProjectsController < ApplicationController
         end
 
         @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to @project, notice: 'Projekti onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @project }
       else
         @bundle = Projectbundle.all
@@ -117,7 +117,7 @@ class ProjectsController < ApplicationController
           end
 
         end
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

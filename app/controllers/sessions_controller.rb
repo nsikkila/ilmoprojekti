@@ -10,11 +10,11 @@ class SessionsController < ApplicationController
     # haetaan usernamea vastaava käyttäjä tietokannasta
     user = User.find_by username: params[:username]
     if user.nil? or not user.authenticate params[:password]
-      redirect_to signin_path, notice: "Käyttäjätunnus tai salasana ei täsmää"
+      redirect_to signin_path, alert: "Käyttäjätunnus tai salasana ei täsmää"
     else
       session[:user_id] = user.id
       session[:timeout] = Time.now + 20.minutes
-      redirect_to user, notice: "Tervetuloa takaisin!"
+      redirect_to user
     end
   end
 
