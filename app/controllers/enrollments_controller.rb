@@ -94,8 +94,9 @@ class EnrollmentsController < ApplicationController
     enrollment = Enrollment.find params[:enrollment_id]
     project = Project.find params[:project_id]
     new_forced = params[:forced]
+    projectbundle = enrollment.projects.first.projectbundle
 
-    unless enrollment.projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))
+    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))  or not compare_accesslevel(:teacher)
       if (new_forced == 'true')
         signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 0, status: true, forced: true)
         signup.save
@@ -103,38 +104,39 @@ class EnrollmentsController < ApplicationController
         signup = enrollment.signups.find_by_project_id(params[:project_id])
         signup.destroy
       end
-
-      render nothing: true
-
     end
+    render nothing: true
+
   end
 
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
     projectbundle = enrollment.projects.first.projectbundle
-    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))
+    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin)) or not compare_accesslevel(:teacher)
       signup = enrollment.signups.find_by_project_id(params[:project_id])
       project = signup.project
 
       new_status = params[:status]
       signup.status = new_status
       signup.save
-
-      render nothing: true
     end
+    render nothing:true
   end
 
   def get_current_statuses
-    bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
-    enrollments = bundle.enrollments
-    signups = bundle.signups
-    projects = bundle.projects
-    enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
-    projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
-    signups_json = signups.as_json( only: [:enrollment_id, :project_id, :status, :forced, :priority])
-
-    response = [enrollments_json, projects_json, signups_json]
-    render :json => response
+    if compare_accesslevel(:teacher)
+      bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
+      enrollments = bundle.enrollments
+      signups = bundle.signups
+      projects = bundle.projects
+      enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
+      projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
+      signups_json = signups.as_json( only: [:enrollment_id, :project_id, :status, :forced, :priority])
+      response = [enrollments_json, projects_json, signups_json]
+      render :json => response
+    else
+      render nothing:true
+    end
   end
 
   def update

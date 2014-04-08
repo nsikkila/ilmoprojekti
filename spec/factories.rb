@@ -33,6 +33,7 @@ FactoryGirl.define do
     project_id 1
     priority 1
     status true
+    forced false
   end
 end
 
