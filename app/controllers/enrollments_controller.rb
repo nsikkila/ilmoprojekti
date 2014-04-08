@@ -17,9 +17,9 @@ class EnrollmentsController < ApplicationController
       if @projectbundle.nil?
         redirect_to :root, notice: "Ei aktiivisia projektiryhmiä"
       else
+        @user_is_admin = compare_accesslevel(:admin)
         set_projectbundle_and_projects
         @enrollments = Enrollment.all
-        @user_is_admin = compare_accesslevel(:admin)
       end
     end
   end
@@ -122,7 +122,7 @@ class EnrollmentsController < ApplicationController
     end
   end
 
-  def huippu
+  def get_current_statuses
     bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
     enrollments = bundle.enrollments
     signups = bundle.signups
