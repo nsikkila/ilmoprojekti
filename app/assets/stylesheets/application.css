@@ -81,8 +81,13 @@ h1, h2 {
     border-collapse: collapse;
 }
 
+
 .prioritycell {
     border-collapse: collapse;
+}
+
+.note {
+    background-color: violet;
 }
 
 .forced {
@@ -91,10 +96,6 @@ h1, h2 {
 
 .accepted {
     background-color: lightgreen;
-}
-
-.note {
-    background-color: violet;
 }
 
 .legend {
