@@ -17,6 +17,7 @@ describe "Projectpundle page" do
       expect(page).to have_content("Aktiivinen")
 
     end
+
     it "should have correct fields in the page" do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
@@ -27,6 +28,7 @@ describe "Projectpundle page" do
       expect(page).to have_button("Tallenna projektiryhmä")
       expect(page).to have_link("Takaisin")
     end
+
     it "should go to own page after greating valid bundle" do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
@@ -37,11 +39,9 @@ describe "Projectpundle page" do
       click_button("Tallenna projektiryhmä")
 
       expect(page).to have_content "Projektiryhmä onnistuneesti luotu."
-
-
     end
 
-    it "should not create new bundle after greating with empty name field" do
+    it "should not create new bundle after creating with empty name field" do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
       visit new_projectbundle_path;
@@ -50,9 +50,9 @@ describe "Projectpundle page" do
 
       click_button("Tallenna projektiryhmä")
 
-      expect(page).to have_content "Name can't be blank"
+      expect(page).to have_content "Nimi ei voi olla sisällötön"
     end
-    it "should not create new bundle after greating with empty description field" do
+    it "should not create new bundle after creating with empty description field" do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
       visit new_projectbundle_path;
@@ -61,7 +61,7 @@ describe "Projectpundle page" do
 
       click_button("Tallenna projektiryhmä")
 
-      expect(page).to have_content "Description can't be blank"
+      expect(page).to have_content "Kuvaus ei voi olla sisällötön"
       end
     end
 end
