@@ -35,4 +35,51 @@ describe Enrollment do
     expect(Enrollment.count).to eq (0)
   end
 
+  describe "when has accepted signups" do
+    before :each do
+      @enro = Enrollment.new
+      @enro.signups << Signup.new(status:true, priority:2)
+      @enro.signups << Signup.new(status:true, priority:3)
+      @enro.signups << Signup.new(status:false, priority:4)
+    end
+
+    it "returns correct magic number" do
+      result = @enro.magic_number
+      expected_result = 2.5
+
+      expect(result).to eq(expected_result)
+    end
+
+    it "return correct amount of accepted signups" do
+      result = @enro.accepted_amount
+      expected_result = 2
+
+      expect(result).to eq(expected_result)
+    end
+
+  end
+
+  describe "when has no accepted signups" do
+    before :each do
+      @enro = Enrollment.new
+      @enro.signups << Signup.new(status:false, priority:2)
+      @enro.signups << Signup.new(status:false, priority:3)
+      @enro.signups << Signup.new(status:false, priority:4)
+    end
+
+    it "returns correct magic number" do
+      result = @enro.magic_number
+      expected_result = 0
+
+      expect(result).to eq(expected_result)
+    end
+
+    it "return correct amount of accepted signups" do
+      result = @enro.accepted_amount
+      expected_result = 0
+
+      expect(result).to eq(expected_result)
+    end
+  end
+
 end
