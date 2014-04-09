@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe EnrollmentsController do
 
+  describe "when no projectbundle is active" do
+    before :each do
+      @projectbundle = FactoryGirl.create(:projectbundle, active:false)
+      @projects = generate_six_unique_projects(@projectbundle.id)
+    end
+
+    it "#new sets @enrollment to nil" do
+      get :new
+      response.should render_template('new')
+      expect(@enrollment).to be nil
+    end
+
+    it "#index redirects to root" do
+      get :index
+      response.should redirect_to(:root)
+    end
+
+  end
+
   describe "when signups are ongoing" do
     before :each do
       @projectbundle = FactoryGirl.create(:projectbundle)
@@ -15,6 +34,85 @@ describe EnrollmentsController do
       expect(Enrollment.count).to eq(1)
       #six signups
       expect(Signup.count).to eq(6)
+    end
+  end
+
+  describe "#get_current_statuses" do
+    before :each do
+      @projectbundle = FactoryGirl.create(:projectbundle, signup_end:Date.yesterday)
+      @projects = generate_six_unique_projects(@projectbundle.id)
+    end
+
+    describe "when not logged in" do
+
+      it "renders nothing" do
+
+        get :get_current_statuses
+
+        response.body.should eq(' ')
+      end
+
+    end
+
+    describe "when logged in as a teacher" do
+      before :each do
+        @teacher = FactoryGirl.create(:teacher)
+        session[:user_id] = @teacher.id
+      end
+
+      it "returns all projects with correct fields" do
+        #We are expecting 6 unique projects with fields id, maxstudents and amount_of_accepted_students
+
+        get :get_current_statuses
+
+
+        response.body.should have_content '{"id":1,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":2,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":3,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":4,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":5,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":6,"maxstudents":15,"amount_of_accepted_students":0}'
+      end
+
+      it "returns all signups with correct fields" do
+        #We are expecting 2 unique enrollments with fields enrollment_id, project_id, priority, status and forced
+        enro1 = generate_enro_with_signup(true, false)
+        enro2 = generate_enro_with_signup(true, true)
+        get :get_current_statuses
+
+        response.body.should have_content '{"enrollment_id":1,"project_id":1,"priority":1,"status":true,"forced":false}'
+        response.body.should have_content '{"enrollment_id":2,"project_id":1,"priority":1,"status":true,"forced":true}'
+      end
+    end
+    describe "when logged in as an admin" do
+      before :each do
+        @admin = FactoryGirl.create(:admin)
+        session[:user_id] = @admin.id
+      end
+
+      it "returns all projects with correct fields" do
+        #We are expecting 6 unique projects with fields id, maxstudents and amount_of_accepted_students
+
+        get :get_current_statuses
+
+
+        response.body.should have_content '{"id":1,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":2,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":3,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":4,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":5,"maxstudents":15,"amount_of_accepted_students":0}'
+        response.body.should have_content '{"id":6,"maxstudents":15,"amount_of_accepted_students":0}'
+      end
+
+      it "#get_current_statuses returns all signups with correct fields" do
+        #We are expecting 2 unique enrollments with fields enrollment_id, project_id, priority, status and forced
+        enro1 = generate_enro_with_signup(true, false)
+        enro2 = generate_enro_with_signup(true, true)
+        get :get_current_statuses
+
+        response.body.should have_content '{"enrollment_id":1,"project_id":1,"priority":1,"status":true,"forced":false}'
+        response.body.should have_content '{"enrollment_id":2,"project_id":1,"priority":1,"status":true,"forced":true}'
+      end
     end
   end
 
@@ -283,7 +381,6 @@ describe EnrollmentsController do
     end
 
   end
-
 end
 
 
