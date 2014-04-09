@@ -1,13 +1,15 @@
 class SignupsController < ApplicationController
+#Signuppeja ei käsitellä yksittäisinä. Ainoastaan pakotuksen yhteydessä luodaan ja poistetaan yksittäisiä signuppeja
+#ja sekin hoidetaan suoraan olioita käpistelemällä. Säilytetään koodi (ja muutama testi) kommentoituna, jos tuleekin tarvetta
+
+=begin
+
   before_action :set_signup, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :create, :update, :destroy] do
     to_root_if_not_at_least(:teacher)
   end
 
-#Signuppeja ei käsitellä yksittäisinä. Ainoastaan pakotuksen yhteydessä luodaan ja poistetaan yksittäisiä signuppeja
-#ja sekin hoidetaan suoraan olioita käpistelemällä.
 
-=begin
   before_action :check_expire
   
   # GET /signups

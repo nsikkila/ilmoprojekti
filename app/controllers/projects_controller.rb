@@ -32,6 +32,7 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @project = Project.new
+    #@project.projectpicture = Projectpicture.new
     @bundle = Projectbundle.all
   end
 
@@ -48,8 +49,30 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     @project.user = current_user
 
+    #return if params[:projectpicture].blank?
+
+    #@projectpicture = @project.projectpicture
+
     respond_to do |format|
-      if @project.save
+      if @project.valid?
+        if not params[:project][:projectpicture].nil?
+          @projectpicture = Projectpicture.new
+
+          @projectpicture.uploaded_file = params[:project][:projectpicture]
+
+          if @projectpicture.save
+            @project.projectpicture = @projectpicture
+            @projectpicture.project = @project
+            @projectpicture.save
+          else
+            @bundle = Projectbundle.all
+            #@project.errors[''] << "Hahaa, loins!"
+            render :new, :notice => "Kuvan tallentaminen ei onnistunut."
+            return
+          end
+        end
+
+        @project.save
         format.html { redirect_to @project, notice: 'Projekti onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @project }
       else
@@ -65,7 +88,35 @@ class ProjectsController < ApplicationController
   def update
     @bundle = Projectbundle.all
     respond_to do |format|
-      if @project.update(project_params)
+
+      @project.assign_attributes(project_params)
+
+      if @project.valid?
+
+        @projectpicture = Projectpicture.find_by_project_id(@project.id)
+
+        if not params[:project][:projectpicture].nil?
+
+          #Jos updatessa tulee uusi kuva, poistetaan vanha
+          if not @projectpicture.nil?
+            @projectpicture.destroy
+          end
+
+          @projectpicture = Projectpicture.new
+          @projectpicture.uploaded_file = params[:project][:projectpicture]
+
+          if @projectpicture.save
+            @project.projectpicture = @projectpicture
+            @projectpicture.project = @project
+            @projectpicture.save
+          else
+            @bundle = Projectbundle.all
+            render :edit, :notice => "Nönnönnöö"
+            return
+          end
+
+        end
+        @project.save
         format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
         format.json { head :no_content }
       else
@@ -94,6 +145,6 @@ class ProjectsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def project_params
-    params.require(:project).permit(:name, :description, :projectbundle_id, :website, :maxstudents)
+    params.require(:project).permit(:name, :description, :projectbundle_id, :website, :maxstudents, :projectpicture_attributes => [:projectpicture])
   end
 end

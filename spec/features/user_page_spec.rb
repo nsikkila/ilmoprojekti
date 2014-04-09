@@ -68,7 +68,7 @@ describe "User page" do
 
       click_button('Tallenna käyttäjä')
 
-      expect(page).to have_content "Password confirmation doesn't match Password"
+      expect(page).to have_content "Salasanan vahvistus ei vastaa varmennusta"
 
 
     end

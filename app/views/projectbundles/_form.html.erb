@@ -1,7 +1,7 @@
 <%= form_for(@projectbundle) do |f| %>
   <% if @projectbundle.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@projectbundle.errors.count, "errors") %> prohibited this projectbundle from being saved:</h2>
+      <h2><%= pluralize(@projectbundle.errors.count, "virhe", "virhettä") %> esti projektinipun tallentamisen:</h2>
 
       <ul>
       <% @projectbundle.errors.full_messages.each do |msg| %>

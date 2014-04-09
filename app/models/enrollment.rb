@@ -15,7 +15,7 @@ class UniqueSignupValidator < ActiveModel::Validator
     end
 
     if not at_least_one
-      record.errors[:project] << 'Valitse vähintää yksi projekti.'
+      record.errors[:project] << 'Valitse vähintään yksi projekti.'
     end
 
   end
