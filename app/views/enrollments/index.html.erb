@@ -118,7 +118,7 @@
       </tbody>
     </table>
 
-    <p>Lataa tämä taulukko csv-muodossa:<br>
+    <p>Lataa tämä taulukko xls-muodossa:<br>
       <%= link_to 'Lataa', projectbundles_path(format: "xlsx")%>
     </p>
 
@@ -291,7 +291,7 @@
     })
 
     function setModifiable() {
-        modifyingAllowed = <%= @projectbundle.signup_is_active %>;
+        modifyingAllowed = <%= not @projectbundle.signup_is_active %>;
         admin = <%= @user_is_admin %>;
         verified = <%= @projectbundle.verified %>;
     }

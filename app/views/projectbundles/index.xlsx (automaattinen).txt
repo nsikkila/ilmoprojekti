@@ -38,5 +38,7 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     sheet.add_row stdntArray
     stdntArray = []
   end
+	arrayYks = ["Opiskelijoita", ""]
+	
 
 end
