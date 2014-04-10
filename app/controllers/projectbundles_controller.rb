@@ -83,7 +83,7 @@ class ProjectbundlesController < ApplicationController
       @projectbundle.verified = true
       @projectbundle.save
       @enrollments = @projectbundle.enrollments
-      if not @enrollments.nil? or not @enrollments.empty?
+      if not (@enrollments.nil? or @enrollments.empty?)
         EnrollmentMail.result_email_for_all(@enrollments).deliver
       end
       redirect_to projectbundles_path, notice: 'Projektiryhmä vahvistettu!'

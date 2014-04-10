@@ -1,13 +1,14 @@
 wb = xlsx_package.workbook
 
 wb.add_worksheet(:name => "Projektijaot") do |sheet|
+  header = sheet.styles.add_style(bg_color: "C0C0C0", border: {style: :thin, color: "000000"})
   array = ["Opiskelija", "Opiskelijanumero"]
   @projectbundle.projects.each do |proj|
     array << proj.name
   end
   array << "Opiskelijalla projekteja"
   array << "Magic number"
-  sheet.add_row array
+  sheet.add_row array, style: header
   stdntArray = []
   projId = 1
   @projectbundle.enrollments.each do |roll|
@@ -42,18 +43,22 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
   @projectbundle.projects.each do |proj|
     accStudnts = proj.signups.where(status: true)
 	if not accStudnts.nil?
-   # studnts= accStudnts + "/" + proj.maxstudents
-  #  arrayStats << accStudnts.count.to_s
     arrayStats << "" + accStudnts.count.to_s + "/" + proj.maxstudents.to_s + ""
     fill = accStudnts.count - proj.maxstudents
-    arrayFills << fill.to_s
+    arrayFills << fill
 	else
 		arrayStats << '0'
-    arrayFills << "-" + maxstudents.to_s + ""
+    arrayFills << "-" + maxstudents + ""
 	end
   end
-  sheet.add_row arrayStats
-  sheet.add_row arrayFills
+	arrayFills << ""
+	arrayFills << ""
+	arrayStats << ""
+	arrayStats << ""
+  sheet.add_row arrayStats, style: header
+  sheet.add_row arrayFills, style: header
+
+  
 
 
 
