@@ -54,6 +54,26 @@ describe "Projects page" do
        }.to change{Project.count}.by(1)
     end
 
+    it "Creates a new project when valid values and a picture are passed" do
+      sign_in_and_initialize
+      visit new_project_path
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
+
+      #select('1', from:'enrollment[signups_attributes][0][project_id]')
+
+      expect {
+        click_button('Luo projekti')
+      }.to change{Project.count}.by(1)
+
+      expect(Projectpicture.count).to be(1)
+
+    end
+
     it "Does not create a new project when invalid values are passed and gives correct validation error messages" do
       sign_in_and_initialize
       visit new_project_path
@@ -105,6 +125,34 @@ describe "Projects page" do
       expect(page).to have_content("http://www.hs.fi")
       expect(page).to have_content("15")
 
+
+      #select('1', from:'enrollment[signups_attributes][0][project_id]')
+
+    end
+
+    it "can be accessed and succesfully edited with proper values and a picture" do
+      #sign_in_and_initialize
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+      create_objects_for_frontpage
+      visit edit_project_path(1)
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
+
+      click_button('Luo projekti')
+
+      visit project_path(1)
+
+      expect(page).to have_content("Testiprojekti1")
+      expect(page).to have_content("Description for testproject")
+      expect(page).to have_content("http://www.hs.fi")
+      expect(page).to have_content("15")
+
+      expect(Projectpicture.count).to be(1)
 
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
@@ -175,6 +223,27 @@ describe "Projects page" do
 
       expect(page).to have_content("Jaska Jokunen")
       expect(page).to have_content("Testi Testinen")
+    end
+
+    it "shows the project picture if a picture is saved" do
+
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+      create_objects_for_frontpage
+      visit edit_project_path(1)
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
+
+      click_button('Luo projekti')
+
+      visit project_path(1)
+
+      page.should have_xpath("/html/body/div[2]/div[2]/div/img")
+
     end
 
     it "shows which students have been accepted for the project" do
