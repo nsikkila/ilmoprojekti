@@ -7,6 +7,9 @@ class Projectbundle < ActiveRecord::Base
   validates :description, presence: true
   validates_uniqueness_of :active, :if => :active
 
+
+
+
   def to_s
     "#{name}"
   end

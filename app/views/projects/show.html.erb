@@ -23,7 +23,9 @@
   <%= @project.maxstudents %>
 </p>
 
+<% if not Projectpicture.find_by_project_id(@project.id).nil? %>
 <%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => Projectpicture.find_by_project_id(@project.id)) %>
+<% end %>
 
 <h2>Projektiin halukkuutensa ilmoittaneet: </h2>
 <table>
