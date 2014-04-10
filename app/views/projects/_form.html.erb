@@ -37,7 +37,7 @@
     <div class="field">
       <%= f.label :projectbundle_id, 'Projektiryhmä'%>
       <br>
-      <%= f.select :projectbundle_id, options_from_collection_for_select(@bundle, :id, :to_s) %>
+      <%= f.select :projectbundle_id, options_from_collection_for_select(@projectbundles, :id, :to_s) %>
     </div>
 
     <div class="field">

@@ -61,6 +61,7 @@ h1, h2 {
 .content {
     background-color: rgb(47, 99, 148);
     padding: 20px;
+    padding-top: 5px;
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
@@ -149,12 +150,12 @@ span.tooltip:after {
 
 #navi {
     max-width: 100%;
-    font-size: 15px;
+    font-size: 12px;
     color: white;
     background-color: rgb(47, 99, 148);
     display: inline;
     padding-top: 3px;
-    padding-left: 2px;
+    padding-left: 20px;
 
 }
 

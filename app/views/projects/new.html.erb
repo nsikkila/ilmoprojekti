@@ -1,7 +1,12 @@
-<%= render 'form' %>
 
-<%= link_to 'Takaisin', projects_path %>
+<% if (@projectbundles.nil?) %>
+    Sinun on luotava vähintään yksi projektiryhmä ennen kuin voit luoda projekteja
+<% else %>
+    <%= render 'form' %>
 
+    <%= link_to 'Takaisin', projects_path %>
+
+<% end %>
 <% content_for :header do %>
     Uusi projekti
 <% end %>

@@ -225,6 +225,27 @@ describe "Projects page" do
       expect(page).to have_content("Testi Testinen")
     end
 
+    it "shows the project picture if a picture is saved" do
+
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+      create_objects_for_frontpage
+      visit edit_project_path(1)
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
+
+      click_button('Luo projekti')
+
+      visit project_path(1)
+
+      page.should have_xpath("/html/body/div[2]/div[2]/div/img")
+
+    end
+
     it "shows which students have been accepted for the project" do
       usr=FactoryGirl.create :user, username:"koklaus"
       signin(username:usr.username, password:usr.password)
