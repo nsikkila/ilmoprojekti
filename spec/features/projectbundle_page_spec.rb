@@ -29,7 +29,7 @@ describe "Projectpundle page" do
       expect(page).to have_link("Takaisin")
     end
 
-    it "should go to own page after greating valid bundle" do
+    it "should go to own page after creating valid bundle" do
       user = FactoryGirl.create(:admin)
       signin(username:user.username, password:user.password)
       visit new_projectbundle_path;
@@ -63,5 +63,40 @@ describe "Projectpundle page" do
 
       expect(page).to have_content "Kuvaus ei voi olla sisällötön"
       end
+  end
+  describe "Projectbundle edit" do
+    it "should change the name when edited with valid information" do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi")
+
+
+      visit "/projectbundles/#{projectbundle.id}/edit"
+
+      fill_in("projectbundle_name", with: "Muokattu")
+      #expect{
+        click_button "Tallenna projektiryhmä"
+      #}.to change{projectbundle.name}.from("Testi").to("Muokattu")
+      expect(page).to have_content "Muokattu"
     end
+  end
+
+  describe "Projectbundle edit" do
+    it "should change the description when edited with valid information" do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi", description: "Testing")
+
+
+      visit "/projectbundles/#{projectbundle.id}/edit"
+
+      fill_in("projectbundle_description", with: "Muokattu")
+
+      click_button "Tallenna projektiryhmä"
+
+      expect(page).to have_content "Muokattu"
+    end
+  end
+
+
 end
