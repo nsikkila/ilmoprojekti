@@ -1,7 +1,7 @@
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert%></p>
 <% if not @projectbundle.nil? %>
-<h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}kello 23.59"%></h3>
+<h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)} kello 23.59"%></h3>
   <%= render 'form' %>
   <br/>
   <br/>
@@ -11,7 +11,9 @@
         <div id="<%= p.id %>" >
           <p>
             <%= p.description %><br/>
+            <% if not Projectpicture.find_by_project_id(p.id).nil? %>
             <%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => Projectpicture.find_by_project_id(p.id)) %><br/>
+            <% end %>
             Projektin kotisivu: <%= link_to p.website, p.website, :target => '_blank' %><br/>
             Projektiin hyväksyttävien opiskelijoiden määrä: <%= p.maxstudents %><br/>
             Vastuuhenkilö: <%= p.user.to_s %>
