@@ -33,14 +33,14 @@ class ProjectsController < ApplicationController
   def new
     @project = Project.new
     #@project.projectpicture = Projectpicture.new
-    @bundle = Projectbundle.all
+    @projectbundles = Projectbundle.all
   end
 
   # GET /projects/1/edit
   def edit
     #@project = Project.find(params[:project_id])
     #@bundle = @project.projectbundle
-    @bundle = Projectbundle.all
+    @projectbundles = Projectbundle.all
   end
 
   # POST /projects
@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
             @projectpicture.project = @project
             @projectpicture.save
           else
-            @bundle = Projectbundle.all
+            @projectbundles = Projectbundle.all
             #@project.errors[''] << "Hahaa, loins!"
             render :new, :notice => "Kuvan tallentaminen ei onnistunut."
             return
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to @project, notice: 'Projekti onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @project }
       else
-        @bundle = Projectbundle.all
+        @projectbundles = Projectbundle.all
         format.html { render action: 'new' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
@@ -86,7 +86,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    @bundle = Projectbundle.all
+    @projectbundles = Projectbundle.all
     respond_to do |format|
 
       @project.assign_attributes(project_params)
@@ -110,7 +110,7 @@ class ProjectsController < ApplicationController
             @projectpicture.project = @project
             @projectpicture.save
           else
-            @bundle = Projectbundle.all
+            @projectbundles = Projectbundle.all
             render :edit, :notice => "Nönnönnöö"
             return
           end
