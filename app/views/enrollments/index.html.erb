@@ -1,21 +1,56 @@
 
 <% unless @enrollments.first.nil? %>
+    <% if @projectbundle.verified == false %>
+        <% if @projectbundle.signup_is_active == true %>
+            <p>Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
+        <% elsif @user_is_admin %>
+            [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
+        <% end %>
+    <% else %>
+        <p><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
+    <% end %>
+    <table>
+      <tr>
+        <td class="legend">&nbsp;&nbsp;4&nbsp;&nbsp;</td>
+        <td>Opiskelija on ilmoittautunut kyseiseen projektiin prioriteetilla X</td>
+      </tr>
+      <tr>
+        <td class="legend">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>Opiskelija ei ole ilmoittautunut kyseiseen projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend accepted"></td>
+        <td>Opiskelija hyväksytty projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend forced"></td>
+        <td>Opiskelija pakotettu projektiin</td>
+      </tr>
+      <tr>
+        <td class="legend note"></td>
+        <td>Työväri (ei varsinaista vaikutusta ryhmäjakoihin)</td>
+      </tr>
 
-    <table class="enrollmenttable" style="width:100%;">
+    </table>
+
+    <table class="tablesorter" id="enrollmenttable">
       <thead>
       <tr>
         <th>
           Opiskelija
         </th>
+        <th>
+          Opnro
+        </th>
         <% @projects.each do |project| %>
-            <th>
-              <%= project.name %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
-        <th>
+        <th title="Moneenko projektiin opiskelija on hyväksytty">
           Opiskelijalla projekteja
         </th>
-        <th>
+        <th title="Opiskelijan hyväksyttyjen ilmoittautumisten prioriteettien keskiarvo. Tämä arvo tulee pitää mahdollisimman pienenä.">
           Magic number
         </th>
       </tr>
@@ -23,22 +58,33 @@
 
       <tfoot class="tableSummary">
       <tr>
-        <td>Opiskelijoita</td>
+        <td></td>
+        <td></td>
+        <% @projects.each do |project| %>
+            <th title="<%= project.name %>">
+              <%= project.name.truncate(4, omission:'') %>
+            </th>
+        <% end %>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td title="Kurssille hyväksytyt opiskelijat/Kurssille hyväksyttävien opiskelijoiden määrä">Opiskelijoita</td>
+        <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-ptotal">
-              <%= project.amount_of_accepted_students %> / <%= project.maxstudents %>
+            <td class="summaryCell" id="<%= project.id %>-ptotal">
             </td>
         <% end %>
         <td></td>
         <td></td>
       </tr>
       <tr>
-        <td>Täyttöaste</td>
+        <td title="Kertoo paljonko kurssilla on tilaa tai monellako opiskelijalla raja on ylitetty">Täyttöaste</td>
+        <td></td>
         <% @projects.each do |project| %>
 
-            <td id="<%= project.id %>-pfill">
-              <%= project.amount_of_accepted_students - project.maxstudents %>
+            <td class="summaryCell" id="<%= project.id %>-pfill">
             </td>
         <% end %>
         <td></td>
@@ -51,32 +97,30 @@
 
           <tr>
             <td>
-              <%= enrollment.name %>
+              <%= enrollment.name %>[<%= link_to 'x', enrollments_path+"/"+enrollment.id.to_s+"/delete", method: :delete, data: { confirm: 'Haluatko varmasti poistaa ilmoittautumisen?' } %>]
+            </td>
+            <td>
+              <%= enrollment.studentnumber %>
             </td>
             <% @projects.each do |project| %>
-                <% signup = enrollment.signups.find_by(project_id:project.id) %>
-                <% unless signup.nil? %>
-                    <td id="<%= enrollment.id %>-<%= project.id %>" onclick="toggle(<%= enrollment.id %>, <%= project.id %>)" class="prioritycell<%= ' accepted' if signup.status %>"<%= 'class=accepted' if signup.status %>>
-                      <%= signup.priority %>
-                    </td>
-                <% else %>
-                    <td></td>
-                <% end %>
+
+                <td id="<%= enrollment.id %>-<%= project.id %>" title="<%= "#{enrollment.lastname} #{enrollment.firstname} - #{project.name}" %>" onclick="changeStatus($(this))" class="prioritycell">
+                </td>
+
             <% end %>
-            <td id="<%= enrollment.id %>-etotal" class="tableSummary">
-              <%= enrollment.accepted_amount %>
+            <td id="<%= enrollment.id %>-etotal" class="summaryCell tableSummary">
             </td>
-            <td id="<%= enrollment.id %>-escore" class="tableSummary">
-              <%= enrollment.compute_magic_number %>
+            <td id="<%= enrollment.id %>-escore" class="summaryCell tableSummary">
             </td>
           </tr>
       <% end %>
       </tr>
       </tbody>
-
-
-
     </table>
+
+    <p>Lataa tämä taulukko xls-muodossa:<br>
+      <%= link_to 'Lataa', projectbundles_path(format: "xlsx")%>
+    </p>
 
 <% else %>
     <h2>Ei ilmoittautumisia.</h2>
@@ -88,22 +132,189 @@
 <% end %>
 
 <script>
-    function toggle(enrollment_id, project_id) {
+
+    var autoTimeout = 5000; //ms
+    var UItimeout = 200; //ms
+    var UItimeoutHandle, autoTimeoutHandle;
+    var modifyingAllowed, verified, admin = false;
+
+    function setForcedClass(element) {
+        element.toggleClass('forced', true);
+        element.toggleClass('wanted', false);
+    }
+    function setAcceptedClass(element) {
+        element.toggleClass('accepted', true);
+        element.toggleClass('wanted', true);
+    }
+    function unSetForcedClass(element) {
+        element.toggleClass('forced', false);
+        element.toggleClass('wanted', false);
+    }
+    function unSetAcceptedClass(element) {
+        element.toggleClass('accepted', false);
+        element.toggleClass('wanted', true);
+    }
+
+    function resetForcedStatuses() {
+        $('.prioritycell.forced').each(function() {
+            unSetForcedClass($(this));
+        });
+    }
+
+    function refreshAll() {
+        clearTimeout(autoTimeoutHandle);
+        $.ajax({
+            type: "GET",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "tabledata"
+        })
+                .done(function(msg) {
+                    var selector, element;
+                    var enrollments = msg[0];
+                    var projects = msg[1];
+                    var signups = msg[2];
+
+                    resetForcedStatuses();
+
+                    $.each(signups, function(index, signup) {
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+
+                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
+
+                        element = $(selector);
+
+                        if (signup.priority > 0) {
+                            element.html(signup.priority);
+                        }
+
+                        if (signup.forced) { //Signup is forced
+                            setForcedClass(element);
+                        } else if (signup.status) { //Not forced but status is true => accepted
+                            setAcceptedClass(element);
+                        } else if (!signup.status) { //Status is false but signup exists => not accepted
+                            unSetAcceptedClass(element);
+                        } else {
+                            alert('Error: status is unknown');
+                        }
+                    });
+
+
+                    $.each(enrollments, function(index, enrollment) {
+
+                        selector = '#'+enrollment.id+'-etotal';
+                        $(selector).html(enrollment.accepted_amount);
+
+                        selector = '#'+enrollment.id+'-escore';
+                        $(selector).html(enrollment.magic_number);
+                    });
+
+                    $.each(projects, function(index, project) {
+                        selector = '#'+project.id+'-pfill';
+                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+
+                        selector = '#'+project.id+'-ptotal';
+                        $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
+                    })
+                    if (modifyingAllowed) {
+                        autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
+                    }
+                });
+
+
+    }
+
+
+    function setForcedStatus(element, newForced) {
+
+        var elementIdArray = element.attr('id').split("-");
+        var enrollment_id = elementIdArray[0];
+        var project_id = elementIdArray[1];
         $.ajax({
             type: "POST",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: "toggle",
-            data: { enrollment_id: enrollment_id, project_id: project_id }
+            url: "setforced",
+            data: {enrollment_id: enrollment_id, project_id: project_id, forced: newForced }
         })
-                .done(function( msg ) {
-                    document.getElementById(project_id+"-ptotal").innerHTML = msg.acceptedStudents + " / " +msg.maxStudents;
-                    document.getElementById(enrollment_id+"-etotal").innerHTML = msg.acceptedProjects;
-                    document.getElementById(enrollment_id+"-escore").innerHTML = msg.magicNumber;
-                    document.getElementById(project_id+"-pfill").innerHTML = msg.acceptedStudents - msg.maxStudents;
-                    $("#"+enrollment_id +"-"+project_id).toggleClass("accepted");
+                .done(function(msg) {
                 });
-    };
+    }
 
+    function setStatus(element, newStatus) {
+        var elementIdArray = element.attr('id').split("-");
+        var enrollment_id = elementIdArray[0];
+        var project_id = elementIdArray[1];
+        $.ajax({
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: "setstatus",
+            data: {enrollment_id: enrollment_id, project_id: project_id, status: newStatus }
+        })
+                .done(function(msg) {
+                });
+    }
 
+    function changeStatus(element) {
+        if (modifyingAllowed || (admin && verified)) {
+            clearTimeout(autoTimeoutHandle);
+            var elementClass = element.attr('class');
 
+            if (elementClass.indexOf('wanted') == -1) {
+                if (elementClass.indexOf('forced') >= 0) {
+                    unSetForcedClass(element);
+                    setForcedStatus(element, false);
+                } else {
+                    setForcedClass(element);
+                    setForcedStatus(element, true);
+                }
+            } else {
+                if (elementClass.indexOf('accepted') >= 0) {
+                    unSetAcceptedClass(element);
+                    setStatus(element, false);
+                } else {
+                    setAcceptedClass(element);
+                    setStatus(element, true);
+                }
+            }
+            setTimeout(refreshAll, UItimeout);
+        } else {
+            if (verified) {
+                alert('Ainoastaan admin voi tehdä muutoksia vahvistettuihin ilmottautumisiin.');
+            } else {
+                alert('Ilmottautuminen on vielä käynnissä.');
+            }
+        }
+    }
+
+    $('.prioritycell').bind('contextmenu', function(event) {
+        $(this).toggleClass('note');
+        event.preventDefault();
+    })
+
+    function setModifiable() {
+        modifyingAllowed = <%= not @projectbundle.signup_is_active %>;
+        admin = <%= @user_is_admin %>;
+        verified = <%= @projectbundle.verified %>;
+    }
+
+    $(document).ready(function() {
+        refreshAll();
+        setModifiable();
+        $(function() {
+            $( document ).tooltip({show:{delay:1000}});
+        });
+    });
+
+    $(document).ready(function()
+            {
+                $.tablesorter.formatInt = function (s) {
+                    var i = parseInt(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $.tablesorter.formatFloat = function (s) {
+                    var i = parseFloat(s);
+                    return (isNaN(i)) ? null : i;
+                };
+                $("#enrollmenttable").tablesorter();
+            }
+    );
 </script>

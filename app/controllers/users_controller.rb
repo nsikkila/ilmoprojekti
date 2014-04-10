@@ -1,11 +1,13 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action only: [:new, :create, :destroy] do
-    is_at_least(:admin)
+  before_action only: [:new, :create, :destroy, :index] do
+    to_root_if_not_at_least(:admin)
   end
-  before_action only: [:show] do
-     current_user.id == params[:id].to_i or is_at_least(:admin)
+  before_action only: [:show, :edit, :update] do
+     current_user.id == params[:id].to_i or to_root_if_not_at_least(:admin)
   end
+
+  before_action :check_expire
 
   # GET /users
   # GET /users.json
@@ -25,14 +27,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if current_user.id == params[:id].to_i
       @users = current_user
-    elsif is_at_least(:admin)
-      @users = User.all
-    else
-      redirect_to :root
-    end
-
   end
 
   # POST /users
@@ -43,7 +38,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to @user, notice: 'Uusi käyttäjä onnistuneesti luotu.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
         format.html { render action: 'new' }
@@ -55,20 +50,15 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    if current_user.id == params[:id].to_i
       respond_to do |format|
         if @user.update(user_params)
-          format.html { redirect_to @user, notice: 'User was successfully updated.' }
+          format.html { redirect_to @user, notice: 'Käyttäjätiedot päivitetty.' }
           format.json { head :no_content }
         else
           format.html { render action: 'edit' }
           format.json { render json: @user.errors, status: :unprocessable_entity }
         end
       end
-    else
-      redirect_to :root
-    end
-
   end
 
   # DELETE /users/1

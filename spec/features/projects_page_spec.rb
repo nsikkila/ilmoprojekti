@@ -8,11 +8,20 @@ describe "Projects page" do
     it "Cannot be accessed if not logged in" do
       create_objects_for_frontpage
       visit projects_path
-      expect(page).to_not have_content("Luo uusi projekti")
-      expect(page).to have_content("Etunimi")
-      expect(page).to have_content("Sukunimi")
-      expect(page).to have_content("Opiskelijanumero")
+
+      expect(page).to have_content 'Sinun täytyy kirjautua sisään'
     end
+
+    it "allows the deletion of a project" do
+      sign_in_and_initialize
+      FactoryGirl.create(:project)
+      visit projects_path
+
+      expect {
+        click_link("Poista")
+      }.to change{Project.count}.by(-1)
+    end
+
   end
 
   describe "Create new project form" do
@@ -24,10 +33,8 @@ describe "Projects page" do
     it "Cannot be accessed if not logged in" do
         create_objects_for_frontpage
         visit new_project_path
-        expect(page).to_not have_content("Luo projekti")
-        expect(page).to have_content("Etunimi")
-        expect(page).to have_content("Sukunimi")
-        expect(page).to have_content("Opiskelijanumero")
+        expect(page).to have_content("Sinun täytyy kirjautua sisään")
+
 
     end
 
@@ -62,9 +69,9 @@ describe "Projects page" do
         click_button('Luo projekti')
       }.to_not change{Project.count}
 
-      expect(page).to have_content("Name is too short")
-      expect(page).to have_content("Description is too short")
-      expect(page).to have_content("Website is not a valid URL")
+      expect(page).to have_content("Nimi on liian lyhyt")
+      expect(page).to have_content("Kuvaus on liian lyhyt")
+      expect(page).to have_content("Kotisivu is not a valid URL")
     end
 
 
@@ -75,14 +82,14 @@ describe "Projects page" do
     it "cannot be accessed if not logged in" do
       create_objects_for_frontpage
       visit edit_project_path(1)
-      expect(page).to_not have_content("Luo uusi projekti")
-      expect(page).to have_content("Etunimi")
-      expect(page).to have_content("Sukunimi")
-      expect(page).to have_content("Opiskelijanumero")
+      expect(page).to have_content("Sinun täytyy kirjautua sisään")
+
     end
 
     it "can be accessed and succesfully edited with proper values" do
-      sign_in_and_initialize
+      #sign_in_and_initialize
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
       create_objects_for_frontpage
       visit edit_project_path(1)
       fill_in('project_name', with:"Testiprojekti1")
@@ -104,7 +111,11 @@ describe "Projects page" do
     end
 
     it "cannot be edited with improper values" do
-      sign_in_and_initialize
+      #sign_in_and_initialize
+
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+
       create_objects_for_frontpage
       visit edit_project_path(1)
       fill_in('project_name', with:"")
@@ -113,9 +124,9 @@ describe "Projects page" do
       fill_in('project_maxstudents', with:"asd")
       click_button('Luo projekti')
 
-      expect(page).to have_content("Name is too short")
-      expect(page).to have_content("Description is too short")
-      expect(page).to have_content("Website is not a valid URL")
+      expect(page).to have_content("Nimi on liian lyhyt")
+      expect(page).to have_content("Kuvaus on liian lyhyt")
+      expect(page).to have_content("Kotisivu is not a valid URL")
 
       visit project_path(1)
 
@@ -149,10 +160,55 @@ describe "Projects page" do
       expect(page).to have_content("Testiprojekti1")
       expect(page).to have_content("Description for testproject")
       expect(page).to have_content("http://www.hs.fi")
-      expect(page).to have_content("Vastuuhenkilö: testi")
+      expect(page).to have_content("Vastuuhenkilö: Opettaja")
     end
 
   end
+
+  describe "Project page" do
+
+    it "shows list of students who have signed up for the project" do
+      #@enrollment = create_enrollment_with_signups
+      #enroll=create_another_enrollment_with_signups
+      create_two_enrollments_with_signups
+      visit project_path(1)
+
+      expect(page).to have_content("Jaska Jokunen")
+      expect(page).to have_content("Testi Testinen")
+    end
+
+    it "shows which students have been accepted for the project" do
+      usr=FactoryGirl.create :user, username:"koklaus"
+      signin(username:usr.username, password:usr.password)
+      @enrollment = create_another_enrollment_with_signups
+      visit project_path(1)
+
+      expect(page).to have_content("Jaska Jokunen")
+      expect(page).to have_content("Odottaa vielä hyväksymistä tai ei hyväksytty")
+      @enrollment.signups.first.status = true
+
+      visit project_path(1)
+
+      expect(page).to have_content("Jaska Jokunen")
+      expect(page).to have_content("Hyväksytty")
+    end
+
+    it "has link to page which contains email addresses of accepted students" do
+      usr=FactoryGirl.create :user, username:"koklaus"
+      signin(username:usr.username, password:usr.password)
+      @enrollment = create_enrollment_with_signups
+
+      visit project_path(1)
+      expect(page).to have_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
+      click_link("Hyväksyttyjen opiskelijoiden sähköpostiosoitteet")
+
+   #   save_and_open_page
+
+      expect(page).to have_content("test@email.com")
+    end
+
+  end
+
 end
 
 def sign_in_and_initialize

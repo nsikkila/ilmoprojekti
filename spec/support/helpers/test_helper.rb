@@ -27,6 +27,7 @@ module TestHelper
   def create_objects_for_frontpage
     #FactoryGirl.create(:signup)
     FactoryGirl.create(:user)
+
     @projectbundle = FactoryGirl.create(:projectbundle)
     @projects = generate_six_unique_projects(@projectbundle.id)
     @enrollment = FactoryGirl.build(:enrollment)
@@ -34,6 +35,9 @@ module TestHelper
     6.times do
       @enrollment.signups << FactoryGirl.build(:signup)
     end
+
+    @enrollment.save
+
   end
 
   def create_enrollment_with_signups
@@ -53,4 +57,79 @@ module TestHelper
     return @enrollment
   end
 
-end
+  def create_two_enrollments_with_signups
+
+    FactoryGirl.create(:user)
+    @projectbundle = FactoryGirl.create(:projectbundle)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+
+    @enrollment.save
+
+    @enrollment2 = FactoryGirl.build(:enrollment1)
+
+    index = 1
+    6.times do
+      @enrollment2.signups << FactoryGirl.build(:signup, project_id:index, status:false)
+      index = index + 1
+    end
+
+    @enrollment2.save
+
+
+  end
+
+  def create_another_enrollment_with_signups
+    #FactoryGirl.create(:signup)
+   # FactoryGirl.create(:teacher)
+    @projectbundle = FactoryGirl.create(:projectbundle)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment1)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index, status:false)
+      index = index + 1
+    end
+
+    @enrollment.save
+    return @enrollment
+  end
+
+  def create_enrollments_with_signups_for_old_projects
+    #FactoryGirl.create(:signup)
+   # FactoryGirl.create(:user)
+    @projectbundle = FactoryGirl.create(:projectbundle_closed)
+    @projects = generate_six_unique_projects(@projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+
+    @enrollment.save
+    return @enrollment
+  end
+
+  def create_signups_for_projectbundle(projectbundle)
+    @projects = generate_six_unique_projects(projectbundle.id)
+    @enrollment = FactoryGirl.build(:enrollment)
+
+    index = 1
+    6.times do
+      @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+      index = index + 1
+    end
+
+    @enrollment.save
+  end
+
+  end

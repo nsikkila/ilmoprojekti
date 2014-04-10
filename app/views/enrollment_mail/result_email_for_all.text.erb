@@ -1,0 +1,12 @@
+Tämä on automaattisesti luotu vahvistusviesti. Älä vastaa tähän.
+
+--------------------------------
+Olet ilmottautunut Laurean ammattikorkeakoulun projekteihin.
+Ilmottautumiset on nyt vahvistettu ja
+<% if @projs.empty? %>valitettavasti sinua ei valittu mihinkään projektiin.
+<% else %>sinut on valittu seuraaviin projekteihin:
+<% @projs.each do |proj| %>
+<%= proj %>
+<% end %>
+<% end %>
+Jos sinulla on kysyttävää valinnoista, ota yhteyttä projektien yhteyshenkilöihin (Kari Halmeeseen?)

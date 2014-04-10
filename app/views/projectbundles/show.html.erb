@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert%></p>
 
 <p>
   <strong>Name:</strong>
@@ -12,8 +13,25 @@
 
 <p>
   <strong>Active:</strong>
-  <%= @projectbundle.active %>
+  <% if @projectbundle.active? and not @projectbundle.active.nil?%>
+    <td>Kyllä</td>
+<% else %>
+    <td>Ei</td>
+<% end %>
+</p>
+
+<p>
+  <strong>Ilmottautumisen alkamispäivä:</strong>
+  <%= @projectbundle.signup_start.to_formatted_s(:laurea_way) %>
+</p>
+
+<p>
+  <strong>Ilmottautumisen päättymispäivä:</strong>
+  <%= @projectbundle.signup_end.to_formatted_s(:laurea_way) %>
 </p>
 
 <%= link_to 'Muokkaa', edit_projectbundle_path(@projectbundle) %> |
 <%= link_to 'Takaisin', projectbundles_path %>
+<% content_for :header do %>
+    <%= "Projektiryhmän tiedot" %>
+<% end %>

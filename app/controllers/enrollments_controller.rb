@@ -2,34 +2,67 @@ class EnrollmentsController < ApplicationController
   require 'digest/sha1'
   require 'enrollment.rb'
 
+  before_action only: [:destroy] do
+    to_root_if_not_at_least(:teacher)
+  end
+
+  before_action :check_expire
+
   def index
-    if current_user.nil? or not is_at_least(:teacher)
-      redirect_to :root
+    if current_user.nil? or not compare_accesslevel(:teacher)
+      redirect_to :root, notice: "Sivu on vain opettajille."
+    else
+      @projectbundle = Projectbundle.find_by_active(true)
+
+      if @projectbundle.nil?
+        redirect_to :root, notice: "Ei aktiivisia projektiryhmiä"
+      else
+        @user_is_admin = compare_accesslevel(:admin)
+        set_projectbundle_and_projects
+        @enrollments = Enrollment.all
+      end
     end
-    set_projectbundle_and_projects
-    @enrollments = Enrollment.all
   end
 
   def new
-    set_projectbundle_and_projects
-    @enrollment = Enrollment.new
-    set_signups_to_enrollment(6)
+    if Projectbundle.find_by_active(true).nil?
+      @enrollment = nil
+    else
+      set_projectbundle_and_projects
+      @enrollment = Enrollment.new
+      set_signups_to_enrollment(6)
+    end
   end
 
   def create
     @enrollment = Enrollment.new(enrollment_params)
-    @enrollment.signups.each do |signup|
-      signup.status = false
-    end
-    respond_to do |format|
-      if @enrollment.save
-        @digest = Enrollment.create_hash(@enrollment)
-        EnrollmentMail.confirmation_email(@enrollment, @digest).deliver
-        format.html { render action: 'show' }
-      else
-        set_projectbundle_and_projects
-        format.html { render action: 'new' }
+    @activebundle = Projectbundle.find_by_active(true)
+    if not @activebundle.signup_is_active
+      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+    else
+      @enrollment.signups.each do |signup|
+        signup.status = false
       end
+      respond_to do |format|
+        if @enrollment.save
+          @digest = Enrollment.create_hash(@enrollment)
+          EnrollmentMail.confirmation_email(@enrollment, @digest, @activebundle).deliver
+          format.html { render action: 'show' }
+        else
+          set_projectbundle_and_projects
+          format.html { render action: 'new' }
+        end
+      end
+    end
+  end
+
+  def destroy
+    enrollment = Enrollment.find_by_id(params[:enrollment_id])
+    if not enrollment.nil?
+      Enrollment.destroy(enrollment)
+      redirect_to enrollments_path
+    else
+      redirect_to enrollments_path
     end
   end
 
@@ -51,24 +84,59 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-   if Enrollment.confirm_expire_date(@enrollment)
-     redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
-   end
+    if not @enrollment.return_projectbundle.signup_is_active
+      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
+    end
   end
 
-  def toggle
+  def setforced
+
     enrollment = Enrollment.find params[:enrollment_id]
-    signup = enrollment.signups.find_by_project_id(params[:project_id])
-    project = signup.project
-    if signup.status
-      signup.status = false
-      signup.save
-    else
-      signup.status = true
+    project = Project.find params[:project_id]
+    new_forced = params[:forced]
+    projectbundle = enrollment.projects.first.projectbundle
+
+    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))  or not compare_accesslevel(:teacher)
+      if (new_forced == 'true')
+        signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 0, status: true, forced: true)
+        signup.save
+      else
+        signup = enrollment.signups.find_by_project_id(params[:project_id])
+        signup.destroy
+      end
+    end
+    render nothing: true
+
+  end
+
+  def setstatus
+    enrollment = Enrollment.find params[:enrollment_id]
+    projectbundle = enrollment.projects.first.projectbundle
+    unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin)) or not compare_accesslevel(:teacher)
+      signup = enrollment.signups.find_by_project_id(params[:project_id])
+      project = signup.project
+
+      new_status = params[:status]
+      signup.status = new_status
       signup.save
     end
+    render nothing:true
+  end
 
-    render :json => "{\"acceptedProjects\":\"#{enrollment.accepted_amount}\", \"magicNumber\":\"#{enrollment.compute_magic_number}\", \"acceptedStudents\":\"#{project.amount_of_accepted_students}\", \"maxStudents\":\"#{project.maxstudents}\", \"newStatus\":\"#{signup.status}\"}"
+  def get_current_statuses
+    if compare_accesslevel(:teacher)
+      bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
+      enrollments = bundle.enrollments
+      signups = bundle.signups
+      projects = bundle.projects
+      enrollments_json = enrollments.as_json(only: [:id], methods: [:accepted_amount, :magic_number])
+      projects_json = projects.as_json(only: [:id, :maxstudents], methods: :amount_of_accepted_students)
+      signups_json = signups.as_json( only: [:enrollment_id, :project_id, :status, :forced, :priority])
+      response = [enrollments_json, projects_json, signups_json]
+      render :json => response
+    else
+      render nothing:true
+    end
   end
 
   def update
@@ -90,12 +158,19 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  def show_emails
+    @proj = Project.find(params[:format])
+    render :emails
+  end
+
   private
 
   def set_signups_to_enrollment(number_of_signups)
     priority = 1
     number_of_signups.times do
-      @enrollment.signups << Signup.new(priority: priority)
+
+      @enrollment.signups << Signup.new(priority: priority, forced: false)
+
       priority = priority + 1
     end
   end
@@ -110,15 +185,12 @@ class EnrollmentsController < ApplicationController
   end
 
   def set_projectbundle_and_projects
-    @projectbundle = Projectbundle.first
+    @projectbundle = Projectbundle.find_by_active(true)
     @projects = @projectbundle.projects
-
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id])
+    params.require(:enrollment).permit(:firstname, :lastname, :studentnumber, :email, :signups_attributes => [:project_id, :enrollment_id, :priority, :id, :forced])
+
   end
-
-
-
 end

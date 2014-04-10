@@ -1,7 +1,7 @@
 <%= form_for(@projectbundle) do |f| %>
   <% if @projectbundle.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@projectbundle.errors.count, "errors") %> prohibited this projectbundle from being saved:</h2>
+      <h2><%= pluralize(@projectbundle.errors.count, "virhe", "virhettä") %> esti projektinipun tallentamisen:</h2>
 
       <ul>
       <% @projectbundle.errors.full_messages.each do |msg| %>
@@ -20,10 +20,22 @@
     <%= f.text_area :description %>
   </div>
   <div class="field">
+    <%= f.label :signup_start, 'Ilmoittautuminen alkaa'%>
+    <br>
+    <%= f.date_select :signup_start %>
+  </div>
+  <div class="field">
+    <%= f.label :signup_end, 'Ilmoittautuminen päättyy' %>
+    <br>
+    <%= f.date_select :signup_end %>
+  </div>
+  <div class="field">
     <%= f.label :active ,'Aktiivinen'%><br>
     <%= f.check_box :active %>
   </div>
+
   <div class="actions">
-    <%= f.submit 'Luo projektiryhmä' %>
+    <%= f.submit 'Tallenna projektiryhmä' %>
   </div>
+
 <% end %>

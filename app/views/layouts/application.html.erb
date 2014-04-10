@@ -7,32 +7,35 @@
   <%= csrf_meta_tags %>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 </head>
 <body>
 
 <div id="navi">
-  <%= link_to 'Etusivu', root_path %>
+  <%= link_to 'ETUSIVU', root_path %>
   <% if not current_user.nil? and compare_accesslevel(:admin) %>
-      <%= link_to 'Käyttäjät', users_path %>
+      <%= link_to 'KÄYTTÄJÄT', users_path %>
   <% end %>
-  <%= link_to 'Projektit', projects_path %> |
-  <% if not current_user.nil? and is_at_least(:teacher) %>
-      <%= link_to 'Ilmoittautumiset', enrollments_path %>
-  <% end %>
-  <% if not current_user.nil? %>
-      <%=link_to current_user.username,  user_path(current_user.id) %> kirjautuneena sisään.
-      <%= link_to 'Kirjaudu ulos', signout_path, method: :delete %>
-  <% else %>
-      <%=link_to 'Kirjaudu sisään', signin_path %>
+  <%= link_to 'PROJEKTIT', projects_path %>
+
+  <% if not current_user.nil? and compare_accesslevel(:admin) %>
+      <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
+  <% end %> |
+
+  <% if not current_user.nil? and compare_accesslevel(:teacher) %>
+      <%= link_to 'ILMOTTAUTUMISET', enrollments_path %>
   <% end %>
 
+  <% if not current_user.nil? %>
+      <%=link_to current_user.username.upcase,  user_path(current_user.id) %> KIRJAUTUNEENA SISÄÄN.
+      <%= link_to 'KIRJAUDU ULOS', signout_path, method: :delete %>
+  <% else %>
+      <%=link_to 'KIRJAUDU SISÄÄN', signin_path %>
+  <% end %>
 </div>
 
 <div class="content">
   <div class="header">
-    <h1><%= yield :header %></h1>
+    <h1 id="topheader"><%= yield :header %></h1><div id="headerlogo"><img src="/images/p2plogo_box_projekti_ilmo_250x111.jpeg"/></div>
   </div>
   <div style="margin-top: 10px;">
     <div class="subdiv" style="padding: 15px;">

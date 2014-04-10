@@ -1,0 +1,26 @@
+<% unless @proj.signups.empty? %>
+    <table>
+      <thead>
+      <tr>
+        <th>Nimi</th>
+        <th>Sähköpostiosoite</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @proj.signups.each do |signup| %>
+      <tr>
+            <% if signup.status %>
+                <td><%= signup.enrollment.name %></td>
+                <td><%= signup.enrollment.email %></td>
+            <% end %>
+        <% end %>
+        </tr>
+      </tbody>
+    </table>
+<%else%>
+ Projektiin <%=@proj.name%> ei ole hyväksytty ketään.
+<% end %>
+
+<% content_for :header do %>
+    Projektiin hyväksyttyjen oppilaiden sähköpostiosoitteet
+<% end %>

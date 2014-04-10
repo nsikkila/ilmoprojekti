@@ -1,8 +1,16 @@
 class SignupsController < ApplicationController
+#Signuppeja ei käsitellä yksittäisinä. Ainoastaan pakotuksen yhteydessä luodaan ja poistetaan yksittäisiä signuppeja
+#ja sekin hoidetaan suoraan olioita käpistelemällä. Säilytetään koodi (ja muutama testi) kommentoituna, jos tuleekin tarvetta
+
+=begin
+
   before_action :set_signup, only: [:show, :edit, :update, :destroy]
   before_action only: [:edit, :create, :update, :destroy] do
-    is_at_least(:teacher)
+    to_root_if_not_at_least(:teacher)
   end
+
+
+  before_action :check_expire
   
   # GET /signups
   # GET /signups.json
@@ -72,4 +80,6 @@ class SignupsController < ApplicationController
     def signup_params
       params.require(:signup).permit(:student_id, :project_id)
     end
+
+=end
 end

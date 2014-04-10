@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306084530) do
+ActiveRecord::Schema.define(version: 20140403112924) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -28,19 +28,30 @@ ActiveRecord::Schema.define(version: 20140306084530) do
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "signup_start"
+    t.date     "signup_end"
+    t.boolean  "verified"
+  end
+
+  create_table "projectpictures", force: true do |t|
+    t.string   "filename"
+    t.string   "content_type"
+    t.binary   "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "project_id"
   end
 
   create_table "projects", force: true do |t|
     t.string   "name"
     t.string   "description"
-    t.date     "signup_start"
-    t.date     "signup_end"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "maxstudents"
     t.integer  "user_id"
     t.integer  "projectbundle_id"
     t.string   "website"
+    t.integer  "projectpicture_id"
   end
 
   create_table "signups", force: true do |t|
@@ -50,7 +61,10 @@ ActiveRecord::Schema.define(version: 20140306084530) do
     t.datetime "updated_at"
     t.integer  "priority"
     t.boolean  "status"
+    t.boolean  "forced"
   end
+
+  add_index "signups", ["enrollment_id"], name: "index_signups_on_enrollment_id"
 
   create_table "users", force: true do |t|
     t.string   "firstname"

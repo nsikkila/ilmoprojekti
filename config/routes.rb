@@ -5,6 +5,7 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :signups
 
+  get 'projectpictures/show' => 'projectpictures#show'
   resources :projects
 
   resources :users
@@ -13,13 +14,19 @@ Ilmoprojekti::Application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
+  get 'projectbundles/:projectbundle_id/verify', to: 'projectbundles#verify'
   get 'all', to: 'enrollments#index'
   get 'enrollments/:enrollment_id/:hash', to: 'enrollments#edithash'
+  delete 'enrollments/:enrollment_id/delete', to: 'enrollments#destroy'
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
-  post 'toggle', to: 'enrollments#toggle'
+  post 'setstatus', to: 'enrollments#setstatus'
+  post 'setforced', to: 'enrollments#setforced'
+  get 'tabledata', to: 'enrollments#get_current_statuses'
 
   root 'enrollments#new'
+
+  get 'emails', to: 'enrollments#show_emails'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -2,22 +2,29 @@ class UniqueSignupValidator < ActiveModel::Validator
 
   def validate(record)
     arr = Array.new
+    at_least_one = false
     record.signups.each do |signup|
       if not signup.project_id.nil?
+        at_least_one = true
         if arr.include?(signup.project_id)
-          record.errors[:project] << 'can only have one priority'
+          record.errors[:project] << 'Voit valita kunkin projektin vain kerran.'
         else
           arr << signup.project_id
         end
       end
     end
+
+    if not at_least_one
+      record.errors[:project] << 'Valitse vähintään yksi projekti.'
+    end
+
   end
 end
 
 class Enrollment < ActiveRecord::Base
-
+  belongs_to :projectbundle
+  has_many :signups, -> { order(:id => :asc) }, dependent: :destroy
   has_many :projects, through: :signups
-  has_many :signups, order: 'id ASC'
   accepts_nested_attributes_for :signups
 
   validates_with UniqueSignupValidator
@@ -27,7 +34,7 @@ class Enrollment < ActiveRecord::Base
   validates :email, presence: {on: :create}, format: {with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, message: "Sähköpostiosoitteen täytyy olla muotoa esi@merk.ki"}
 
   def name
-    "#{firstname} #{lastname} "
+    "#{lastname} #{firstname}"
   end
 
   def accepted_amount
@@ -40,30 +47,26 @@ class Enrollment < ActiveRecord::Base
     accepted
   end
 
-  def compute_magic_number
+  def magic_number
     number = 0
+    amount = 0
     signups.each do |signup|
       if signup.status
         number = number + signup.priority
+        amount = amount + 1
       end
     end
-    number
+    if amount == 0
+      return 0
+    end
+    (number.to_f/amount).round(1)
+  end
+
+  def return_projectbundle
+    self.projects.first.projectbundle
   end
 
   def self.create_hash(enrollment)
     Digest::SHA1.hexdigest (enrollment.id.to_s + enrollment.created_at.to_s)
   end
-
-  def self.confirm_expire_date(enrollment)
-    enrollment.signups.each do |sign|
-   #   raise sign.project.inspect
-      if not sign.project.nil?
-        if sign.project.signup_end < Date.today
-          return true
-        end
-      end
-    end
-    false
-  end
-
 end
