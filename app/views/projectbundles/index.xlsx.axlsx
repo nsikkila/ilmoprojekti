@@ -2,9 +2,11 @@ wb = xlsx_package.workbook
 
 wb.add_worksheet(:name => "Projektijaot") do |sheet|
   header = sheet.styles.add_style(bg_color: "C0C0C0", border: {style: :thin, color: "000000"})
+  approved = sheet.styles.add_style(bg_color: "33FF66")
+  unapproved = sheet.styles.add_style(bg_color: "FF0033")
   array = ["Opiskelija", "Opiskelijanumero"]
   @projectbundle.projects.each do |proj|
-    array << proj.name
+    array << proj.name.to_s
   end
   array << "Opiskelijalla projekteja"
   array << "Magic number"
@@ -51,15 +53,23 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     arrayFills << "-" + maxstudents + ""
 	end
   end
-	arrayFills << ""
-	arrayFills << ""
-	arrayStats << ""
-	arrayStats << ""
+	arrayFills << " "
+	arrayFills << " "
+	arrayStats << " "
+	arrayStats << " "
   sheet.add_row arrayStats, style: header
   sheet.add_row arrayFills, style: header
 
-  
+  sheet.rows.each do |row|
+    row.cells.each do |cell|
+      if cell.value == "Ei valittu"
+        cell.style = unapproved
+      end
 
-
+      if cell.value == "Valittu"
+        cell.style = approved
+      end
+    end
+  end
 
 end
