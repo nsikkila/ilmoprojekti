@@ -1,5 +1,5 @@
 class EnrollmentMail < ActionMailer::Base
-  default from: "donotreply@ilmoprojekti.com"
+  default from: "ilmoprojekti@gmail.com"
 
   def confirmation_email(user, hash, projectbundle)
     @projectbundle = projectbundle

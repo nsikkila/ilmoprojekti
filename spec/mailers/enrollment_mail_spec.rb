@@ -24,6 +24,8 @@ describe EnrollmentMail do
       @email.should have_subject("Vahvistus ilmottautumisesta")
     end
 
+
+
   end
 
 end
