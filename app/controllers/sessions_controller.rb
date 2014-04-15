@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
     else
       session[:user_id] = user.id
       session[:timeout] = Time.now + 20.minutes
-      redirect_to user
+      redirect_to projects_path
     end
   end
 
