@@ -18,8 +18,8 @@
                 <td><%= link_to project.name, project %></td>
                 <% if (current_user.id == project.user.id) or (current_user.accesslevel == 1) %>
                 <td><%= link_to 'Muokkaa', edit_project_path(project) %></td>
-                <% end %>
                 <td><%= link_to 'Poista', project, method: :delete, data: { confirm: 'Haluatko varmasti poistaa projektin?' } %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>
