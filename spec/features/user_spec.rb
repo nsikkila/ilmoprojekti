@@ -43,7 +43,7 @@ describe "User" do
 		it "can access project creation" do
 			visit projects_path
 
-			click_link "Luo uusi projekti"
+			first(:link, "Luo uusi projekti").click
 			expect(current_path).to eq(new_project_path)
 		end
 
@@ -71,7 +71,7 @@ describe "User" do
 		it "can access project creation" do
 			visit projects_path
 
-			click_link "Luo uusi projekti"
+      first(:link, "Luo uusi projekti").click
 			expect(current_path).to eq(new_project_path)
 		end
 

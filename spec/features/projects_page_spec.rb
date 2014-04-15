@@ -50,7 +50,7 @@ describe "Projects page" do
        #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
        expect {
-         click_button('Luo projekti')
+         click_button('Tallenna projekti')
        }.to change{Project.count}.by(1)
     end
 
@@ -67,7 +67,7 @@ describe "Projects page" do
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
       expect {
-        click_button('Luo projekti')
+        click_button('Tallenna projekti')
       }.to change{Project.count}.by(1)
 
       expect(Projectpicture.count).to be(1)
@@ -86,7 +86,7 @@ describe "Projects page" do
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
       expect {
-        click_button('Luo projekti')
+        click_button('Tallenna projekti')
       }.to_not change{Project.count}
 
       expect(page).to have_content("Nimi on liian lyhyt")
@@ -116,7 +116,7 @@ describe "Projects page" do
       fill_in('project_description', with:"Description for testproject")
       fill_in('project_website', with:"http://www.hs.fi")
       fill_in('project_maxstudents', with:"15")
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit project_path(1)
 
@@ -143,7 +143,7 @@ describe "Projects page" do
 
       attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit project_path(1)
 
@@ -170,7 +170,7 @@ describe "Projects page" do
       fill_in('project_description', with:"")
       fill_in('project_website', with:"I am not a url")
       fill_in('project_maxstudents', with:"asd")
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       expect(page).to have_content("Nimi on liian lyhyt")
       expect(page).to have_content("Kuvaus on liian lyhyt")
@@ -202,7 +202,7 @@ describe "Projects page" do
 
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit new_enrollment_path
       expect(page).to have_content("Testiprojekti1")
@@ -238,7 +238,7 @@ describe "Projects page" do
 
       attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit project_path(1)
 
