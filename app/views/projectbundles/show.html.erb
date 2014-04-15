@@ -2,17 +2,17 @@
 <p class="alert"><%= alert%></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Nimi:</strong>
   <%= @projectbundle.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong>Kuvaus:</strong>
   <%= @projectbundle.description %>
 </p>
 
 <p>
-  <strong>Active:</strong>
+  <strong>Aktiivinen:</strong>
   <% if @projectbundle.active? and not @projectbundle.active.nil?%>
     <td>Kyllä</td>
 <% else %>
