@@ -163,6 +163,15 @@
         });
     }
 
+    function setFillWithPlusSign(accepted, max) {
+        fill = accepted - max;
+        if (fill > 0 ) {
+            return "+" + fill;
+        } else {
+            return fill;
+        }
+    }
+
     function refreshAll() {
         clearTimeout(autoTimeoutHandle);
         $.ajax({
@@ -212,7 +221,8 @@
 
                     $.each(projects, function(index, project) {
                         selector = '#'+project.id+'-pfill';
-                        $(selector).html(project.amount_of_accepted_students-project.maxstudents);
+                        fill = setFillWithPlusSign(project.amount_of_accepted_students, project.maxstudents)
+                        $(selector).html(fill);
 
                         selector = '#'+project.id+'-ptotal';
                         $(selector).html(project.amount_of_accepted_students + ' / ' + project.maxstudents);
