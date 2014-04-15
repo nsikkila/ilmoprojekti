@@ -45,7 +45,7 @@
           Opnro
         </th>
         <% @projects.each do |project| %>
-            <th title="<%= project.name %>">
+            <th title="<%= project.name %>" class="{sorter: 'digit'}">
               <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
@@ -220,8 +220,8 @@
                     if (modifyingAllowed) {
                         autoTimeoutHandle = setTimeout(refreshAll, autoTimeout);
                     }
+                    $("#enrollmenttable").trigger('update');
                 });
-
 
     }
 
@@ -316,7 +316,13 @@
                     var i = parseFloat(s);
                     return (isNaN(i)) ? null : i;
                 };
-                $("#enrollmenttable").tablesorter();
+
+                $("#enrollmenttable").tablesorter({
+                    debug: true,
+                    headers: {
+                        3:{sorter: 'digit'}
+                    }
+                });
             }
     );
 </script>

@@ -1,6 +1,6 @@
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert%></p>
-<% if not @projectbundle.nil? %>
+<% if not @projectbundle.nil? and not (@projectbundle.signup_start > Date.today) and not (@projectbundle.signup_end <= Date.today)%>
 <h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}"%></h3>
   <%= render 'form' %>
   <br/>
