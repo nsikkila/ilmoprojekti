@@ -327,12 +327,7 @@
                     return (isNaN(i)) ? null : i;
                 };
 
-                $("#enrollmenttable").tablesorter({
-                    debug: true,
-                    headers: {
-                        3:{sorter: 'digit'}
-                    }
-                });
+                $("#enrollmenttable").tablesorter();
             }
     );
 </script>

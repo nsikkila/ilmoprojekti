@@ -36,9 +36,9 @@
           </tr>
         </table>
         <p>Valitse alla olevista vetovalikoista haluamasi kurssit tärkeysjärjestyksessä.</p>
-        <p>Lisätietoa projekteista löytyy alempaa.</p>
-        <p> HUOM!  Valitse ainakin yksi projekti.</p>
-        <table class="formtable">
+        <p>HUOM!  Valitse ainakin yksi projekti!</p>
+
+        <table class="formtable" style="display: inline-block;">
           <%= f.fields_for :signups do |sf| %>
               <tr>
                 <td class="label">Prioriteetti <%= sf.object.priority %>:</td>
@@ -51,6 +51,7 @@
 
           <% end %>
         </table>
+        <div style="display: inline-block; position: relative; top: -100px; margin-left: 10px;">Lisätietoa projekteista löytyy sivun alaosasta</div>
         <br>
         <br/>
         <div class="actions">
