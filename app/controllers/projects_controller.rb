@@ -38,9 +38,12 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    #@project = Project.find(params[:project_id])
-    #@bundle = @project.projectbundle
-    @projectbundles = Projectbundle.all
+    if @project.user == current_user or compare_accesslevel(:admin)
+      @projectbundles = Projectbundle.all
+    else
+      redirect_to projects_path, notice: 'Voit muokata vain omia projektejasi.'
+    end
+
   end
 
   # POST /projects
@@ -86,42 +89,45 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    @projectbundles = Projectbundle.all
-    respond_to do |format|
+    if @project.user == current_user or compare_accesslevel(:admin)
 
-      @project.assign_attributes(project_params)
+      @projectbundles = Projectbundle.all
+      respond_to do |format|
 
-      if @project.valid?
+        @project.assign_attributes(project_params)
 
-        @projectpicture = Projectpicture.find_by_project_id(@project.id)
+        if @project.valid?
 
-        if not params[:project][:projectpicture].nil?
+          @projectpicture = Projectpicture.find_by_project_id(@project.id)
 
-          #Jos updatessa tulee uusi kuva, poistetaan vanha
-          if not @projectpicture.nil?
-            @projectpicture.destroy
+          if not params[:project][:projectpicture].nil?
+
+            #Jos updatessa tulee uusi kuva, poistetaan vanha
+            if not @projectpicture.nil?
+              @projectpicture.destroy
+            end
+
+            @projectpicture = Projectpicture.new
+            @projectpicture.uploaded_file = params[:project][:projectpicture]
+
+            if @projectpicture.save
+              @project.projectpicture = @projectpicture
+              @projectpicture.project = @project
+              @projectpicture.save
+            else
+              @projectbundles = Projectbundle.all
+              render :edit, :notice => "Nönnönnöö"
+              return
+            end
+
           end
-
-          @projectpicture = Projectpicture.new
-          @projectpicture.uploaded_file = params[:project][:projectpicture]
-
-          if @projectpicture.save
-            @project.projectpicture = @projectpicture
-            @projectpicture.project = @project
-            @projectpicture.save
-          else
-            @projectbundles = Projectbundle.all
-            render :edit, :notice => "Nönnönnöö"
-            return
-          end
-
+          @project.save
+          format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @project.errors, status: :unprocessable_entity }
         end
-        @project.save
-        format.html { redirect_to @project, notice: 'Projekti onnistuneesti päivitetty.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -129,10 +135,13 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-    @project.destroy
-    respond_to do |format|
-      format.html { redirect_to projects_url }
-      format.json { head :no_content }
+    if @project.user == current_user or compare_accesslevel(:admin)
+
+      @project.destroy
+      respond_to do |format|
+        format.html { redirect_to projects_url }
+        format.json { head :no_content }
+      end
     end
   end
 

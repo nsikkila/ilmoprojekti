@@ -26,7 +26,6 @@ describe "Projectpundle page" do
       expect(page).to have_unchecked_field("projectbundle_active")
       expect(page).to have_field("projectbundle_description")
       expect(page).to have_button("Tallenna projektiryhmä")
-      expect(page).to have_link("Takaisin")
     end
 
     it "should go to own page after creating valid bundle" do
