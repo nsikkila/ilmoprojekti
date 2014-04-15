@@ -54,6 +54,7 @@ end
 gem 'byebug', group: [:development, :test]
 
 gem 'coveralls', require: false
+
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
@@ -61,6 +62,7 @@ group :test do
   gem 'simplecov', :require => false
   gem 'email_spec'
   gem 'selenium-webdriver'
+  gem 'email_spec'
 end
 
 gem 'axlsx'

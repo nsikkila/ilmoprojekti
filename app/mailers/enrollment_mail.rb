@@ -5,7 +5,7 @@ class EnrollmentMail < ActionMailer::Base
     @projectbundle = projectbundle
   	@enrollment=user
   	@digest=hash
-  	@url="http://ilmoprojekti.herokuapp.com/enrollments"+@enrollment.id.to_s+"/"+@digest
+  	@url="http://ilmoprojekti.herokuapp.com/enrollments/"+@enrollment.id.to_s+"/"+@digest
   	mail(to: @enrollment.email, subject:'Vahvistus ilmottautumisesta')
   end
 
