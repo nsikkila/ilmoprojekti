@@ -240,6 +240,8 @@ describe "Projects page" do
 
       click_button('Tallenna projekti')
 
+      expect(Projectpicture.count).to be(1)
+
       visit project_path(1)
 
       page.should have_xpath("/html/body/div[2]/div[2]/div/img")
