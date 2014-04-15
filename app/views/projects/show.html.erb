@@ -32,6 +32,7 @@
 <%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => Projectpicture.find_by_project_id(@project.id)) %>
 <% end %>
 
+<% if @project.signups.count >= 1 %>
 <h2>Projektiin halukkuutensa ilmoittaneet: </h2>
 <table>
   <tr>
@@ -63,6 +64,7 @@
       </tr>
   <% end %>
 </table>
+<% end %>
 <br/>
  <%= link_to 'Hyväksyttyjen opiskelijoiden sähköpostiosoitteet', emails_path(@project.id) %><br>
 <a href="mailto:?bcc=<%= @emails %>">Lähetä sähköposti hyväksytyille</a><br><br>
