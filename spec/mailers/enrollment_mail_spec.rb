@@ -29,8 +29,12 @@ describe EnrollmentMail do
 
   describe "email after verification" do
     before(:each) do
-      @enrollment = create_enrollment_with_signups
-      @email = EnrollmentMail.result_email_for_all(@enrollment)
+      @enro = create_enrollment_with_signups
+      @email = EnrollmentMail.result_email_for_all(@enro)
+    end
+
+    it "should have right sender" do
+      @email.should deliver_from("ilmoprojekti@gmail.com")
     end
 
     it "should have right recipient" do
@@ -42,8 +46,30 @@ describe EnrollmentMail do
     end
 
     it "should tell if not accepted to any project" do
-      @email.should have_body_text("valitettavasti sinua ei valittu mihinkään projektiin")
+      @enro.signups.each do |sign|
+        sign.status = false
+        sign.save
+        @enro.save
+
       end
+      @enro.save
+      @mail = EnrollmentMail.result_email_for_all(@enro)
+      @mail.should have_body_text("valitettavasti sinua ei valittu mihinkään projektiin")
+    end
+
+    it "should tell if accepted to projects" do
+      @bundle = Projectbundle.find_by_active(true)
+      if not @bundle.nil?
+        @bundle.active = false
+        @bundle.save
+      end
+      @enr = create_another_enrollment_with_signups
+      sign = @enr.signups.first
+      sign.status = true
+      sign.save
+      @mail = EnrollmentMail.result_email_for_all(@enr)
+      @mail.should have_body_text("sinut on valittu seuraaviin projekteihin:")
+    end
   end
 
 end

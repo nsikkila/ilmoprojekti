@@ -99,6 +99,7 @@ module TestHelper
     end
 
     @enrollment.save
+    @projectbundle.save
     return @enrollment
   end
 
