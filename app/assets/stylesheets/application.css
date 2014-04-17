@@ -149,26 +149,7 @@ span.tooltip:after {
 }
 
 #navi {
-    max-width: 100%;
-    font-size: 12px;
-    color: white;
-    background-color: rgb(47, 99, 148);
-    display: inline;
-    padding-top: 3px;
-    padding-left: 20px;
 
-}
-
-#navi a {
-    align: inline-block;
-    color: #ffffff;
-}
-
-#navi a:visited {
-    color: black;
-}
-#navi a:hover {
-    color:#2F6394;
 }
 
 .alert {
