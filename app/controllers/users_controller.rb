@@ -64,7 +64,8 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user.destroy
+    @user.disabled = true
+    @user.save
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
@@ -79,6 +80,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username,:firstname, :lastname, :password, :password_confirmation, :accesslevel)
+      params.require(:user).permit(:username,:firstname, :lastname, :password, :password_confirmation,:accesslevel).merge(disabled:false)
     end
 end

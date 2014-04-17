@@ -87,7 +87,7 @@ describe Enrollment do
   describe 'removing enrollment' do
 
     it 'removes associated signups' do
-      e = create_enrollment_with_signups(1)
+      e = create_enrollment_with_two_signups(1)
 
       #initial
       expect(Enrollment.count).to eq 1
@@ -101,8 +101,8 @@ describe Enrollment do
     end
 
     it 'does not remove unassiociated signups' do
-      e1 = create_enrollment_with_signups(1)
-      e2 = create_enrollment_with_signups(2)
+      e1 = create_enrollment_with_two_signups(1)
+      e2 = create_enrollment_with_two_signups(2)
 
       #initial
       expect(Enrollment.count).to eq 2
@@ -119,7 +119,7 @@ describe Enrollment do
 
 end
 
-def create_enrollment_with_signups(enrollment_id)
+def create_enrollment_with_two_signups(enrollment_id)
   e = FactoryGirl.build(:enrollment, id:enrollment_id)
   s1 = FactoryGirl.create(:signup, project_id:1, enrollment_id:enrollment_id)
   s2 = FactoryGirl.create(:signup, project_id:2, enrollment_id:enrollment_id)

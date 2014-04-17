@@ -13,13 +13,35 @@
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
+    <% @users.select{|u| not u.disabled}.each do |user| %>
       <tr>
         <td><%= link_to "#{user.username}", user %></td>
         <td><%= user.firstname %> <%= user.lastname %></td>
         <td><%= link_to 'Poista', user, method: :delete, data: { confirm: 'Haluatko varmasti poistaa käyttäjän?' } %></td>
       </tr>
     <% end %>
+  </tbody>
+</table>
+
+<h3>Poistetut käyttäjät:</h3>
+<table>
+  <thead>
+  <tr>
+    <th>Käyttäjänimi</th>
+    <th>Nimi</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.select{|u| u.disabled}.each do |user| %>
+      <tr>
+        <td><%= link_to "#{user.username}", user %></td>
+        <td><%= user.firstname %> <%= user.lastname %></td>
+        <td><%= link_to 'Palauta', user, method: :enable, data: { confirm: 'Haluatko varmasti palauttaa käyttäjän?' } %></td>
+      </tr>
+  <% end %>
   </tbody>
 </table>
 
