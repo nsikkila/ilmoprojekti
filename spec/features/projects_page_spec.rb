@@ -186,6 +186,26 @@ describe "Projects page" do
 
     end
 
+    it "cannot only be accessed by the projects owner" do
+
+      user = FactoryGirl.create(:teacher)
+      FactoryGirl.create(:projectbundle)
+      project = FactoryGirl.create(:project)
+
+      user2 = FactoryGirl.create(:user)
+      signin(username:user2.username, password:user2.password)
+
+      #expect(User.count).to be(2)
+      #expect(Projectbundle.count).to be(1)
+      #expect(Project.count).to be (1)
+
+      visit edit_project_path(project)
+
+      save_and_open_page
+
+      expect(page).to have_content("Voit muokata vain omia projektejasi.")
+    end
+
 
   end
 
