@@ -39,7 +39,7 @@
       <tr>
         <td><%= link_to "#{user.username}", user %></td>
         <td><%= user.firstname %> <%= user.lastname %></td>
-        <td><%= link_to 'Palauta', user, method: :enable, data: { confirm: 'Haluatko varmasti palauttaa käyttäjän?' } %></td>
+        <td><%= link_to 'Palauta', user, method: :post, data: { confirm: 'Haluatko varmasti palauttaa käyttäjän?' } %></td>
       </tr>
   <% end %>
   </tbody>
