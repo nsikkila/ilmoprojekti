@@ -59,11 +59,9 @@ class EnrollmentsController < ApplicationController
   def destroy
     enrollment = Enrollment.find_by_id(params[:enrollment_id])
     if not enrollment.nil?
-      Enrollment.destroy(enrollment)
-      redirect_to enrollments_path
-    else
-      redirect_to enrollments_path
+      Enrollment.destroy(enrollment)  
     end
+      redirect_to enrollments_path
   end
 
   def edithash

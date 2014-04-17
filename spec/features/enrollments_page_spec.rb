@@ -5,6 +5,11 @@ describe "Enrollments page" do
 
   describe "Signup form" do
 
+    it "is not displayed if signups are not active" do
+      visit root_path
+      expect(page).to have_content("Ei aktiivisia projektiryhmiä")
+    end
+
     it "has all the correct fields, lists project information and projects" do
 
       FactoryGirl.create :projectbundle
