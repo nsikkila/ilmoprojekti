@@ -69,7 +69,6 @@ class ProjectsController < ApplicationController
             @projectpicture.save
           else
             @projectbundles = Projectbundle.all
-            #@project.errors[''] << "Hahaa, loins!"
             render :new, :notice => "Kuvan tallentaminen ei onnistunut."
             return
           end
@@ -116,7 +115,7 @@ class ProjectsController < ApplicationController
               @projectpicture.save
             else
               @projectbundles = Projectbundle.all
-              render :edit, :notice => "Nönnönnöö"
+              render :edit, :notice => "Kuvaa ei voitu tallentaa"
               return
             end
 

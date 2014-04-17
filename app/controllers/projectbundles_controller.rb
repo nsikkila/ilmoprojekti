@@ -101,13 +101,15 @@ class ProjectbundlesController < ApplicationController
     params.require(:projectbundle).permit(:name, :description, :active, :signup_start, :signup_end)
   end
 
-  def is_somebody_active
-    is_it_active = false
-    @projectbundles.each do |projectbundle|
-      if projectbundle.active = true
-        is_it_active = true
-      end
-      return is_it_active
-    end
-  end
+  #Mikä viritys tää on? Käytetäänkö tätä edes missään? Eipä taida edes toimia
+  #def is_somebody_active
+  #  is_it_active = false
+  #  @projectbundles.each do |projectbundle|
+  #    if projectbundle.active = true
+  #      is_it_active = true
+  #    end
+  #    return is_it_active
+  #  end
+  #end
+
 end

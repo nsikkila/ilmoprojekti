@@ -120,6 +120,40 @@ describe "Projectpundle page" do
 
       expect(page).to have_content "Muokattu"
     end
+
+    it "should not update the project if fields do not pass validation " do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi", description: "Testing")
+
+      visit "/projectbundles/#{projectbundle.id}/edit"
+
+      fill_in("projectbundle_description", with: "")
+
+      click_button "Tallenna projektiryhmä"
+
+      expect(page).to have_content "1 virhe esti projektinipun tallentamisen:"
+    end
+
+  end
+
+  describe "Projectbundle destroy" do
+    it "should destroy a project if user is logged in as an admin" do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi", description: "Testing")
+
+      expect(Projectbundle.count).to be(1)
+
+      visit projectbundles_path
+
+      click_link("Poista")
+
+      expect(Projectbundle.count).to be(0)
+
+    end
+
+
   end
 
 
