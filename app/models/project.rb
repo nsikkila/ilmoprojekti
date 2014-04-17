@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
 
   has_one :projectpicture, dependent: :destroy
   has_many :signups
-  has_many :enrollments, through: :signups
+  has_many :enrollments, through: :signups, dependent: :destroy
   belongs_to :projectbundle
   belongs_to :user
   accepts_nested_attributes_for :projectpicture
