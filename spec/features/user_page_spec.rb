@@ -97,12 +97,11 @@ describe "User page" do
     end
 
     it "can delete a user" do
-      FactoryGirl.create(:user)
+      u = FactoryGirl.create(:user)
       visit users_path
 
-      expect {
-        find(:xpath, "(//a[text()='Poista'])[2]").click
-      }.to change { User.count }.by(-1)
+      find(:xpath, "(//a[text()='Poista'])[2]").click
+      expect(User.find(u.id)).to be_disabled
 
     end
 
