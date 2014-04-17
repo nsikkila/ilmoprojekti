@@ -58,7 +58,6 @@ module TestHelper
   end
 
   def create_two_enrollments_with_signups
-
     FactoryGirl.create(:user)
     @projectbundle = FactoryGirl.create(:projectbundle)
     @projects = generate_six_unique_projects(@projectbundle.id)

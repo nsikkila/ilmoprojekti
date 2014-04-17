@@ -10,23 +10,24 @@ class EnrollmentMail < ActionMailer::Base
   end
 
   def result_email_for_all(enrollments)
-  #  enrollments.to_a
-    #byebug
+
+    #  enrollments.to_a
     if enrollments.is_a? Enrollment
       @mails = enrollments.email
       result_email_for_one(enrollments)
     elsif enrollments.count == 1
-        @mails = enrollments.first.email
-        result_email_for_one(enrollments.first)
-      else
-        @mails = []
-        enrollments.each do |enrs|
-          result_email_for_one(enrs)
-          @mails << enrs.email
-        end
+      @mails = enrollments.first.email
+      result_email_for_one(enrollments.first)
+    else
+
+      @mails = []
+      enrollments.each do |enrs|
+        result_email_for_one(enrs)
+        @mails << enrs.email
       end
-      mail(bcc: @mails, subject: 'Ilmottautumisen tulokset')
     end
+    mail(bcc: @mails, subject: 'Ilmottautumisen tulokset')
+  end
 
 
   def result_email_for_one(enrollment)

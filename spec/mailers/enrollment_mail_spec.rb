@@ -31,6 +31,11 @@ describe EnrollmentMail do
     before(:each) do
       @enro = create_enrollment_with_signups
       @email = EnrollmentMail.result_email_for_all(@enro)
+      @bundle = Projectbundle.find_by_active(true)
+      if not @bundle.nil?
+        @bundle.active = false
+        @bundle.save
+      end
     end
 
     it "should have right sender" do
@@ -40,6 +45,36 @@ describe EnrollmentMail do
     it "should have right recipient" do
       @email.should bcc_to("test@email.com")
     end
+
+    it "should have all the recipients when several enrollments" do
+      @projectbundle = FactoryGirl.create(:projectbundle)
+      @projects = generate_six_unique_projects(@projectbundle.id)
+      @enrollment = FactoryGirl.build(:enrollment)
+
+      index = 1
+      6.times do
+        @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+        index = index + 1
+      end
+
+      @enrollment.save
+
+      @projs = generate_six_unique_projects(@projectbundle.id)
+      @enro = FactoryGirl.build(:enrollment1, email: "jepa@gmail.com")
+
+      index = 1
+      6.times do
+        @enro.signups << FactoryGirl.build(:signup, project_id:index)
+        index = index + 1
+      end
+
+      @enro.save
+
+      arr = [@enrollment, @enro]
+      @mail = EnrollmentMail.result_email_for_all(arr)
+      @mail.should bcc_to("test@email.com", "jepa@gmail.com")
+    end
+
 
     it "should have correct subject" do
       @email.should have_subject("Ilmottautumisen tulokset")
@@ -58,11 +93,6 @@ describe EnrollmentMail do
     end
 
     it "should tell if accepted to projects" do
-      @bundle = Projectbundle.find_by_active(true)
-      if not @bundle.nil?
-        @bundle.active = false
-        @bundle.save
-      end
       @enr = create_another_enrollment_with_signups
       sign = @enr.signups.first
       sign.status = true
