@@ -3,7 +3,32 @@ require 'spec_helper'
 include TestHelper
 
 describe "Projectpundle page" do
+
+  it "none of the views can be accessed by a teacher" do
+    user = FactoryGirl.create(:teacher)
+    projectbundle = FactoryGirl.create(:projectbundle)
+    signin(username:user.username, password:user.password)
+    visit new_projectbundle_path
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit projectbundles_path
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit projectbundle_path(projectbundle)
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit edit_projectbundle_path(projectbundle)
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+  end
+
   describe "Projectbundle new" do
+
+
 
     it "should have correct texts in the page" do
       user = FactoryGirl.create(:admin)

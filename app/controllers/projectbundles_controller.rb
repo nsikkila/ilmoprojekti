@@ -1,9 +1,6 @@
 class ProjectbundlesController < ApplicationController
   before_action :set_projectbundle, only: [:show, :edit, :update, :destroy]
-  before_action only: [:edit, :new, :create, :update, :destroy] do
-    to_root_if_not_at_least(:teacher)
-  end
-  before_action only: [:verify] do
+  before_action only: [:edit, :new, :create, :update, :destroy, :verify, :index, :show] do
     to_root_if_not_at_least(:admin)
   end
 
