@@ -5,8 +5,8 @@ class Project < ActiveRecord::Base
   validates :website, url: true, :allow_blank => true
   validates :maxstudents, :presence => true, :numericality => true
 
-  has_one :projectpicture, dependent: :destroy
-  has_many :signups
+  has_one :projectpicture
+  has_many :signups, dependent: :destroy
   has_many :enrollments, through: :signups
   belongs_to :projectbundle
   belongs_to :user
