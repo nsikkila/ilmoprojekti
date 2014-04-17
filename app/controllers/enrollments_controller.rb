@@ -59,7 +59,7 @@ class EnrollmentsController < ApplicationController
   def destroy
     enrollment = Enrollment.find_by_id(params[:enrollment_id])
     if not enrollment.nil?
-      Enrollment.destroy(enrollment)  
+      Enrollment.destroy(enrollment)
     end
       redirect_to enrollments_path
   end

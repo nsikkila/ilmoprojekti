@@ -5,11 +5,6 @@ describe "Enrollments page" do
 
   describe "Signup form" do
 
-    it "is not displayed if signups are not active" do
-      visit root_path
-      expect(page).to have_content("Ei aktiivisia projektiryhmiä")
-    end
-
     it "has all the correct fields, lists project information and projects" do
 
       FactoryGirl.create :projectbundle
@@ -249,6 +244,25 @@ describe "Enrollments page" do
       expect(page).to have_content("Ilmoittautuminen onnistui!")
       expect(page).to have_content("Muokkaa")
       expect(page).to have_content("7654321")
+      #save_and_open_page
+
+    end
+
+    it "does not save changes if information is not valid" do
+      enrollment = create_enrollment_with_signups
+
+      hash = Enrollment.create_hash(enrollment)
+
+      visit "enrollments/#{enrollment.id}/#{hash}"
+
+      fill_in('enrollment_firstname', with: "")
+      fill_in('enrollment_lastname', with: "")
+      fill_in('enrollment_studentnumber', with: "")
+      fill_in('enrollment_email', with: "edit@testi.fi")
+
+      click_button('Tallenna ilmoittautuminen')
+
+      expect(page).to have_content("3 virhettä esti ilmoittautumisen tallentamisen:")
       #save_and_open_page
 
     end
