@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe Projectbundle do
 
-  it "gets added to the database when created" do
+  it 'gets added to the database when created' do
     p = Projectbundle.create(name: "Testbundle", description: "Testdescription")
 
     expect(p.valid?).to be(true)
@@ -30,7 +30,6 @@ describe Projectbundle do
 
     expect(p.valid?).to be(false)
     expect(Projectbundle.count).to eq(0)
-
   end
 
   it 'removing a bundle removes associated projects' do
