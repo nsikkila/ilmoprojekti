@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140403112924) do
+ActiveRecord::Schema.define(version: 20140417134834) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20140403112924) do
     t.datetime "updated_at"
     t.string   "password_digest"
     t.string   "username"
+    t.boolean  "disabled"
   end
 
 end
