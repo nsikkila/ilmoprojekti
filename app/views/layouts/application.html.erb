@@ -10,37 +10,51 @@
 </head>
 <body>
 
-<div id="navi">
+<nav>
   <ul>
     <li><%= link_to 'ETUSIVU', root_path %></li>
     <% if not current_user.nil? and compare_accesslevel(:admin) %>
-        <li><%= link_to 'KÄYTTÄJÄT', users_path%>
-        <ul>
-          <li><%= link_to 'LUO UUSI', new_user_path %></li>
-          <li><%= link_to 'LISTAA KÄYTTÄJÄT' , users_path%></li>
-        </ul>
+        <li><%= link_to 'KÄYTTÄJÄT', users_path %>
+          <ul>
+            <li><%= link_to 'LUO UUSI', new_user_path %></li>
+            <li><%= link_to 'LISTAA KÄYTTÄJÄT', users_path %></li>
+          </ul>
         </li>
 
 
     <% end %>
-    <li></li><%= link_to 'PROJEKTIT', projects_path %>
+    <li><%= link_to 'PROJEKTIT', projects_path %>
+      <ul>
+        <li><%= link_to 'LUO UUSI', new_project_path %></li>
+        <li><%= link_to 'LISTAA PROJEKTIT', projects_path %></li>
+      </ul>
+    </li>
 
     <% if not current_user.nil? and compare_accesslevel(:admin) %>
-        <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
-    <% end %> |
+       <li> <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
+       <ul>
+         <li><%= link_to 'LUO UUSI', new_projectbundle_path%></li>
+         <li><%= link_to 'LISTAA PROJEKTIRYHMÄT', projectbundles_path %></li>
+       </ul>
+       </li>
+    <% end %>
 
     <% if not current_user.nil? and compare_accesslevel(:teacher) %>
-        <%= link_to 'ILMOITTAUTUMISET', enrollments_path %>
+        <li><%= link_to 'ILMOITTAUTUMISET', enrollments_path %></li>
     <% end %>
 
     <% if not current_user.nil? %>
-        <%= link_to current_user.username.upcase, user_path(current_user.id) %> KIRJAUTUNEENA SISÄÄN.
-        <%= link_to 'KIRJAUDU ULOS', signout_path, method: :delete %>
+        <li><%= link_to current_user.username.upcase, user_path(current_user.id) %>
+        <ul>
+          <li><%= link_to 'MUOKKAA TIETOJA', edit_user_path(current_user)%></li>
+          <li><%= link_to 'KIRJAUDU ULOS', signout_path, method: :delete %></li>
+        </ul>
+        </li>
     <% else %>
-        <%= link_to 'KIRJAUDU SISÄÄN', signin_path %>
+       <li> <%= link_to 'KIRJAUDU SISÄÄN', signin_path %></li>
     <% end %>
-      </ul>
-</div>
+  </ul>
+</nav>
 
 <div class="content">
   <div class="header">

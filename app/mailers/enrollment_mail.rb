@@ -10,8 +10,6 @@ class EnrollmentMail < ActionMailer::Base
   end
 
   def result_email_for_all(enrollments)
-
-    #  enrollments.to_a
     if enrollments.is_a? Enrollment
       @mails = enrollments.email
       result_email_for_one(enrollments)
@@ -19,7 +17,6 @@ class EnrollmentMail < ActionMailer::Base
       @mails = enrollments.first.email
       result_email_for_one(enrollments.first)
     else
-
       @mails = []
       enrollments.each do |enrs|
         result_email_for_one(enrs)
