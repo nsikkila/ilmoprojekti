@@ -110,3 +110,10 @@ describe "Enrollment table view when signup is still active" do
   end
 
 end
+
+describe "Enrollment table view when no projectbundles exist" do
+  it "is not displayed" do
+    visit enrollments_path
+    expect(page).to have_content("Ei aktiivisia projektiryhmiä")
+  end
+end

@@ -248,6 +248,25 @@ describe "Enrollments page" do
 
     end
 
+    it "does not save changes if information is not valid" do
+      enrollment = create_enrollment_with_signups
+
+      hash = Enrollment.create_hash(enrollment)
+
+      visit "enrollments/#{enrollment.id}/#{hash}"
+
+      fill_in('enrollment_firstname', with: "")
+      fill_in('enrollment_lastname', with: "")
+      fill_in('enrollment_studentnumber', with: "")
+      fill_in('enrollment_email', with: "edit@testi.fi")
+
+      click_button('Tallenna ilmoittautuminen')
+
+      expect(page).to have_content("3 virhettä esti ilmoittautumisen tallentamisen:")
+      #save_and_open_page
+
+    end
+
     it "doesnt allow editing if deadline has passed" do
       enrollment = create_enrollments_with_signups_for_old_projects
       hash = Enrollment.create_hash(enrollment)
