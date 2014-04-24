@@ -67,9 +67,9 @@ class EnrollmentsController < ApplicationController
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
-      redirect_to :root, notice: 'Ilmottautumista ei löydy.'
-    elsif not @enrollment.projectbundle.active
-      redirect_to :root, notice: 'Ilmottautuminen on päättynyt.'
+      redirect_to :root, notice: 'Ilmoittautumista ei löydy.'
+    elsif not (@enrollment.return_projectbundle.signup_is_active)
+      redirect_to :root, notice: 'Ilmoittautuminen on päättynyt.'
     else
       session[:enrollment_id] = @enrollment.id
       session[:hash] = params[:hash]
@@ -83,9 +83,6 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if not @enrollment.return_projectbundle.signup_is_active
-      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
-    end
   end
 
   def setforced
