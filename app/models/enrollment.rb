@@ -33,6 +33,7 @@ class Enrollment < ActiveRecord::Base
   validates :studentnumber, format: {with: /\A[0-9]{7}\z/i, message: "Opiskelijanumeron täytyy olla numeroista koostuva ja 7 merkkiä pitkä"}
   validates :email, presence: {on: :create}, format: {with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\z/i, message: "Sähköpostiosoitteen täytyy olla muotoa esi@merk.ki"}
 
+
   def name
     "#{lastname} #{firstname}"
   end
