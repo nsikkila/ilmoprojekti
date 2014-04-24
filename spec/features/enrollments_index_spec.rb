@@ -15,7 +15,8 @@ describe "Enrollment table view" do
     create_signups_for_projectbundle(@projectbundle)
     visit enrollments_path
 
-    click_link("Vahvista")
+    #click_link("Vahvista")
+    find(:xpath, "(//a[text()='Vahvista'])[1]").click
     #@projectbundle.verified.should == true
 
     expect(page).to have_content("Projektiryhmä vahvistettu!")

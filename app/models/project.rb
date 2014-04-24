@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   validates :description,:allow_blank => false, length: {maximum: 10000}
 
   validates :website, url: true, :allow_blank => true
+  #validointia ei asiakkaan mukaan tarvitse, yo. vaatii mukaan http://
   validates :maxstudents, :presence => true, :numericality => true
 
   has_one :projectpicture
