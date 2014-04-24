@@ -1,0 +1,4 @@
+class ChangeDateFormatInProjectbundles < ActiveRecord::Migration
+  def change
+  end
+end
