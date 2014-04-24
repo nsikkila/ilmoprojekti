@@ -1,9 +1,11 @@
 <h2>Projektin muokkaus</h2>
 
+<p id="notice"><%= notice %></p>
+
 <%= render 'form' %>
 
-<%= link_to 'Näytä', @project %> |
-<%= link_to 'Takaisin', projects_path %>
+<%= link_to 'Takaisin', @project %> |
+<%= link_to 'Listaa kaikki projektit', projects_path %>
 
 <% content_for :header do %>
     <%= "Projekti: #{@project.name}" %>

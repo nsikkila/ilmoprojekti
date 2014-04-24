@@ -37,8 +37,8 @@ class EnrollmentsController < ApplicationController
   def create
     @enrollment = Enrollment.new(enrollment_params)
     @activebundle = Projectbundle.find_by_active(true)
-    if not @activebundle.signup_is_active
-      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+    if (@activebundle.nil? or not @activebundle.signup_is_active)
+      redirect_to :root, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
         signup.status = false
@@ -60,18 +60,17 @@ class EnrollmentsController < ApplicationController
     enrollment = Enrollment.find_by_id(params[:enrollment_id])
     if not enrollment.nil?
       Enrollment.destroy(enrollment)
-      redirect_to enrollments_path
-    else
-      redirect_to enrollments_path
     end
+    redirect_to enrollments_path
   end
 
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
-      redirect_to :root
+      redirect_to :root, notice: 'Ilmoittautumista ei löydy.'
+    elsif not (@enrollment.return_projectbundle.signup_is_active)
+      redirect_to :root, notice: 'Ilmoittautuminen on päättynyt.'
     else
-
       session[:enrollment_id] = @enrollment.id
       session[:hash] = params[:hash]
 
@@ -84,9 +83,6 @@ class EnrollmentsController < ApplicationController
     redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
-    if not @enrollment.return_projectbundle.signup_is_active
-      redirect_to :root, notice: 'Ilmottautumisen muokkaus ei ole enää mahdollista'
-    end
   end
 
   def setforced
@@ -141,7 +137,7 @@ class EnrollmentsController < ApplicationController
 
   def update
     @enrollment = Enrollment.find(params[:id])
-    @params = params[:enrollment][:signups_attribute]
+    #@params = params[:enrollment][:signups_attribute]
     @digest = Enrollment.create_hash(@enrollment)
     if session_variables_are_valid
       respond_to do |format|

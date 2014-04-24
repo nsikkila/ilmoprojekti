@@ -1,6 +1,3 @@
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert%></p>
-
 <p>Projektiryhmiä voi kerrallaan olla aktiivisena yksi kappale. Käytännössä aktiivisuus tarkoittaa sitä, että ohjelmisto
   käsittelee kyseistä projektiryhmää.</p>
 <p>Projektit, opiskelijoiden ilmoittautumiset ja ryhmäjaot ovat <b>projektiryhmäkohtaisia</b></p>
@@ -50,6 +47,8 @@
 </table>
 
 <br>
+<%= link_to 'Uusi projektiryhmä', new_projectbundle_path %>
+
 
 <% content_for :header do %>
     <%= "Olemassa olevat projektiryhmät" %>

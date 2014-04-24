@@ -97,12 +97,27 @@ describe "User page" do
     end
 
     it "can delete a user" do
-      FactoryGirl.create(:user)
+      u = FactoryGirl.create(:user)
       visit users_path
 
-      expect {
-        find(:xpath, "(//a[text()='Poista'])[2]").click
-      }.to change { User.count }.by(-1)
+      find(:xpath, "(//a[text()='Poista'])[2]").click
+      expect(User.find(u.id)).to be_disabled
+
+    end
+
+    it "can return a user after deletion" do
+      u = FactoryGirl.create(:user)
+      visit users_path
+
+      find(:xpath, "(//a[text()='Poista'])[2]").click
+      expect(User.find(u.id)).to be_disabled
+
+      visit users_path
+
+      find(:xpath, "(//a[text()='Palauta'])[1]").click
+
+      expect(User.find(u.id)).not_to be_disabled
+
 
     end
 

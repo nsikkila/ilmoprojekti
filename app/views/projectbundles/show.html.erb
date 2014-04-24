@@ -1,18 +1,15 @@
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert%></p>
-
 <p>
-  <strong>Name:</strong>
+  <strong>Nimi:</strong>
   <%= @projectbundle.name %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong>Kuvaus:</strong>
   <%= @projectbundle.description %>
 </p>
 
 <p>
-  <strong>Active:</strong>
+  <strong>Aktiivinen:</strong>
   <% if @projectbundle.active? and not @projectbundle.active.nil?%>
     <td>Kyllä</td>
 <% else %>
@@ -31,7 +28,7 @@
 </p>
 
 <%= link_to 'Muokkaa', edit_projectbundle_path(@projectbundle) %> |
-<%= link_to 'Takaisin', projectbundles_path %>
+<%= link_to 'Listaa kaikki projektiryhmät', projectbundles_path %>
 <% content_for :header do %>
     <%= "Projektiryhmän tiedot" %>
 <% end %>

@@ -98,15 +98,13 @@ describe "Enrollment table view" do
 
 end
 
-describe "Enrollment table view when signup is still active" do
+describe "Enrollment table view when no projectbundles exist" do
+  it "is not displayed" do
 
-  it "can not be accessed" do
-    FactoryGirl.create(:projectbundle, signup_end:Date.tomorrow)
+    @user2 = FactoryGirl.create(:admin)
+    signin(username:@user2.username, password:@user2.password)
 
     visit enrollments_path
-
-    expect(page).not_to have_content("Ilmoittautumisnäkymä")
-
+    expect(page).to have_content("Ei aktiivisia projektiryhmiä")
   end
-
 end

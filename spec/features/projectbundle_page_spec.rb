@@ -3,7 +3,32 @@ require 'spec_helper'
 include TestHelper
 
 describe "Projectpundle page" do
+
+  it "none of the views can be accessed by a teacher" do
+    user = FactoryGirl.create(:teacher)
+    projectbundle = FactoryGirl.create(:projectbundle)
+    signin(username:user.username, password:user.password)
+    visit new_projectbundle_path
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit projectbundles_path
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit projectbundle_path(projectbundle)
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+    visit edit_projectbundle_path(projectbundle)
+
+    expect(page).to have_content("Vain järjestelmävalvojalla on pääsy sivulle")
+
+  end
+
   describe "Projectbundle new" do
+
+
 
     it "should have correct texts in the page" do
       user = FactoryGirl.create(:admin)
@@ -26,7 +51,6 @@ describe "Projectpundle page" do
       expect(page).to have_unchecked_field("projectbundle_active")
       expect(page).to have_field("projectbundle_description")
       expect(page).to have_button("Tallenna projektiryhmä")
-      expect(page).to have_link("Takaisin")
     end
 
     it "should go to own page after creating valid bundle" do
@@ -96,6 +120,40 @@ describe "Projectpundle page" do
 
       expect(page).to have_content "Muokattu"
     end
+
+    it "should not update the project if fields do not pass validation " do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi", description: "Testing")
+
+      visit "/projectbundles/#{projectbundle.id}/edit"
+
+      fill_in("projectbundle_description", with: "")
+
+      click_button "Tallenna projektiryhmä"
+
+      expect(page).to have_content "1 virhe esti projektinipun tallentamisen:"
+    end
+
+  end
+
+  describe "Projectbundle destroy" do
+    it "should destroy a project if user is logged in as an admin" do
+      user = FactoryGirl.create(:admin)
+      signin(username:user.username, password:user.password)
+      projectbundle = FactoryGirl.create(:projectbundle, name:"Testi", description: "Testing")
+
+      expect(Projectbundle.count).to be(1)
+
+      visit projectbundles_path
+
+      click_link("Poista")
+
+      expect(Projectbundle.count).to be(0)
+
+    end
+
+
   end
 
 

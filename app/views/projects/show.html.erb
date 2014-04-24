@@ -1,9 +1,12 @@
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert%></p>
 
 <p>
   <strong>Nimi:</strong>
   <%= @project.name %>
+</p>
+
+<p>
+  <strong>Projektiryhmä:</strong>
+  <%= @project.projectbundle.name %>
 </p>
 
 <p>
@@ -13,7 +16,7 @@
 
 <% if not @project.website.nil? %>
     <p>
-      <strong>Website</strong>
+      <strong>Kotisivu:</strong>
       <%= link_to @project.website, @project.website, :target => '_blank' %>
     </p>
 <% end %>
@@ -27,6 +30,7 @@
 <%= image_tag url_for(:controller => "projectpictures", :action => "show", :id => Projectpicture.find_by_project_id(@project.id)) %>
 <% end %>
 
+<% if @project.signups.count >= 1 %>
 <h2>Projektiin halukkuutensa ilmoittaneet: </h2>
 <table>
   <tr>
@@ -58,11 +62,12 @@
       </tr>
   <% end %>
 </table>
+<% end %>
 <br/>
  <%= link_to 'Hyväksyttyjen opiskelijoiden sähköpostiosoitteet', emails_path(@project.id) %><br>
 <a href="mailto:?bcc=<%= @emails %>">Lähetä sähköposti hyväksytyille</a><br><br>
 <%= link_to 'Muokkaa projektia', edit_project_path(@project) %>
-<%= link_to 'Takaisin', projects_path %>
+<%= link_to 'Listaa kaikki projektit', projects_path %>
 
 <% content_for :header do %>
     <%= "Projekti: #{@project.name}" %>

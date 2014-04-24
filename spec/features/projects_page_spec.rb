@@ -50,7 +50,7 @@ describe "Projects page" do
        #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
        expect {
-         click_button('Luo projekti')
+         click_button('Tallenna projekti')
        }.to change{Project.count}.by(1)
     end
 
@@ -67,10 +67,30 @@ describe "Projects page" do
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
       expect {
-        click_button('Luo projekti')
+        click_button('Tallenna projekti')
       }.to change{Project.count}.by(1)
 
       expect(Projectpicture.count).to be(1)
+
+    end
+
+    it "Does not create a new project when a picture that is too large is submitted" do
+      sign_in_and_initialize
+      visit new_project_path
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/test_picture.png'))
+
+      #select('1', from:'enrollment[signups_attributes][0][project_id]')
+
+      expect {
+        click_button('Tallenna projekti')
+      }.to change{Project.count}.by(0)
+
+      expect(Projectpicture.count).to be(0)
 
     end
 
@@ -86,7 +106,7 @@ describe "Projects page" do
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
       expect {
-        click_button('Luo projekti')
+        click_button('Tallenna projekti')
       }.to_not change{Project.count}
 
       expect(page).to have_content("Nimi on liian lyhyt")
@@ -116,7 +136,7 @@ describe "Projects page" do
       fill_in('project_description', with:"Description for testproject")
       fill_in('project_website', with:"http://www.hs.fi")
       fill_in('project_maxstudents', with:"15")
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit project_path(1)
 
@@ -143,7 +163,7 @@ describe "Projects page" do
 
       attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit project_path(1)
 
@@ -155,6 +175,53 @@ describe "Projects page" do
       expect(Projectpicture.count).to be(1)
 
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
+
+    end
+
+    it "cannot be edited submitting a picture that is too large" do
+      #sign_in_and_initialize
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+      create_objects_for_frontpage
+      visit edit_project_path(1)
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/test_picture.png'))
+
+      click_button('Tallenna projekti')
+
+      expect(page).not_to have_content('Projekti onnistuneesti päivitetty.')
+
+    end
+
+    it "allows the replacing of a project picture" do
+      user = FactoryGirl.create :teacher
+      signin(username:user.username, password:user.password)
+      create_objects_for_frontpage
+      visit edit_project_path(1)
+      fill_in('project_name', with:"Testiprojekti1")
+      fill_in('project_description', with:"Description for testproject")
+      fill_in('project_website', with:"http://www.hs.fi")
+      fill_in('project_maxstudents', with:"15")
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
+
+      click_button('Tallenna projekti')
+
+      expect(page).to have_content('Projekti onnistuneesti päivitetty.')
+
+      expect(Projectpicture.count).to eq(1)
+
+      visit edit_project_path(1)
+
+      attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo.jpeg'))
+
+      click_button('Tallenna projekti')
+
+      expect(page).to have_content('Projekti onnistuneesti päivitetty.')
 
     end
 
@@ -170,7 +237,7 @@ describe "Projects page" do
       fill_in('project_description', with:"")
       fill_in('project_website', with:"I am not a url")
       fill_in('project_maxstudents', with:"asd")
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       expect(page).to have_content("Nimi on liian lyhyt")
       expect(page).to have_content("Kuvaus on liian lyhyt")
@@ -184,6 +251,24 @@ describe "Projects page" do
 
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
+    end
+
+    it "cannot only be accessed by the projects owner" do
+
+      user = FactoryGirl.create(:teacher)
+      FactoryGirl.create(:projectbundle)
+      project = FactoryGirl.create(:project)
+
+      user2 = FactoryGirl.create(:user)
+      signin(username:user2.username, password:user2.password)
+
+      #expect(User.count).to be(2)
+      #expect(Projectbundle.count).to be(1)
+      #expect(Project.count).to be (1)
+
+      visit edit_project_path(project)
+
+      expect(page).to have_content("Voit muokata vain omia projektejasi.")
     end
 
 
@@ -202,7 +287,7 @@ describe "Projects page" do
 
       #select('1', from:'enrollment[signups_attributes][0][project_id]')
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
 
       visit new_enrollment_path
       expect(page).to have_content("Testiprojekti1")
@@ -238,7 +323,9 @@ describe "Projects page" do
 
       attach_file("project_projectpicture", File.join(Rails.root, '/public/images/p2plogo_box_projekti_ilmo_250x111.jpeg'))
 
-      click_button('Luo projekti')
+      click_button('Tallenna projekti')
+
+      expect(Projectpicture.count).to be(1)
 
       visit project_path(1)
 

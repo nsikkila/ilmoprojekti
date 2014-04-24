@@ -4,6 +4,7 @@ FactoryGirl.define do
     password "Test123"
     password_confirmation "Test123"
     accesslevel 0
+    disabled false
   end
 end
 

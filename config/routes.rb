@@ -23,6 +23,7 @@ Ilmoprojekti::Application.routes.draw do
   post 'setstatus', to: 'enrollments#setstatus'
   post 'setforced', to: 'enrollments#setforced'
   get 'tabledata', to: 'enrollments#get_current_statuses'
+  post 'users/:id', to: 'users#enable'
 
   root 'enrollments#new'
 

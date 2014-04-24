@@ -125,7 +125,7 @@ describe "Enrollments page" do
 
       enroll= Enrollment.find_by studentnumber: '1234567'
       hash= Enrollment.create_hash(enroll)
-      expect(page).to have_content hash
+      #expect(page).to have_content hash
 
       visit root_path
 
@@ -145,7 +145,7 @@ describe "Enrollments page" do
 
       enroll= Enrollment.find_by studentnumber: '1234568'
       hash1= Enrollment.create_hash(enroll)
-      expect(page).to have_content hash1
+      #expect(page).to have_content hash1
 
       expect(hash.equal? hash1).to be_false
 
@@ -248,13 +248,32 @@ describe "Enrollments page" do
 
     end
 
+    it "does not save changes if information is not valid" do
+      enrollment = create_enrollment_with_signups
+
+      hash = Enrollment.create_hash(enrollment)
+
+      visit "enrollments/#{enrollment.id}/#{hash}"
+
+      fill_in('enrollment_firstname', with: "")
+      fill_in('enrollment_lastname', with: "")
+      fill_in('enrollment_studentnumber', with: "")
+      fill_in('enrollment_email', with: "edit@testi.fi")
+
+      click_button('Tallenna ilmoittautuminen')
+
+      expect(page).to have_content("3 virhettä esti ilmoittautumisen tallentamisen:")
+      #save_and_open_page
+
+    end
+
     it "doesnt allow editing if deadline has passed" do
       enrollment = create_enrollments_with_signups_for_old_projects
       hash = Enrollment.create_hash(enrollment)
 
       visit "enrollments/#{enrollment.id}/#{hash}"
 
-      expect(page).to have_content("Ilmottautumisen muokkaus ei ole enää mahdollista")
+      expect(page).to have_content("Ilmoittautuminen on päättynyt")
     end
   end
 end

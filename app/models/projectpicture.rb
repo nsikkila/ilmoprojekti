@@ -24,6 +24,6 @@ class Projectpicture < ActiveRecord::Base
   end
 
   def picture_size_validation
-    self.errors[:projectpicture] << "Kuvan pitää olla kooltaan alle 3MB" if data.size > 3.megabytes
+    self.errors[:project] << "Kuvan pitää olla kooltaan alle 3MB" if data.size > 3.megabytes
   end
 end
