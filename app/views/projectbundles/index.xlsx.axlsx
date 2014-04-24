@@ -17,7 +17,7 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     stdntArray << roll.name
     stdntArray << roll.studentnumber
     while projId <= @projectbundle.projects.count do
-      proju =roll.signups.find_by_project_id(projId)
+      proju = roll.signups.find_by_project_id(projId)
       if not proju.nil?
         if proju.status
           stdntArray << 'Valittu'
@@ -60,16 +60,6 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
   sheet.add_row arrayStats, style: header
   sheet.add_row arrayFills, style: header
 
-  sheet.rows.each do |row|
-    row.cells.each do |cell|
-      if cell.value == "Ei valittu"
-        cell.style = unapproved
-      end
-
-      if cell.value == "Valittu"
-        cell.style = approved
-      end
-    end
-  end
+  
 
 end

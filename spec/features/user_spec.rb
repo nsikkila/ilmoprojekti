@@ -10,7 +10,7 @@ describe "User" do
 		it "can sign in with right credentials" do
 			sign_in
 
-			expect(page).to have_content 'MAIJA KIRJAUTUNEENA SISÄÄN'
+			expect(page).to have_content 'MAIJA'
 		end
 
 		it "can not sign in with incorrect password" do
