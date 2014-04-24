@@ -61,15 +61,16 @@ class EnrollmentsController < ApplicationController
     if not enrollment.nil?
       Enrollment.destroy(enrollment)
     end
-      redirect_to enrollments_path
+    redirect_to enrollments_path
   end
 
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
-      redirect_to :root
+      redirect_to :root, notice: 'Ilmottautumista ei löydy.'
+    elsif not @enrollment.projectbundle.active
+      redirect_to :root, notice: 'Ilmottautuminen on päättynyt.'
     else
-
       session[:enrollment_id] = @enrollment.id
       session[:hash] = params[:hash]
 
