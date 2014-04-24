@@ -46,6 +46,22 @@ describe EnrollmentsController do
     end
   end
 
+  describe "#update" do
+
+    it "cannot be successfully called if session variables do not match" do
+      @projectbundle = FactoryGirl.create(:projectbundle, name:"Failededit", signup_end:Date.tomorrow)
+      @projects = generate_six_unique_projects(@projectbundle.id)
+
+      post :create, { :enrollment=>{firstname:"Matti", lastname:"Mainio", studentnumber:'1234567', email:'testi@maili.fi', :signups_attributes => {"0"=>{"project_id"=>"1", "priority"=>"1"}, "1"=>{"project_id"=>"2", "priority"=>"2"}, "2"=>{"project_id"=>"3", "priority"=>"3"}, "3"=>{"project_id"=>"4", "priority"=>"4"}, "4"=>{"project_id"=>"5", "priority"=>"5"}, "5"=>{"project_id"=>"6", "priority"=>"6"}}} }
+
+      expect(Enrollment.count).to eq(1)
+
+      put :update, id: 1
+      response.body.should_not have_content 'Ilmoittautumisen yhteenveto'
+
+    end
+  end
+
   describe "#get_current_statuses" do
     before :each do
       @projectbundle = FactoryGirl.create(:projectbundle, signup_end:Date.yesterday)

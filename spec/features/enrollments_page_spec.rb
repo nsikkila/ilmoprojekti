@@ -248,27 +248,6 @@ describe "Enrollments page" do
 
     end
 
-    it "allows the editing of enrollment but does not update if " do
-      enrollment = create_enrollment_with_signups
-
-      hash = Enrollment.create_hash(enrollment)
-
-      visit "enrollments/#{enrollment.id}/#{hash}"
-
-      fill_in('enrollment_firstname', with: "edit")
-      fill_in('enrollment_lastname', with: "edit")
-      fill_in('enrollment_studentnumber', with: "7654321")
-      fill_in('enrollment_email', with: "edit@testi.fi")
-
-      click_button('Tallenna ilmoittautuminen')
-
-      expect(page).to have_content("Ilmoittautuminen onnistui!")
-      expect(page).to have_content("Muokkaa")
-      expect(page).to have_content("7654321")
-      #save_and_open_page
-
-    end
-
     it "does not save changes if information is not valid" do
       enrollment = create_enrollment_with_signups
 
