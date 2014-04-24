@@ -273,7 +273,7 @@ describe "Enrollments page" do
 
       visit "enrollments/#{enrollment.id}/#{hash}"
 
-      expect(page).to have_content("Ilmottautumisen muokkaus ei ole enää mahdollista")
+      expect(page).to have_content("Ilmoittautuminen on päättynyt")
     end
   end
 end

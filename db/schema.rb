@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140417134834) do
+ActiveRecord::Schema.define(version: 20140424091017) do
 
   create_table "enrollments", force: true do |t|
     t.string   "firstname"
@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 20140417134834) do
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "signup_start"
-    t.date     "signup_end"
+    t.datetime "signup_start"
+    t.datetime "signup_end"
     t.boolean  "verified"
   end
 

@@ -105,6 +105,22 @@ describe "User page" do
 
     end
 
+    it "can return a user after deletion" do
+      u = FactoryGirl.create(:user)
+      visit users_path
+
+      find(:xpath, "(//a[text()='Poista'])[2]").click
+      expect(User.find(u.id)).to be_disabled
+
+      visit users_path
+
+      find(:xpath, "(//a[text()='Palauta'])[1]").click
+
+      expect(User.find(u.id)).not_to be_disabled
+
+
+    end
+
     it "cannot create a user with faulty information" do
       visit new_user_path
 
