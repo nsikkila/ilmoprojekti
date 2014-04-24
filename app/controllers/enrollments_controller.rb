@@ -37,8 +37,8 @@ class EnrollmentsController < ApplicationController
   def create
     @enrollment = Enrollment.new(enrollment_params)
     @activebundle = Projectbundle.find_by_active(true)
-    if not @activebundle.signup_is_active
-      redirect_to :back, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
+    if (@activebundle.nil? or not @activebundle.signup_is_active)
+      redirect_to :root, notice: 'Yritit ilmottautua projekteihin, joiden ilmottautumisaika on umpeutunut'
     else
       @enrollment.signups.each do |signup|
         signup.status = false
