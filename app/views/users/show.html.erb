@@ -10,8 +10,11 @@
 
 
 
-<%= link_to 'Muokkaa', edit_user_path(@user) %> |
-<%= link_to 'Listaa kaikki käyttäjät', users_path %>
+<%= link_to 'Muokkaa', edit_user_path(@user) %>
+<% if compare_accesslevel(:admin) %>
+    |
+    <%= link_to 'Listaa kaikki käyttäjät', users_path %>
+<%end%>
 
 <% content_for :header do %>
     <%= "Käyttäjä: #{@user.username}" %>

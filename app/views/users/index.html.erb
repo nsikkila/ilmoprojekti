@@ -17,6 +17,7 @@
       <tr>
         <td><%= link_to "#{user.username}", user %></td>
         <td><%= user.firstname %> <%= user.lastname %></td>
+        <td><%= link_to 'Muokkaa', edit_user_path(user)%> </td>
         <td><%= link_to 'Poista', user, method: :delete, data: { confirm: 'Haluatko varmasti poistaa käyttäjän?' } %></td>
       </tr>
     <% end %>

@@ -23,20 +23,22 @@
 
 
     <% end %>
-    <li><%= link_to 'PROJEKTIT', projects_path %>
-      <ul>
-        <li><%= link_to 'LUO UUSI', new_project_path %></li>
-        <li><%= link_to 'LISTAA PROJEKTIT', projects_path %></li>
-      </ul>
-    </li>
+    <% if not current_user.nil? %>
+        <li><%= link_to 'PROJEKTIT', projects_path %>
+          <ul>
+            <li><%= link_to 'LUO UUSI', new_project_path %></li>
+            <li><%= link_to 'LISTAA PROJEKTIT', projects_path %></li>
+          </ul>
+        </li>
+    <% end %>
 
     <% if not current_user.nil? and compare_accesslevel(:admin) %>
-       <li> <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
-       <ul>
-         <li><%= link_to 'LUO UUSI', new_projectbundle_path%></li>
-         <li><%= link_to 'LISTAA PROJEKTIRYHMÄT', projectbundles_path %></li>
-       </ul>
-       </li>
+        <li> <%= link_to 'PROJEKTIRYHMÄT', projectbundles_path %>
+          <ul>
+            <li><%= link_to 'LUO UUSI', new_projectbundle_path %></li>
+            <li><%= link_to 'LISTAA PROJEKTIRYHMÄT', projectbundles_path %></li>
+          </ul>
+        </li>
     <% end %>
 
     <% if not current_user.nil? and compare_accesslevel(:teacher) %>
@@ -45,13 +47,13 @@
 
     <% if not current_user.nil? %>
         <li><%= link_to current_user.username.upcase, user_path(current_user.id) %>
-        <ul>
-          <li><%= link_to 'MUOKKAA TIETOJA', edit_user_path(current_user)%></li>
-          <li><%= link_to 'KIRJAUDU ULOS', signout_path, method: :delete %></li>
-        </ul>
+          <ul>
+            <li><%= link_to 'MUOKKAA TIETOJA', edit_user_path(current_user) %></li>
+            <li><%= link_to 'KIRJAUDU ULOS', signout_path, method: :delete %></li>
+          </ul>
         </li>
     <% else %>
-       <li> <%= link_to 'KIRJAUDU SISÄÄN', signin_path %></li>
+        <li> <%= link_to 'KIRJAUDU SISÄÄN', signin_path %></li>
     <% end %>
   </ul>
 </nav>
