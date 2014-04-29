@@ -53,7 +53,7 @@ describe EnrollmentMail do
 
       index = 1
       6.times do
-        @enrollment.signups << FactoryGirl.build(:signup, project_id:index)
+        @enrollment.signups << FactoryGirl.build(:signup, project_id: index)
         index = index + 1
       end
 
@@ -64,7 +64,7 @@ describe EnrollmentMail do
 
       index = 1
       6.times do
-        @enro.signups << FactoryGirl.build(:signup, project_id:index)
+        @enro.signups << FactoryGirl.build(:signup, project_id: index)
         index = index + 1
       end
 
@@ -99,6 +99,11 @@ describe EnrollmentMail do
       sign.save
       @mail = EnrollmentMail.result_email_for_all(@enr)
       @mail.should have_body_text("sinut on valittu seuraaviin projekteihin:")
+      @enr.signups.each do |sign|
+        if sign.status
+          @mail.should have_body_text(sign.project.name)
+        end
+      end
     end
   end
 

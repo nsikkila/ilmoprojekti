@@ -329,7 +329,7 @@ describe "Projects page" do
 
       visit project_path(1)
 
-      page.should have_xpath("/html/body/div[2]/div[2]/div/img")
+      page.should have_xpath("/html/body/div/div[2]/div/img")
 
     end
 

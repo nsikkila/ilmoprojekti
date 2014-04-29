@@ -137,7 +137,7 @@ class EnrollmentsController < ApplicationController
 
   def update
     @enrollment = Enrollment.find(params[:id])
-    @params = params[:enrollment][:signups_attribute]
+    #@params = params[:enrollment][:signups_attribute]
     @digest = Enrollment.create_hash(@enrollment)
     if session_variables_are_valid
       respond_to do |format|

@@ -124,6 +124,16 @@
       <%= link_to 'Lataa', projectbundles_path(format: "xlsx")%>
     </p>
 
+    <% if @projectbundle.verified == false %>
+        <% if @projectbundle.signup_is_active == true %>
+            <p>Ilmottautuminen projekteihin on vielä käynnissä <%= @projectbundle.signup_end.to_formatted_s(:laurea_way) %> asti. <strong>Ilmottautumisen aikana et voi tehdä muutoksia tällä sivulla.</strong></p>
+        <% elsif @user_is_admin %>
+            [<%= link_to 'Vahvista', projectbundles_path+"/"+@projectbundle.id.to_s+"/verify", data: { confirm: 'Haluatko varmasti vahvistaa projektiryhmän? Projektiryhmän vahvistaminen lukitsee ryhmäjaot ja lähettää tiedot jaoista opiskelijoille.' } %>]
+        <% end %>
+    <% else %>
+        <p><strong>Huom. <%= @projectbundle.name %> on jo julkaistu ja tiedot ryhmäjaoista lähetetty opiskelijoille! Vain admin voi tehdä muutoksia tällä sivulla.</strong></p>
+    <% end %>
+
 <% else %>
     <h2>Ei ilmoittautumisia.</h2>
 <% end %>
@@ -290,7 +300,7 @@
             setTimeout(refreshAll, UItimeout);
         } else {
             if (verified) {
-                alert('Ainoastaan admin voi tehdä muutoksia vahvistettuihin ilmottautumisiin.');
+                alert('Ainoastaan ylläpitäjä voi tehdä muutoksia vahvistettuihin ilmottautumisiin.');
             } else {
                 alert('Ilmottautuminen on vielä käynnissä.');
             }

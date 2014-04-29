@@ -17,12 +17,12 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     stdntArray << roll.name
     stdntArray << roll.studentnumber
     while projId <= @projectbundle.projects.count do
-      proju =roll.signups.find_by_project_id(projId)
+      proju = roll.signups.find_by_project_id(projId)
       if not proju.nil?
         if proju.status
-          stdntArray << 'Valittu'
+          stdntArray << "Valittu"
         else
-          stdntArray << 'Ei valittu'
+          stdntArray << "Ei valittu"
         end
       else
         stdntArray << " "
@@ -33,7 +33,7 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     if not great.nil?
       stdntArray << great.count
     else
-      stdntArray << '0'
+      stdntArray << "0"
     end
     stdntArray << roll.magic_number
     projId = 1
@@ -49,7 +49,7 @@ wb.add_worksheet(:name => "Projektijaot") do |sheet|
     fill = accStudnts.count - proj.maxstudents
     arrayFills << fill
 	else
-		arrayStats << '0'
+		arrayStats << "0"
     arrayFills << "-" + maxstudents + ""
 	end
   end
