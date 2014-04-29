@@ -195,11 +195,10 @@
                     var projects = msg[1];
                     var signups = msg[2];
 
+                    //Must reset because the controller only returns the statuses of existing signups (forced and wanted)
                     resetForcedStatuses();
 
                     $.each(signups, function(index, signup) {
-                        selector = '#'+signup.enrollment_id+'-'+signup.project_id;
-
                         selector = '#'+signup.enrollment_id+'-'+signup.project_id;
 
                         element = $(selector);
