@@ -24,7 +24,7 @@
 
 <p>
   <strong>Ilmottautumisen päättymispäivä:</strong>
-  <%= @projectbundle.signup_end.to_formatted_s(:laurea_way) %>
+  <%= @projectbundle.signup_end.strftime("%d.%m.%Y %H:%M") %>
 </p>
 
 <%= link_to 'Muokkaa', edit_projectbundle_path(@projectbundle) %> |

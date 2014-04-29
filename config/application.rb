@@ -7,7 +7,7 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
-
+time.in_time_zone("Helsinki")
 module Ilmoprojekti
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -21,6 +21,8 @@ module Ilmoprojekti
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.default_timezone = 'Eastern Time (US & Canada)'
     config.i18n.default_locale = :fi
     config.i18n.enforce_available_locales = true
   end
