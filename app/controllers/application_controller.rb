@@ -13,19 +13,21 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
 
+  # Redirects to signin page if user does not have at least given accesslevel
   def to_root_if_not_at_least(level)
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
-      if list[level] > current_user.accesslevel #ohjataan käyttäjä roottiin jos ei tarpeeksi iso accesslevel
-        redirect_to signin_path, alert: "Vain järjestelmävalvojalla on pääsy sivulle"
+      if list[level] > current_user.accesslevel
+        redirect_to signin_path, alert: 'Vain järjestelmävalvojalla on pääsy sivulle' #If logged in but not allowed here, must not be admin
       else
-        list[level] <= current_user.accesslevel
+        list[level] <= current_user.accesslevel # returns true...
       end
-    else #ohjataan kirjautumaton käyttäjä roottiin
-      redirect_to signin_path, alert: "Sinun täytyy kirjautua sisään päästäksesi tarkastelemaan sivua"
+    else # User is not logged in
+      redirect_to signin_path, alert: 'Sinun täytyy kirjautua sisään päästäksesi tarkastelemaan sivua'
     end
   end
 
+  # Returns true if user is logged in and has at the least the given accesslevel, otherwise false
   def compare_accesslevel(accesslevel)
     if not current_user.nil?
       list = {:admin => 1, :teacher => 0}
@@ -40,7 +42,7 @@ class ApplicationController < ActionController::Base
       if session[:timeout] < Time.now
         session[:user_id] = nil
         session[:timeout] = nil
-        redirect_to :root, alert: "Istuntosi on vanhentunut, kirjaudu uudelleen sisään"
+        redirect_to :root, alert: 'Istuntosi on vanhentunut, kirjaudu uudelleen sisään'
         #     render 'signout', method :delete
       else
         session[:timeout] = Time.now + 20.minutes

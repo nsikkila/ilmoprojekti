@@ -10,12 +10,12 @@ class EnrollmentsController < ApplicationController
 
   def index
     if current_user.nil? or not compare_accesslevel(:teacher)
-      redirect_to :root, notice: "Sivu on vain opettajille."
+      redirect_to :root, notice: 'Sivu on vain opettajille.'
     else
       @projectbundle = Projectbundle.find_by_active(true)
 
       if @projectbundle.nil?
-        redirect_to :root, notice: "Ei aktiivisia projektiryhmiä"
+        redirect_to :root, notice: 'Ei aktiivisia projektiryhmiä.'
       else
         @user_is_admin = compare_accesslevel(:admin)
         set_projectbundle_and_projects
@@ -64,6 +64,7 @@ class EnrollmentsController < ApplicationController
     redirect_to enrollments_path
   end
 
+  # Checks if link hash is valid and allows editing if that is the case
   def edithash
     @enrollment = Enrollment.find(params[:enrollment_id])
     if @enrollment.nil? or not Enrollment.create_hash(@enrollment) == params[:hash]
@@ -80,23 +81,27 @@ class EnrollmentsController < ApplicationController
   end
 
   def edit
-    redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil?
+    redirect_to :root if session[:enrollment_id].nil? or session[:hash].nil? # edithash is not successfully run
     set_projectbundle_and_projects
     @enrollment = Enrollment.find(session[:enrollment_id])
   end
 
+  # creates a new forced signup or destroys an existing forced signup
   def setforced
     enrollment = Enrollment.find params[:enrollment_id]
     new_forced = params[:forced]
     projectbundle = enrollment.projects.first.projectbundle
 
+    # nobody can force while signups are active, only admin when signups are verified
     unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin))  or not compare_accesslevel(:teacher)
       if (new_forced == 'true')
         signup = Signup.new(enrollment_id: params[:enrollment_id], project_id: params[:project_id], priority: 10, status: true, forced: true)
         signup.save
       else
         signup = enrollment.signups.find_by_project_id(params[:project_id])
-        signup.destroy
+        if signup.forced #only destroy the signup if it was forced. if it is not an error has occurred
+          signup.destroy
+        end
       end
     end
     render nothing: true
@@ -106,9 +111,10 @@ class EnrollmentsController < ApplicationController
   def setstatus
     enrollment = Enrollment.find params[:enrollment_id]
     projectbundle = enrollment.projects.first.projectbundle
+
+    # nobody can set status while signups are active, only admin when signups are verified
     unless projectbundle.signup_is_active or (projectbundle.verified and not compare_accesslevel(:admin)) or not compare_accesslevel(:teacher)
       signup = enrollment.signups.find_by_project_id(params[:project_id])
-      project = signup.project
 
       new_status = params[:status]
       signup.status = new_status
@@ -117,6 +123,7 @@ class EnrollmentsController < ApplicationController
     render nothing:true
   end
 
+  # Returns json with all existing signups
   def get_current_statuses
     if compare_accesslevel(:teacher)
       bundle = Projectbundle.includes([{:enrollments => :signups}, {:projects => :signups}]).find_by_active(true)
@@ -169,6 +176,7 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  # Clears session variables after edit
   def clear_session_variables
     session[:enrollment_id] = nil
     session[:hash] = nil
