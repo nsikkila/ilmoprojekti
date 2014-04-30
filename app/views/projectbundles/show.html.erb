@@ -19,7 +19,7 @@
 
 <p>
   <strong>Ilmottautumisen alkamispäivä:</strong>
-  <%= @projectbundle.signup_start.to_formatted_s(:laurea_way) %>
+  <%= @projectbundle.signup_start.strftime("%d.%m.%Y %H:%M")%>
 </p>
 
 <p>
