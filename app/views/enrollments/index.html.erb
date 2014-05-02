@@ -1,4 +1,3 @@
-
 <h2>Ryhmän <%= @projectbundle.name %> ilmoittautumiset</h2>
 
 <% unless @enrollments.first.nil? %>
@@ -63,7 +62,7 @@
         <td></td>
         <td></td>
         <% @projects.each do |project| %>
-            <th title="<%= project.name %>">q
+            <th title="<%= project.name %>">
               <%= project.name.truncate(4, omission:'') %>
             </th>
         <% end %>
