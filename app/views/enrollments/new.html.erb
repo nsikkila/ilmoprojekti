@@ -1,5 +1,5 @@
 <% if not @projectbundle.nil? and not (@projectbundle.signup_start > Date.today) and not (@projectbundle.signup_end <= Date.today)%>
-<h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.to_formatted_s(:laurea_way)}"%></h3>
+<h3><%="Ilmoittautuminen päättyy #{@projectbundle.signup_end.strftime("%d.%m.%Y %H:%M")}"%></h3>
   <%= render 'form' %>
   <br/>
   <br/>
