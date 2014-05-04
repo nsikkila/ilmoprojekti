@@ -104,6 +104,7 @@ GEM
       daemon_controller (>= 1.2.0)
       rack
       rake (>= 0.8.1)
+    pg (0.17.1)
     polyglot (0.3.4)
     rack (1.5.2)
     rack-mini-profiler (0.9.1)
@@ -218,6 +219,7 @@ DEPENDENCIES
   jquery-rails
   launchy (~> 2.4.2)
   passenger
+  pg
   rack-mini-profiler
   rails (= 4.0.2)
   rails_12factor
