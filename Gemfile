@@ -9,7 +9,8 @@ group :development, :test do
 end
 # Use postgres as database for Active Record: PRODUCTION
 group :production do
-  gem 'sqlite3'
+  #gem 'sqlite3'
+  gem 'pg' #PostgreSQL
   gem 'rails_12factor'
   gem 'passenger'
 end
